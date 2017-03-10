@@ -1,0 +1,31 @@
+{
+  "name": "query-decomposer",
+  "version": "1.0.0",
+  "description": "Testing replication-aware query decomposition iwth ldf+hdt",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/**/*.js --trace-deprecation --timeout 5000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Callidon/query-decomposer.git"
+  },
+  "author": "Thomas Minier <thomas.minier@protonmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Callidon/query-decomposer/issues"
+  },
+  "homepage": "https://github.com/Callidon/query-decomposer#readme",
+  "dependencies": {
+    "asynciterator": "^1.1.0",
+    "jsonld": "^0.4.11",
+    "lodash": "^4.17.4",
+    "lru-cache": "^4.0.2",
+    "request": "^2.80.0",
+    "sparqljs": "^1.3.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
