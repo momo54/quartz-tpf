@@ -71,7 +71,7 @@ class FragmentPages {
       return Promise.resolve();
     }
 
-    // fallback: fetch the page online
+    // otherwise, fetch the page from online fragment
     return new Promise((resolve, reject) => {
       const options = {
         url: this._nextPage,

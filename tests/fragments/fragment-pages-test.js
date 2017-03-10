@@ -1,7 +1,7 @@
 'use strict';
 
 require('chai').should();
-const FragmentPages = require('../../src/ldf-lite/fragment-pages.js');
+const FragmentPages = require('../../src/fragments/fragment-pages.js');
 const LRU = require('lru-cache');
 const _ = require('lodash');
 
