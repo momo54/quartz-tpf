@@ -1,2 +1,2 @@
-# query-decomposer
-Federated SPARQL replication-aware query decomposer, using LDF &amp; HDT properties
+#  tpf-client-lite
+ Lighter Triple Pattern Fragment Client
