@@ -6,7 +6,8 @@ const _ = require('lodash');
 const metadata = require('./metadata.js');
 
 const defaultHeaders = {
-  accept: 'application/json'
+  accept: 'application/json',
+  'accept-charset': 'utf-8'
 };
 
 /**
@@ -35,20 +36,18 @@ class FragmentPages {
    * Make the url to fetch a pattern from a fragment with a given page
    * @param {string} fragmentURL - The fragment url
    * @param {Object} pattern - The triple pattern to match against
+   * @param {string} pattern.subject - The subject of the triple pattern
+   * @param {string} pattern.predicate - The predicate of the triple pattern
+   * @param {string} pattern.object - The object of the triple pattern
    * @param {int} page - The index of the first page to use when fetching triples from pages
    * @return {string} An url
    */
   _makeFragmentURL (fragmentURL, pattern, page) {
-    let url = fragmentURL;
     let tp = '';
     if ('subject' in pattern && !pattern.subject.startsWith('?')) tp += `subject=${encodeURIComponent(pattern.subject)}&`;
     if ('predicate' in pattern && !pattern.predicate.startsWith('?')) tp += `predicate=${encodeURIComponent(pattern.predicate)}&`;
     if ('object' in pattern && !pattern.object.startsWith('?')) tp += `object=${encodeURIComponent(pattern.object)}&`;
-    if (tp !== '') {
-      tp = tp.slice(0, -1);
-      url += `?${tp}&page=${page}`;
-    }
-    return url;
+    return `${fragmentURL}?${tp}page=${page}`;
   }
 
   /**
@@ -86,7 +85,7 @@ class FragmentPages {
         if (!this.isClosed) this._nextPage = stats['hydra:next']['@id'];
 
         // extract items fetched from online fragment, then fill buffer with remaining items
-        jsonld.toRDF({ '@context': context, '@graph': graph[0]}, { format: 'application/nquads' }, (err, raw) => {
+        jsonld.toRDF({'@context': context, '@graph': graph[0]}, { format: 'application/nquads' }, (err, raw) => {
           if (err) {
             reject(err);
             return;
@@ -94,7 +93,7 @@ class FragmentPages {
           this._buffer = _.trim(raw).split('\n');
 
           // save page into the cache alongisde its metadata, then resolve promise
-          this._cache.set(this._nextPage, {
+          this._cache.set(options.url, {
             stats,
             items: this._buffer
           });
@@ -105,32 +104,30 @@ class FragmentPages {
   }
 
   /**
-   * Get the next N triples from the fragment pages.
-   * Only fetch the remaining triples from the pages, i.e. this function chan return less than N triples.
+   * Fetch the next N triples from the fragment pages.
+   * Only fetch the remaining triples from the pages, i.e. this function can returns less than N triples.
    * @param {int} count - Number of triples to fetch
    * @param {Object[]} previous - Triples fetched from a previous call of the function (used for recursive call)
    * @return {Promise} A Promise fullfilled with the N triples from the fragment pages.
    */
   fetch (count, previous = []) {
+    // stop case 1: no more triples can be fetched from the fragment
     if (this.isClosed) {
-      // no more triples can be fetched from the fragment
       return Promise.resolve(previous);
     } else if (count <= 0) {
+      // stop case 2: no more items needs to be fetched
       return Promise.resolve(previous);
     } else if (this._buffer.length > 0) {
-      let cpt = count;
       // fetch as many triples as possibles from the buffer
+      let cpt = count;
       const items = _.take(this._buffer, cpt);
       cpt -= items.length;
       this._buffer = _.drop(this._buffer, items.length);
-      // recursive call to fetch missing triples from online fragments
+      // recursive call to fetch (eventually) missing triples
       return this.fetch(cpt, _.union(previous, items));
     } else {
-      // fetch triples from online fragments as last resort
-      return this._refillBuffer()
-      .then(() => {
-        return this.fetch(count, previous);
-      });
+      // fetch triples from online fragments, then retry fetching
+      return this._refillBuffer().then(() => this.fetch(count, previous));
     }
   }
 }
