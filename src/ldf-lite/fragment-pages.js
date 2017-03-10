@@ -1,6 +1,7 @@
 'use strict';
 
 const jsonld = require('jsonld');
+const n3 = require('n3');
 const os = require('os');
 const request = require('request');
 const _ = require('lodash');
@@ -33,6 +34,7 @@ class FragmentPages {
     this._firstPage = this._makeFragmentURL(fragmentURL, pattern, firstPage);
     this._nextPage = this._firstPage;
     this._cache = cache;
+    this._parser = new n3.Parser();
     this.isClosed = false;
     this._buffer = [];
   }
@@ -95,9 +97,9 @@ class FragmentPages {
             reject(err);
             return;
           }
-          this._buffer = _.trim(raw).split('\n');
+          this._buffer = this._parser.parse(_.trim(raw));
 
-          // save page into the cache alongisde its metadata, then resolve promise
+          // save page into the cache with its metadata, then resolve promise
           this._cache.set(options.url, {
             stats,
             items: this._buffer
