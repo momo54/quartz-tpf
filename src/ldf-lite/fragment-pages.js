@@ -1,13 +1,18 @@
 'use strict';
 
 const jsonld = require('jsonld');
+const os = require('os');
 const request = require('request');
 const _ = require('lodash');
 const metadata = require('./metadata.js');
 
-const defaultHeaders = {
-  accept: 'application/json',
-  'accept-charset': 'utf-8'
+const defaultHeaders = () => {
+  return {
+    'accept': 'application/json',
+    'accept-charset': 'utf-8',
+    'accept-encoding': 'gzip,deflate',
+    'user-agent': `Triple Pattern Fragments Client Lite (${os.type()} ${os.arch()})`
+  };
 };
 
 /**
@@ -68,7 +73,7 @@ class FragmentPages {
     return new Promise((resolve, reject) => {
       const options = {
         url: this._nextPage,
-        headers: defaultHeaders
+        headers: defaultHeaders()
       };
       request.get(options, (err, res, body) => {
         if (err) {
