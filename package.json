@@ -1,5 +1,5 @@
 {
-  "name": "tpf-client-lite",
+  "name": "tpf-client-light",
   "version": "1.0.0",
   "description": "Lighter Triple Pattern Fragment Client",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Callidon/tpf-client-lite.git"
+    "url": "git+https://github.com/Callidon/tpf-client-light.git"
   },
   "author": "Thomas Minier <thomas.minier@protonmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Callidon/tpf-client-lite/issues"
+    "url": "https://github.com/Callidon/tpf-client-light/issues"
   },
-  "homepage": "https://github.com/Callidon/tpf-client-lite#readme",
+  "homepage": "https://github.com/Callidon/tpf-client-light#readme",
   "dependencies": {
     "asynciterator": "^1.1.0",
     "jsonld": "^0.4.11",
