@@ -1,21 +1,21 @@
 {
-  "name": "query-decomposer",
+  "name": "tpf-client-lite",
   "version": "1.0.0",
-  "description": "Testing replication-aware query decomposition iwth ldf+hdt",
+  "description": "Lighter Triple Pattern Fragment Client",
   "main": "index.js",
   "scripts": {
     "test": "mocha tests/**/*.js --trace-deprecation --timeout 5000"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Callidon/query-decomposer.git"
+    "url": "git+https://github.com/Callidon/tpf-client-lite.git"
   },
   "author": "Thomas Minier <thomas.minier@protonmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Callidon/query-decomposer/issues"
+    "url": "https://github.com/Callidon/tpf-client-lite/issues"
   },
-  "homepage": "https://github.com/Callidon/query-decomposer#readme",
+  "homepage": "https://github.com/Callidon/tpf-client-lite#readme",
   "dependencies": {
     "asynciterator": "^1.1.0",
     "jsonld": "^0.4.11",

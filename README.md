@@ -1,2 +1,2 @@
 #  tpf-client-lite
- Lighter Triple Pattern Fragment Client
+Lighter Triple Pattern Fragment Client
