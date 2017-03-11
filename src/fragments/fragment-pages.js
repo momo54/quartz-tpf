@@ -32,13 +32,11 @@ const request = require('request');
 const _ = require('lodash');
 const metadata = require('./metadata.js');
 
-const defaultHeaders = () => {
-  return {
-    'accept': 'application/json',
-    'accept-charset': 'utf-8',
-    'accept-encoding': 'gzip,deflate',
-    'user-agent': `Triple Pattern Fragments Client Lite (${os.type()} ${os.arch()})`
-  };
+const defaultHeaders = {
+  'accept': 'application/json',
+  'accept-charset': 'utf-8',
+  'accept-encoding': 'gzip,deflate',
+  'user-agent': `Triple Pattern Fragments Client Lite (${os.type()} ${os.arch()})`
 };
 
 /**
@@ -100,7 +98,7 @@ class FragmentPages {
     return new Promise((resolve, reject) => {
       const options = {
         url: this._nextPage,
-        headers: defaultHeaders()
+        headers: defaultHeaders
       };
       request.get(options, (err, res, body) => {
         if (err) {
@@ -144,9 +142,7 @@ class FragmentPages {
    */
   fetch (count, previous = []) {
     // stop case 1: no more triples can be fetched from the fragment
-    if (this.isClosed) {
-      return Promise.resolve(previous);
-    } else if (count <= 0) {
+    if (count <= 0) {
       // stop case 2: no more items needs to be fetched
       return Promise.resolve(previous);
     } else if (this._buffer.length > 0) {
@@ -157,6 +153,8 @@ class FragmentPages {
       this._buffer = _.drop(this._buffer, items.length);
       // recursive call to fetch (eventually) missing triples
       return this.fetch(cpt, _.union(previous, items));
+    } if (this.isClosed) {
+      return Promise.resolve(null);
     } else {
       // fetch triples from online fragments, then retry fetching
       return this._refillBuffer().then(() => this.fetch(count, previous));

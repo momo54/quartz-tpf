@@ -4,7 +4,7 @@
   "description": "Lighter Triple Pattern Fragment Client",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/**/*.js --trace-deprecation --timeout 5000"
+    "test": "mocha tests/**/*.js --trace-deprecation --timeout 10000"
   },
   "repository": {
     "type": "git",
