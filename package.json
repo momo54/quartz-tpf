@@ -4,6 +4,7 @@
   "description": "Lighter Triple Pattern Fragment Client",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint src/",
     "test": "mocha tests/**/*.js --trace-deprecation --timeout 10000"
   },
   "repository": {
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "eslint": "^3.17.1",
     "mocha": "^3.2.0"
   }
 }

@@ -27,14 +27,13 @@ SOFTWARE.
 require('chai').should();
 const JoinOperator = require('../../src/operators/join-operator.js');
 const TripleOperator = require('../../src/operators/triple-operator.js');
-const FragmentPages = require('../../src/fragments/fragment-pages.js');
-const LRU = require('lru-cache');
+const FragmentFactory = require('../../src/fragments/fragment-factory.js');
 
 describe('JoinOperator', () => {
+	const factory = new FragmentFactory('http://fragments.mementodepot.org/dbpedia_201510');
 	it('should perform a join between two triple patterns', done => {
-		const cache = new LRU(50);
     const leftPattern = { subject: '?s', predicate: 'http://dbpedia.org/property/accessdate', object: '?o' };
-    const pages = new FragmentPages('http://fragments.mementodepot.org/dbpedia_201510', leftPattern, cache, 1);
+    const pages = factory.get(leftPattern);
 		const left = new TripleOperator(pages, leftPattern);
 
 		const rightPattern = {
@@ -42,7 +41,7 @@ describe('JoinOperator', () => {
 			predicate: 'http://dbpedia.org/property/isCitedBy',
 			object: '?citedBy'
 		};
-		const join = new JoinOperator(left.take(1), 'http://fragments.mementodepot.org/dbpedia_201510', rightPattern, cache);
+		const join = new JoinOperator(left.take(1), 'http://fragments.mementodepot.org/dbpedia_201510', rightPattern);
 
 		join.take(1).on('data', m => {
 			m.should.have.keys('?s', '?o', '?citedBy');

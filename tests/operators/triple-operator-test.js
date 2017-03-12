@@ -26,14 +26,13 @@ SOFTWARE.
 require('chai').should();
 
 const TripleOperator = require('../../src/operators/triple-operator.js');
-const FragmentPages = require('../../src/fragments/fragment-pages.js');
-const LRU = require('lru-cache');
+const FragmentFactory = require('../../src/fragments/fragment-factory.js');
 
 describe('TripleOperator', () => {
+	const factory = new FragmentFactory('http://fragments.mementodepot.org/dbpedia_201510');
 	it('should yield mappings from a fragment', done => {
-		const cache = new LRU(50);
     const tp = { subject: '?s', predicate: 'http://dbpedia.org/property/accessdate', object: '?o' };
-    const pages = new FragmentPages('http://fragments.mementodepot.org/dbpedia_201510', tp, cache, 1);
+    const pages = factory.get(tp);
 		const op = new TripleOperator(pages, tp);
 
 		op.take(1).on('data', m => {
