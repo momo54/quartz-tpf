@@ -40,7 +40,10 @@ class JoinOperator extends MultiTransformIterator {
 	 * @param {AsyncIterator} leftSource - An iterator that emits triples from the external relation
 	 * @param {string} rightFragment - The fragment url of the internal relation
 	 * @param {Object} rightPattern - The triple pattern matching the internal relation
-	 * @param {LRU} cache - The LRU cached used to cached framgent pages
+	 * @param {string} rightPattern.subject - The subject of the triple pattern
+   * @param {string} rightPattern.predicate - The predicate of the triple pattern
+   * @param {string} rightPattern.object - The object of the triple pattern
+	 * @param {LRU} cache - The LRU cached used to cached fragment pages
 	 */
 	constructor (leftSource, rightFragment, rightPattern, cache) {
 		super(leftSource);
@@ -48,6 +51,19 @@ class JoinOperator extends MultiTransformIterator {
 		this._rightPattern = rightPattern;
 		this._fragmentFactory = new FragmentFactory(this._rightFragment, cache);
 	}
+
+  /**
+   * _scanMappings is called on each set of mappings fetched from the internal relation
+   * and perform a full join between the two relations.
+   * @param {Object} left - The set of mappings joined from the external relation
+   * @param {Object} right - A set of mappings from the internal relation
+   * @return {Object} The join between the two sets of mappings
+   */
+  _scanMappings (left, right) {
+    // empty results from internal relation means no results from the join
+    if (_.size(right) === 0) return null;
+    return _.assign(left, right);
+  }
 
 	/**
 	 * Perform Nested Loop Join using mappings from upstream iterator
@@ -64,11 +80,7 @@ class JoinOperator extends MultiTransformIterator {
 			// build a new triple operator from this new triple pattern
 			const pages = this._fragmentFactory.get(triple, 1);
 			const rightOperator = new TripleOperator(pages, triple);
-			return rightOperator.map(mappings => {
-				// empty results from internal relation means no results from the join
-				if (_.size(mappings) === 0) return null;
-				return _.assign(item, mappings);
-			});
+			return rightOperator.map(mappings => this._scanMappings(item, mappings));
 	}
 }
 

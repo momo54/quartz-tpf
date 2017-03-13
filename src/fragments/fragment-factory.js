@@ -49,6 +49,9 @@ class FragmentFactory {
 	/**
 	 * Create a new {@link FragmentPages} for a given pattern and first page
 	 * @param  {Object} pattern - The triple pattern to match against
+	 * @param {string} pattern.subject - The subject of the triple pattern
+   * @param {string} pattern.predicate - The predicate of the triple pattern
+   * @param {string} pattern.object - The object of the triple pattern
 	 * @param  {int} [firstPage=1] - (optional) The index of the first page to use when fetching triples from pages
 	 * @return {FragmentPages} A new FragmentPages
 	 */

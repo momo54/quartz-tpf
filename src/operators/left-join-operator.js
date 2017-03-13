@@ -25,7 +25,6 @@ SOFTWARE.
 'use strict';
 
 const JoinOperator = require('./join-operator.js');
-const TripleOperator = require('./triple-operator.js');
 const _ = require('lodash');
 
 /**
@@ -39,29 +38,27 @@ class LeftJoinOperator extends JoinOperator {
 	 * @param {AsyncIterator} leftSource - An iterator that emits triples from the external relation
 	 * @param {string} rightFragment - The fragment url of the internal relation
 	 * @param {Object} rightPattern - The triple pattern matching the internal relation
-	 * @param {LRU} cache - The LRU cached used to cached framgent pages
+	 * @param {string} rightPattern.subject - The subject of the triple pattern
+   * @param {string} rightPattern.predicate - The predicate of the triple pattern
+   * @param {string} rightPattern.object - The object of the triple pattern
+	 * @param {LRU} cache - The LRU cached used to cached fragment pages
 	 */
 	constructor (leftSource, rightFragment, rightPattern, cache) {
 		super(leftSource, rightFragment, rightPattern, cache);
 	}
 
-	/**
-	 * Perform a Left Join using mappings from upstream iterator
-	 * @param {Object} item - Set of mappings fetched from upstream iterator
-	 * @return {AsyncIterator} The next iterator in the query execution plan
-	 */
-	_createTransformer (item) {
-			// creates a new triple by injecting set of mappings into the internal relation
-			const triple = _.mapValues(this._rightPattern, (v, k) => {
-				if (v.startsWith('?') && k in item) return item[k];
-				return v;
-			});
-
-			// build a new triple operator from this new triple pattern
-			const pages = this._fragmentFactory.get(triple, 1);
-			const rightOperator = new TripleOperator(pages, triple);
-			return rightOperator.map(mappings => _.assign(item, mappings));
-	}
+  /**
+   * _scanMappings is called on each set of mappings fetched from the internal relation
+   * and perform a left join between the two relations.
+   * @param {Object} left - The set of mappings joined from the external relation
+   * @param {Object} right - A set of mappings from the internal relation
+   * @return {Object} The left join between the two sets of mappings
+   * @override
+   */
+  _scanMappings (left, right) {
+    // ignore empty results from internal relation
+    return _.assign(left, right);
+  }
 }
 
 module.exports = LeftJoinOperator;
