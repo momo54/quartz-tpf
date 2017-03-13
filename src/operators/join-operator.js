@@ -35,22 +35,22 @@ const _ = require('lodash');
  * @author Thomas Minier
  */
 class JoinOperator extends MultiTransformIterator {
-	/**
-	 * Constructor
-	 * @param {AsyncIterator} leftSource - An iterator that emits triples from the external relation
-	 * @param {string} rightFragment - The fragment url of the internal relation
-	 * @param {Object} rightPattern - The triple pattern matching the internal relation
-	 * @param {string} rightPattern.subject - The subject of the triple pattern
+  /**
+   * Constructor
+   * @param {AsyncIterator} leftSource - An iterator that emits triples from the external relation
+   * @param {string} rightFragment - The fragment url of the internal relation
+   * @param {Object} rightPattern - The triple pattern matching the internal relation
+   * @param {string} rightPattern.subject - The subject of the triple pattern
    * @param {string} rightPattern.predicate - The predicate of the triple pattern
    * @param {string} rightPattern.object - The object of the triple pattern
-	 * @param {LRU} cache - The LRU cached used to cached fragment pages
-	 */
-	constructor (leftSource, rightFragment, rightPattern, cache) {
-		super(leftSource);
-		this._rightFragment = rightFragment;
-		this._rightPattern = rightPattern;
-		this._fragmentFactory = new FragmentFactory(this._rightFragment, cache);
-	}
+   * @param {LRU} cache - The LRU cached used to cached fragment pages
+   */
+  constructor (leftSource, rightFragment, rightPattern, cache) {
+    super(leftSource);
+    this._rightFragment = rightFragment;
+    this._rightPattern = rightPattern;
+    this._fragmentFactory = new FragmentFactory(this._rightFragment, cache);
+  }
 
   /**
    * _scanMappings is called on each set of mappings fetched from the internal relation
@@ -65,23 +65,23 @@ class JoinOperator extends MultiTransformIterator {
     return _.assign(left, right);
   }
 
-	/**
-	 * Perform Nested Loop Join using mappings from upstream iterator
-	 * @param {Object} item - Set of mappings fetched from upstream iterator
-	 * @return {AsyncIterator} The next iterator in the query execution plan
-	 */
-	_createTransformer (item) {
-			// creates a new triple by injecting set of mappings into the internal relation
-			const triple = _.mapValues(this._rightPattern, (v, k) => {
-				if (v.startsWith('?') && k in item) return item[k];
-				return v;
-			});
+  /**
+   * Perform Nested Loop Join using mappings from upstream iterator
+   * @param {Object} item - Set of mappings fetched from upstream iterator
+   * @return {AsyncIterator} The next iterator in the query execution plan
+   */
+  _createTransformer (item) {
+      // creates a new triple by injecting set of mappings into the internal relation
+      const triple = _.mapValues(this._rightPattern, (v, k) => {
+        if (v.startsWith('?') && k in item) return item[k];
+        return v;
+      });
 
-			// build a new triple operator from this new triple pattern
-			const pages = this._fragmentFactory.get(triple, 1);
-			const rightOperator = new TripleOperator(pages, triple);
-			return rightOperator.map(mappings => this._scanMappings(item, mappings));
-	}
+      // build a new triple operator from this new triple pattern
+      const pages = this._fragmentFactory.get(triple, 1);
+      const rightOperator = new TripleOperator(pages, triple);
+      return rightOperator.map(mappings => this._scanMappings(item, mappings));
+  }
 }
 
 module.exports = JoinOperator;

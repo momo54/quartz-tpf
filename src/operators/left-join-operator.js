@@ -33,19 +33,19 @@ const _ = require('lodash');
  * @author Thomas Minier
  */
 class LeftJoinOperator extends JoinOperator {
-	/**
-	 * Constructor
-	 * @param {AsyncIterator} leftSource - An iterator that emits triples from the external relation
-	 * @param {string} rightFragment - The fragment url of the internal relation
-	 * @param {Object} rightPattern - The triple pattern matching the internal relation
-	 * @param {string} rightPattern.subject - The subject of the triple pattern
+  /**
+   * Constructor
+   * @param {AsyncIterator} leftSource - An iterator that emits triples from the external relation
+   * @param {string} rightFragment - The fragment url of the internal relation
+   * @param {Object} rightPattern - The triple pattern matching the internal relation
+   * @param {string} rightPattern.subject - The subject of the triple pattern
    * @param {string} rightPattern.predicate - The predicate of the triple pattern
    * @param {string} rightPattern.object - The object of the triple pattern
-	 * @param {LRU} cache - The LRU cached used to cached fragment pages
-	 */
-	constructor (leftSource, rightFragment, rightPattern, cache) {
-		super(leftSource, rightFragment, rightPattern, cache);
-	}
+   * @param {LRU} cache - The LRU cached used to cached fragment pages
+   */
+  constructor (leftSource, rightFragment, rightPattern, cache) {
+    super(leftSource, rightFragment, rightPattern, cache);
+  }
 
   /**
    * _scanMappings is called on each set of mappings fetched from the internal relation

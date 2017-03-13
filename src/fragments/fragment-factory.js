@@ -32,32 +32,32 @@ const FragmentPages = require('./fragment-pages.js');
  * @author Thomas Minier
  */
 class FragmentFactory {
-	/**
-	 * Constructor
-	 * @param {string} url - The fragment url
-	 * @param {LRU|undefined} cache - (optional) Cache store used to cache fragment pages
-	 */
-	constructor (url, cache) {
-		this._fragmentURL = url;
-		// by default, use a fake cache that does not store anything
-		this._cache = cache || {
-			get: () => undefined,
-			set: () => {}
-		};
-	}
+  /**
+   * Constructor
+   * @param {string} url - The fragment url
+   * @param {LRU|undefined} cache - (optional) Cache store used to cache fragment pages
+   */
+  constructor (url, cache) {
+    this._fragmentURL = url;
+    // by default, use a fake cache that does not store anything
+    this._cache = cache || {
+      get: () => undefined,
+      set: () => {}
+    };
+  }
 
-	/**
-	 * Create a new {@link FragmentPages} for a given pattern and first page
-	 * @param  {Object} pattern - The triple pattern to match against
-	 * @param {string} pattern.subject - The subject of the triple pattern
+  /**
+   * Create a new {@link FragmentPages} for a given pattern and first page
+   * @param  {Object} pattern - The triple pattern to match against
+   * @param {string} pattern.subject - The subject of the triple pattern
    * @param {string} pattern.predicate - The predicate of the triple pattern
    * @param {string} pattern.object - The object of the triple pattern
-	 * @param  {int} [firstPage=1] - (optional) The index of the first page to use when fetching triples from pages
-	 * @return {FragmentPages} A new FragmentPages
-	 */
-	get (pattern, firstPage = 1) {
-		return new FragmentPages(this._fragmentURL, pattern, this._cache, firstPage);
-	}
+   * @param  {int} [firstPage=1] - (optional) The index of the first page to use when fetching triples from pages
+   * @return {FragmentPages} A new FragmentPages
+   */
+  get (pattern, firstPage = 1) {
+    return new FragmentPages(this._fragmentURL, pattern, this._cache, firstPage);
+  }
 }
 
 module.exports = FragmentFactory;

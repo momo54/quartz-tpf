@@ -34,46 +34,46 @@ const _ = require('lodash');
  * @author Thomas Minier
  */
 class TripleOperator extends BufferedIterator {
-	/**
-	 * Constructor
-	 * @param {FragmentPages} fragmentPages - The pages used to read triples
-	 * @param {Object} pattern - The triple pattern releated to
-	 */
-	constructor (fragmentPages, pattern) {
-		super();
-		this._pattern = pattern;
-		this._pages = fragmentPages;
-		this._projection = _.pickBy(this._pattern, v => v.startsWith('?'));
-	}
+  /**
+   * Constructor
+   * @param {FragmentPages} fragmentPages - The pages used to read triples
+   * @param {Object} pattern - The triple pattern releated to
+   */
+  constructor (fragmentPages, pattern) {
+    super();
+    this._pattern = pattern;
+    this._pages = fragmentPages;
+    this._projection = _.pickBy(this._pattern, v => v.startsWith('?'));
+  }
 
-	/**
-	 * Apply a projection on a triple pattern
-	 * @param {Object} triple - The triple pattern on which the projection is applied
-	 * @return {Object} A set of mappings resulting from the projection
-	 */
-	_project (triple) {
-		const subset = _.pickBy(triple, (v, k) => k in this._projection);
-		return _.mapKeys(subset, (v, k) => this._projection[k]);
-	}
+  /**
+   * Apply a projection on a triple pattern
+   * @param {Object} triple - The triple pattern on which the projection is applied
+   * @return {Object} A set of mappings resulting from the projection
+   */
+  _project (triple) {
+    const subset = _.pickBy(triple, (v, k) => k in this._projection);
+    return _.mapKeys(subset, (v, k) => this._projection[k]);
+  }
 
-	/**
-	 * Read a given number of mappings from triples
-	 * @param {int} count - The number of items to generate
-	 * @param {function} done - To be called when reading is completed
-	 * @return {void}
-	 */
-	_read (count, done) {
-		this._pages.fetch(count)
-		.then(triples => {
-			if (triples === null) {
-				this.close();
-			} else {
-				triples.forEach(t => this._push(this._project(t)));
-				done();
-			}
-		});
-		// TODO: see how to catch errors...
-	}
+  /**
+   * Read a given number of mappings from triples
+   * @param {int} count - The number of items to generate
+   * @param {function} done - To be called when reading is completed
+   * @return {void}
+   */
+  _read (count, done) {
+    this._pages.fetch(count)
+    .then(triples => {
+      if (triples === null) {
+        this.close();
+      } else {
+        triples.forEach(t => this._push(this._project(t)));
+        done();
+      }
+    });
+    // TODO: see how to catch errors...
+  }
 }
 
 module.exports = TripleOperator;
