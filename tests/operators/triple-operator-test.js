@@ -29,17 +29,17 @@ const TripleOperator = require('../../src/operators/triple-operator.js');
 const FragmentFactory = require('../../src/fragments/fragment-factory.js');
 
 describe('TripleOperator', () => {
-	const factory = new FragmentFactory('http://fragments.mementodepot.org/dbpedia_201510');
-	it('should yield mappings from a fragment', done => {
+  const factory = new FragmentFactory('http://fragments.mementodepot.org/dbpedia_201510');
+  it('should yield mappings from a fragment', done => {
     const tp = { subject: '?s', predicate: 'http://dbpedia.org/property/accessdate', object: '?o' };
     const pages = factory.get(tp);
-		const op = new TripleOperator(pages, tp);
+    const op = new TripleOperator(pages, tp);
 
-		op.take(1).on('data', m => {
-			m.should.have.keys('?s', '?o');
-			m['?s'].should.not.empty;
-			m['?o'].should.not.empty;
-			done();
-		});
-	});
+    op.take(1).on('data', m => {
+      m.should.have.keys('?s', '?o');
+      m['?s'].should.not.empty;
+      m['?o'].should.not.empty;
+      done();
+    });
+  });
 });

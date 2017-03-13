@@ -30,25 +30,25 @@ const TripleOperator = require('../../src/operators/triple-operator.js');
 const FragmentFactory = require('../../src/fragments/fragment-factory.js');
 
 describe('JoinOperator', () => {
-	const factory = new FragmentFactory('http://fragments.mementodepot.org/dbpedia_201510');
-	it('should perform a join between two triple patterns', done => {
+  const factory = new FragmentFactory('http://fragments.mementodepot.org/dbpedia_201510');
+  it('should perform a join between two triple patterns', done => {
     const leftPattern = { subject: '?s', predicate: 'http://dbpedia.org/property/accessdate', object: '?o' };
     const pages = factory.get(leftPattern);
-		const left = new TripleOperator(pages, leftPattern);
+    const left = new TripleOperator(pages, leftPattern);
 
-		const rightPattern = {
-			subject: '?s',
-			predicate: 'http://dbpedia.org/property/isCitedBy',
-			object: '?citedBy'
-		};
-		const join = new JoinOperator(left.take(1), 'http://fragments.mementodepot.org/dbpedia_201510', rightPattern);
+    const rightPattern = {
+      subject: '?s',
+      predicate: 'http://dbpedia.org/property/isCitedBy',
+      object: '?citedBy'
+    };
+    const join = new JoinOperator(left.take(1), 'http://fragments.mementodepot.org/dbpedia_201510', rightPattern);
 
-		join.take(1).on('data', m => {
-			m.should.have.keys('?s', '?o', '?citedBy');
-			m['?s'].should.not.be.empty;
-			m['?o'].should.not.be.empty;
-			m['?citedBy'].should.not.be.empty;
-			done();
-		});
-	});
+    join.take(1).on('data', m => {
+      m.should.have.keys('?s', '?o', '?citedBy');
+      m['?s'].should.not.be.empty;
+      m['?o'].should.not.be.empty;
+      m['?citedBy'].should.not.be.empty;
+      done();
+    });
+  });
 });
