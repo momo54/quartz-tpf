@@ -40,7 +40,7 @@ class TripleOperator extends BufferedIterator {
    * @param {Object} pattern - The triple pattern releated to
    */
   constructor (fragmentPages, pattern) {
-    super();
+    super({maxBufferSize: 500});
     this._pattern = pattern;
     this._pages = fragmentPages;
     this._projection = _.pickBy(this._pattern, v => v.startsWith('?'));

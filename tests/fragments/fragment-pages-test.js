@@ -100,7 +100,7 @@ describe('FragmentPages', () => {
       pages._buffer.length.should.equals(488);
 
       // manipulate buffer to force the download of the next page
-      pages._buffer = [ _.first(pages._buffer) ];
+      pages._buffer = [];
       return pages.fetch(10);
     })
     .then(triples => {

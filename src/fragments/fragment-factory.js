@@ -52,11 +52,12 @@ class FragmentFactory {
    * @param {string} pattern.subject - The subject of the triple pattern
    * @param {string} pattern.predicate - The predicate of the triple pattern
    * @param {string} pattern.object - The object of the triple pattern
-   * @param  {int} [firstPage=1] - (optional) The index of the first page to use when fetching triples from pages
+   * @param  {int} firstPage - (optional) The index of the first page to use when fetching triples from pages
+   * @param  {int} lastPage - (optional) The index of the last page to read from fragment
    * @return {FragmentPages} A new FragmentPages
    */
-  get (pattern, firstPage = 1) {
-    return new FragmentPages(this._fragmentURL, pattern, this._cache, firstPage);
+  get (pattern, firstPage = 1, lastPage = -1) {
+    return new FragmentPages(this._fragmentURL, pattern, this._cache, firstPage, lastPage);
   }
 }
 

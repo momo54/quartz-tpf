@@ -50,7 +50,7 @@ describe('JoinOperator', () => {
       m['?o'].should.not.be.empty;
       m['?citedBy'].should.not.be.empty;
       cpt++;
-      if (cpt >= 10) done();
+      if (cpt >= 4) done();
     });
   });
 

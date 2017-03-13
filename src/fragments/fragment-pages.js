@@ -92,7 +92,7 @@ class FragmentPages {
     const cachedPage = this._cache.get(this._nextPage);
     if (cachedPage !== undefined) {
       this._buffer = cachedPage.items;
-      this.isClosed = !('hydra:next' in cachedPage.stats);
+      this.isClosed = (!('hydra:next' in cachedPage.stats)) || ('hydra:next' in cachedPage.stats && cachedPage.stats['hydra:next']['@id'].includes(`page=${this._lastPageIndex}`));
       if (!this.isClosed) this._nextPage = cachedPage.stats['hydra:next']['@id'];
       return Promise.resolve();
     }
@@ -112,20 +112,26 @@ class FragmentPages {
         const context = data['@context'];
         const graph = _.partition(data['@graph'], obj => '@id' in obj && !obj['@id'].includes('#metadata'));
 
+        // no triples match this pattern on this fragment
+        if (graph[1].length === 0) {
+          this.isClosed = true;
+          resolve();
+          return;
+        }
+
         const stats = metadata.getStats(this._nextPage, graph[1][0]);
         // check if there's no more pages or the last page has been reached
         this.isClosed = (!('hydra:next' in stats)) || ('hydra:next' in stats && stats['hydra:next']['@id'].includes(`page=${this._lastPageIndex}`));
         // set next page for later operations
         if (!this.isClosed) this._nextPage = stats['hydra:next']['@id'];
 
-        // extract items fetched from online fragment, then fill buffer with remaining items
+        // extract items fetched from the online fragment, then fill buffer with remaining items
         jsonld.toRDF({'@context': context, '@graph': graph[0]}, { format: 'application/nquads' }, (err, raw) => {
           if (err) {
             reject(err);
             return;
           }
           this._buffer = this._parser.parse(_.trim(raw));
-
           // save page into the cache with its metadata, then resolve promise
           this._cache.set(options.url, {
             stats,
@@ -145,9 +151,7 @@ class FragmentPages {
    * @return {Promise} A Promise fullfilled with the N triples from the fragment pages.
    */
   fetch (count, previous = []) {
-    // stop case 1: no more triples can be fetched from the fragment
     if (count <= 0) {
-      // stop case 2: no more items needs to be fetched
       return Promise.resolve(previous);
     } else if (this._buffer.length > 0) {
       // fetch as many triples as possibles from the buffer
@@ -157,7 +161,9 @@ class FragmentPages {
       this._buffer = _.drop(this._buffer, items.length);
       // recursive call to fetch (eventually) missing triples
       return this.fetch(cpt, _.union(previous, items));
-    } if (this.isClosed) {
+    } if (this.isClosed && previous.length > 0) {
+      return Promise.resolve(previous);
+    } else if (this.isClosed) {
       return Promise.resolve(null);
     } else {
       // fetch triples from online fragments, then retry fetching

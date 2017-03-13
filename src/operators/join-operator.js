@@ -48,7 +48,7 @@ class JoinOperator extends MultiTransformIterator {
    * @param {LRU} cache - The LRU cached used to cached fragment pages
    */
   constructor (leftSource, rightFragment, rightPattern, cache) {
-    super(leftSource);
+    super(leftSource, {maxBufferSize: 500});
     this._rightFragment = rightFragment;
     this._rightPattern = rightPattern;
     this._fragmentFactory = new FragmentFactory(this._rightFragment, cache);
@@ -77,8 +77,8 @@ class JoinOperator extends MultiTransformIterator {
       if(_.findKey(this._rightPattern, v => v in item) === undefined) return new EmptyIterator();
 
       // creates a new triple by injecting set of mappings into the internal relation
-      const triple = _.mapValues(this._rightPattern, (v, k) => {
-        if (v.startsWith('?') && k in item) return item[k];
+      const triple = _.mapValues(this._rightPattern, v => {
+        if (v.startsWith('?') && v in item) return item[v];
         return v;
       });
 
