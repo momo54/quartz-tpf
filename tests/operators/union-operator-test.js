@@ -1,4 +1,4 @@
-/* file : triple-operator-test.js
+/* file : union-operator-test.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
@@ -26,21 +26,24 @@ SOFTWARE.
 require('chai').should();
 
 const TripleOperator = require('../../src/operators/triple-operator.js');
+const UnionOperator = require('../../src/operators/union-operator.js');
 const FragmentFactory = require('../../src/fragments/fragment-factory.js');
 
-describe('TripleOperator', () => {
+describe('UnionOperator', () => {
   const factory = new FragmentFactory('http://fragments.mementodepot.org/dbpedia_201510');
-  it('should yield mappings from a fragment', done => {
+  it('should perform an union between two sources', done => {
     let cpt = 0;
-    const tp = { subject: '?s', predicate: 'http://dbpedia.org/property/accessdate', object: '?o' };
-    const op = new TripleOperator(factory.get(tp), tp);
+    const tpA = { subject: '?s1', predicate: 'http://dbpedia.org/property/accessdate', object: '?o1' };
+    const tpB = { subject: '?s2', predicate: 'http://dbpedia.org/property/first', object: '?o2' };
 
-    op.take(10).on('data', m => {
-      m.should.have.keys('?s', '?o');
-      m['?s'].should.not.empty;
-      m['?o'].should.not.empty;
+    const firstOp = new TripleOperator(factory.get(tpA), tpA);
+    const secondOp = new TripleOperator(factory.get(tpB), tpB);
+    const union = new UnionOperator(firstOp.take(2), secondOp.take(2));
+
+    union.on('data', m => {
+      m.should.have.any.keys('?s1', '?o1', '?s2', '?o2');
       cpt++;
-      if (cpt >= 10) done();
+      if (cpt >= 4) done();
     });
   });
 });

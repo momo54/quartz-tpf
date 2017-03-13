@@ -24,7 +24,9 @@ SOFTWARE.
 
 'use strict';
 
-const MultiTransformIterator = require('asynciterator').MultiTransformIterator;
+const AsyncIt = require('asynciterator');
+const MultiTransformIterator = AsyncIt.MultiTransformIterator;
+const EmptyIterator = AsyncIt.EmptyIterator;
 const FragmentFactory = require('../fragments/fragment-factory.js');
 const TripleOperator = require('./triple-operator.js');
 const _ = require('lodash');
@@ -71,6 +73,9 @@ class JoinOperator extends MultiTransformIterator {
    * @return {AsyncIterator} The next iterator in the query execution plan
    */
   _createTransformer (item) {
+      // if there is no commons variables between the mappings & the internal relation => no matches !
+      if(_.findKey(this._rightPattern, v => v in item) === undefined) return new EmptyIterator();
+
       // creates a new triple by injecting set of mappings into the internal relation
       const triple = _.mapValues(this._rightPattern, (v, k) => {
         if (v.startsWith('?') && k in item) return item[k];

@@ -51,10 +51,13 @@ class FragmentPages {
    * @param {Object} pattern - The triple pattern to match against
    * @param {LRU} cache - Cache store used to cache fragment pages
    * @param {int} firstPage - (optional) The index of the first page to use when fetching triples from pages
+   * @param {int} lastPage - (optional) The index of the last page to read from this fragment
    */
-  constructor (fragmentURL, pattern, cache, firstPage = 1) {
+  constructor (fragmentURL, pattern, cache, firstPage = 1, lastPage = -1) {
     this._fragmentURL = fragmentURL;
-    this._firstPage = this._makeFragmentURL(fragmentURL, pattern, firstPage);
+    this._firstPageIndex = firstPage;
+    this._lastPageIndex = lastPage;
+    this._firstPage = this._makeFragmentURL(fragmentURL, pattern, this._firstPageIndex);
     this._nextPage = this._firstPage;
     this._cache = cache;
     this._parser = new n3.Parser();
@@ -109,9 +112,10 @@ class FragmentPages {
         const context = data['@context'];
         const graph = _.partition(data['@graph'], obj => '@id' in obj && !obj['@id'].includes('#metadata'));
 
-        // set next page for later operations
         const stats = metadata.getStats(this._nextPage, graph[1][0]);
-        this.isClosed = !('hydra:next' in stats);
+        // check if there's no more pages or the last page has been reached
+        this.isClosed = (!('hydra:next' in stats)) || ('hydra:next' in stats && stats['hydra:next']['@id'].includes(`page=${this._lastPageIndex}`));
+        // set next page for later operations
         if (!this.isClosed) this._nextPage = stats['hydra:next']['@id'];
 
         // extract items fetched from online fragment, then fill buffer with remaining items
