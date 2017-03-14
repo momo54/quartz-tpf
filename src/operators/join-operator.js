@@ -48,7 +48,7 @@ class JoinOperator extends MultiTransformIterator {
    * @param {LRU} cache - The LRU cached used to cached fragment pages
    */
   constructor (leftSource, rightFragment, rightPattern, cache) {
-    super(leftSource, {maxBufferSize: 500});
+    super(leftSource);
     this._rightFragment = rightFragment;
     this._rightPattern = rightPattern;
     this._fragmentFactory = new FragmentFactory(this._rightFragment, cache);
@@ -83,7 +83,7 @@ class JoinOperator extends MultiTransformIterator {
       });
 
       // build a new triple operator from this new triple pattern
-      const pages = this._fragmentFactory.get(triple, 1);
+      const pages = this._fragmentFactory.get(triple);
       const rightOperator = new TripleOperator(pages, triple);
       return rightOperator.map(mappings => this._scanMappings(item, mappings));
   }

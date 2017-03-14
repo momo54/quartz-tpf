@@ -44,13 +44,17 @@ describe('JoinOperator', () => {
     };
     const join = new JoinOperator(left.take(5), 'http://fragments.mementodepot.org/dbpedia_201510', rightPattern);
 
-    join.take(10).on('data', m => {
+    join.on('data', m => {
       m.should.have.keys('?s', '?o', '?citedBy');
       m['?s'].should.not.be.empty;
       m['?o'].should.not.be.empty;
       m['?citedBy'].should.not.be.empty;
       cpt++;
-      if (cpt >= 4) done();
+    });
+
+    join.on('end', () => {
+      cpt.should.be.above(0);
+      done();
     });
   });
 

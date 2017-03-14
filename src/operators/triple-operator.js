@@ -40,7 +40,7 @@ class TripleOperator extends BufferedIterator {
    * @param {Object} pattern - The triple pattern releated to
    */
   constructor (fragmentPages, pattern) {
-    super({maxBufferSize: 500});
+    super();
     this._pattern = pattern;
     this._pages = fragmentPages;
     this._projection = _.pickBy(this._pattern, v => v.startsWith('?'));
@@ -69,8 +69,8 @@ class TripleOperator extends BufferedIterator {
         this.close();
       } else {
         triples.forEach(t => this._push(this._project(t)));
-        done();
       }
+      done();
     });
     // TODO: see how to catch errors...
   }

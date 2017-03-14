@@ -28,7 +28,8 @@ SOFTWARE.
 const jsonld = require('jsonld');
 const n3 = require('n3');
 const os = require('os');
-const request = require('request');
+// keep http connection open for this fragment url
+const request = require('request').forever({timeout:1000, minSockets:40});
 const _ = require('lodash');
 const metadata = require('./metadata.js');
 
@@ -131,7 +132,7 @@ class FragmentPages {
             reject(err);
             return;
           }
-          this._buffer = this._parser.parse(_.trim(raw));
+          this._buffer = this._buffer.concat(this._parser.parse(_.trim(raw)));
           // save page into the cache with its metadata, then resolve promise
           this._cache.set(options.url, {
             stats,
@@ -160,7 +161,7 @@ class FragmentPages {
       cpt -= items.length;
       this._buffer = _.drop(this._buffer, items.length);
       // recursive call to fetch (eventually) missing triples
-      return this.fetch(cpt, _.union(previous, items));
+      return this.fetch(cpt, previous.concat(items));
     } if (this.isClosed && previous.length > 0) {
       return Promise.resolve(previous);
     } else if (this.isClosed) {
