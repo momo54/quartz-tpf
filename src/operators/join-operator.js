@@ -52,6 +52,7 @@ class JoinOperator extends MultiTransformIterator {
     this._rightFragment = rightFragment;
     this._rightPattern = rightPattern;
     this._fragmentFactory = new FragmentFactory(this._rightFragment, cache);
+    leftSource.on('error', err => this.emit(err));
   }
 
   /**

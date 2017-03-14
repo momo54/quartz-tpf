@@ -71,8 +71,11 @@ class TripleOperator extends BufferedIterator {
         triples.forEach(t => this._push(this._project(t)));
       }
       done();
+    })
+    .catch(err => {
+      this.emit('error', err);
+      done();
     });
-    // TODO: see how to catch errors...
   }
 }
 

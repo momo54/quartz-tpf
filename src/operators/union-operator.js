@@ -45,7 +45,7 @@ class UnionOperator extends BufferedIterator {
       this._sources.push(s);
       s.on('readable', () => this._fillBuffer());
       s.on('end', () => this._fillBuffer());
-      // TODO: find a way to handle errors
+      s.on('error', err => this.emit(err));
     });
   }
 
@@ -61,6 +61,7 @@ class UnionOperator extends BufferedIterator {
     let cycles = 0;
 
     // read in a round robin way
+    // TODO: read count item instead of only one, see if how performance is impacted
     while ( item === null && cycles < this._sources.length) {
       source = this._sources[this._sIndex];
       item = source.read();
