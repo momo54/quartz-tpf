@@ -29,20 +29,20 @@ const _ = require('lodash');
 
 /**
  * TripleOperator is a source in a query execution plan which yields mappings from triples
- * fetched from a Triple Pattern Fragment using a {@link FragmentPages}
+ * fetched from a Triple Pattern Fragment using a {@link Fragment}
  * @extends BufferedIterator
  * @author Thomas Minier
  */
 class TripleOperator extends BufferedIterator {
   /**
    * Constructor
-   * @param {FragmentPages} fragmentPages - The pages used to read triples
-   * @param {Object} pattern - The triple pattern releated to
+   * @param {Fragment} fragment - The fragment used to read triples
+   * @param {Object} pattern - The triple pattern to match against
    */
-  constructor (fragmentPages, pattern) {
+  constructor (fragment, pattern) {
     super();
     this._pattern = pattern;
-    this._pages = fragmentPages;
+    this._fragment = fragment;
     this._projection = _.pickBy(this._pattern, v => v.startsWith('?'));
   }
 
@@ -63,7 +63,7 @@ class TripleOperator extends BufferedIterator {
    * @return {void}
    */
   _read (count, done) {
-    this._pages.fetch(count)
+    this._fragment.fetch(count)
     .then(triples => {
       if (triples === null) {
         this.close();

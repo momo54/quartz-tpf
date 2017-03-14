@@ -41,7 +41,7 @@ class LeftJoinOperator extends JoinOperator {
    * @param {string} rightPattern.subject - The subject of the triple pattern
    * @param {string} rightPattern.predicate - The predicate of the triple pattern
    * @param {string} rightPattern.object - The object of the triple pattern
-   * @param {LRU} cache - The LRU cached used to cached fragment pages
+   * @param {LRU} cache - The LRU cached used to cache fragment pages
    */
   constructor (leftSource, rightFragment, rightPattern, cache) {
     super(leftSource, rightFragment, rightPattern, cache);

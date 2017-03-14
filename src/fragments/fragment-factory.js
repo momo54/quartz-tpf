@@ -24,10 +24,10 @@ SOFTWARE.
 
 'use strict';
 
-const FragmentPages = require('./fragment-pages.js');
+const Fragment = require('./fragment.js');
 
 /**
- * FragmentFactory is a factory used to build {@link FragmentPages} with the same fragment url and cache,
+ * FragmentFactory is a factory used to build {@link Fragment} with the same fragment url and cache,
  * but with a given pattern and first page.
  * @author Thomas Minier
  */
@@ -47,17 +47,21 @@ class FragmentFactory {
   }
 
   /**
-   * Create a new {@link FragmentPages} for a given pattern and first page
+   * Create a new {@link Fragment} for a given pattern and first page
    * @param  {Object} pattern - The triple pattern to match against
    * @param {string} pattern.subject - The subject of the triple pattern
    * @param {string} pattern.predicate - The predicate of the triple pattern
    * @param {string} pattern.object - The object of the triple pattern
    * @param  {int} firstPage - (optional) The index of the first page to use when fetching triples from pages
    * @param  {int} lastPage - (optional) The index of the last page to read from fragment
-   * @return {FragmentPages} A new FragmentPages
+   * @return {Fragment} A new Fragment
    */
   get (pattern, firstPage = 1, lastPage = -1) {
-    return new FragmentPages(this._fragmentURL, pattern, this._cache, firstPage, lastPage);
+    return new Fragment(this._fragmentURL, pattern, {
+      cache: this._cache,
+      firstPage,
+      lastPage
+    });
   }
 }
 

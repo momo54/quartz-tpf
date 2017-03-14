@@ -1,5 +1,5 @@
 /*
-file: fragment-pages.js
+file: fragment.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
@@ -41,26 +41,27 @@ const defaultHeaders = {
 };
 
 /**
- * FragmentPages allow to fetch triples that match a triple pattern from a TPF fragment
+ * Fragment allow to fetch triples that match a triple pattern from a TPF fragment
  * @author Thomas Minier
  */
-class FragmentPages {
+class Fragment {
 
   /**
    * Constructor
    * @param {string} fragmentURL - The fragment url
    * @param {Object} pattern - The triple pattern to match against
-   * @param {LRU} cache - Cache store used to cache fragment pages
-   * @param {int} firstPage - (optional) The index of the first page to use when fetching triples from pages
-   * @param {int} lastPage - (optional) The index of the last page to read from this fragment
+   * @param {Object} options - Options passed to the Fragment pages
+   * @param {LRU} options.cache - Cache store used to cache fragment pages
+   * @param {int} options.firstPage - (optional) The index of the first page to use when fetching triples from pages
+   * @param {int} options.lastPage - (optional) The index of the last page to read from this fragment
    */
-  constructor (fragmentURL, pattern, cache, firstPage = 1, lastPage = -1) {
+  constructor (fragmentURL, pattern, options) {
     this._fragmentURL = fragmentURL;
-    this._firstPageIndex = firstPage;
-    this._lastPageIndex = lastPage;
+    this._firstPageIndex = options.firstPage || 1;
+    this._lastPageIndex = options.lastPage || -1;
     this._firstPage = this._makeFragmentURL(fragmentURL, pattern, this._firstPageIndex);
     this._nextPage = this._firstPage;
-    this._cache = cache;
+    this._cache = options.cache;
     this._parser = new n3.Parser();
     this.isClosed = false;
     this._buffer = [];
@@ -173,4 +174,4 @@ class FragmentPages {
   }
 }
 
-module.exports = FragmentPages;
+module.exports = Fragment;
