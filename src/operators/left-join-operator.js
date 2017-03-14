@@ -35,7 +35,7 @@ const _ = require('lodash');
 class LeftJoinOperator extends JoinOperator {
   /**
    * Constructor
-   * @param {AsyncIterator} leftSource - An iterator that emits triples from the external relation
+   * @param {AsyncIterator} leftSource - An iterator that emits mappings from the external relation
    * @param {string} rightFragment - The fragment url of the internal relation
    * @param {Object} rightPattern - The triple pattern matching the internal relation
    * @param {string} rightPattern.subject - The subject of the triple pattern

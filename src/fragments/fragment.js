@@ -57,14 +57,16 @@ class Fragment {
    */
   constructor (fragmentURL, pattern, options) {
     this._fragmentURL = fragmentURL;
+    this._pattern = pattern;
     this._firstPageIndex = options.firstPage || 1;
     this._lastPageIndex = options.lastPage || -1;
-    this._firstPage = this._makeFragmentURL(fragmentURL, pattern, this._firstPageIndex);
+    this._firstPage = this._makeFragmentURL(this._fragmentURL, this._pattern, this._firstPageIndex);
     this._nextPage = this._firstPage;
     this._cache = options.cache;
     this._parser = new n3.Parser();
     this.isClosed = false;
     this._buffer = [];
+    this._stats = null;
   }
 
   /**
@@ -122,6 +124,8 @@ class Fragment {
         }
 
         const stats = metadata.getStats(this._nextPage, graph[1][0]);
+        // save the stats for the first time
+        if (this._stats === null) this._stats = _.merge({}, stats);
         // check if there's no more pages or the last page has been reached
         this.isClosed = (!('hydra:next' in stats)) || ('hydra:next' in stats && stats['hydra:next']['@id'].includes(`page=${this._lastPageIndex}`));
         // set next page for later operations

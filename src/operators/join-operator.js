@@ -33,13 +33,13 @@ const _ = require('lodash');
 
 /**
  * A Join Operator perform a Nested Loop Join between another operator and a triple pattern
- * @extends TransformIterator
+ * @extends MultiTransformIterator
  * @author Thomas Minier
  */
 class JoinOperator extends MultiTransformIterator {
   /**
    * Constructor
-   * @param {AsyncIterator} leftSource - An iterator that emits triples from the external relation
+   * @param {AsyncIterator} leftSource - An iterator that emits mappings from the external relation
    * @param {string} rightFragment - The fragment url of the internal relation
    * @param {Object} rightPattern - The triple pattern matching the internal relation
    * @param {string} rightPattern.subject - The subject of the triple pattern
