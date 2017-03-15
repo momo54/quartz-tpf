@@ -1,4 +1,4 @@
-/* file : select-operator.js
+/* file : localization.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
@@ -24,37 +24,39 @@ SOFTWARE.
 
 'use strict';
 
-const TransformIterator = require('asynciterator').TransformIterator;
 const _ = require('lodash');
 
 /**
- * SelectOperator applies a SELECT operation (i.e. a projection) on the output of another operator
- * @extends TransformIterator
- * @author Thomas Minier
+ * Perform localization of a triple pattern, i.e. if the relation is fragmented, creates an union with all fragments
+ * @param  {Object} triple - A triple pattern to localize
+ * @param  {Object} catalog - The localization catalog
+ * @return {Object} The localized triple
  */
-class SelectOperator extends TransformIterator {
-  /**
-   * Constructor
-   * @param {AsyncIterator} source - The source operator
-   * @param {string[]} variables - The variables of the projection
-   * @param {Object} options - Options passed to iterator
-   */
-  constructor (source, variables, options = {}) {
-    super(source, options);
-    this._variables = variables;
-    this._selectAll = _.has('*', this._variables);
+const localizeTriple = (triple, catalog) => {
+  const key = `s=${triple.subject}&p=${triple.predicate}&o=${triple.object}`;
+  if (key in catalog) {
+    return {
+      type: 'union',
+      patterns: catalog[key].map(fragment => _.merge({ fragment }, triple))
+    };
   }
+  return _.merge({ fragment: catalog.default }, triple);
+};
 
-  /**
-   * Transform mappings from the source operator using the projection
-   * @param {Object} item - The set of mappings on which we apply the projection
-   * @param {function} done - To be called when projection is done
-   * @return {void}
-   */
-  _transform (item, done) {
-    if (this._selectAll || _.has(item, this._variables)) this._push(_.pick(item, this._variables));
-    done();
-  }
-}
+/**
+ * Perform localization on each triple pattern of a BGP
+ * @param  {Object} bgp - A BGP to localize
+ * @param  {Object} catalog - The localization catalog
+ * @return {Object} The localized BGP
+ */
+const localizeBGP = (bgp, catalog) => {
+  return {
+    type: 'bgp',
+    triples: bgp.triples.map(tp => localizeTriple(tp, catalog))
+  };
+};
 
-module.exports = SelectOperator;
+module.exports = {
+  localizeTriple,
+  localizeBGP
+};

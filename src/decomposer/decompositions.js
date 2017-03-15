@@ -1,4 +1,4 @@
-/* file : select-operator.js
+/* file : decompositions.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
@@ -24,37 +24,42 @@ SOFTWARE.
 
 'use strict';
 
-const TransformIterator = require('asynciterator').TransformIterator;
 const _ = require('lodash');
 
+// Merge two arrays when using _.mergeWith
+const mergeArray = (target, src) => {
+  if (_.isArray(target)) return target.concat(src);
+};
+
 /**
- * SelectOperator applies a SELECT operation (i.e. a projection) on the output of another operator
- * @extends TransformIterator
- * @author Thomas Minier
+ * Apply join reduction on a BGP which contains at least one union
+ * @param  {Object} bgp - The BGP to decompose
+ * @return {Object} The decomposed BGP
  */
-class SelectOperator extends TransformIterator {
-  /**
-   * Constructor
-   * @param {AsyncIterator} source - The source operator
-   * @param {string[]} variables - The variables of the projection
-   * @param {Object} options - Options passed to iterator
-   */
-  constructor (source, variables, options = {}) {
-    super(source, options);
-    this._variables = variables;
-    this._selectAll = _.has('*', this._variables);
-  }
+const joinReduction = bgp => {
+  let patterns = [ { type: 'bgp', triples: [] } ];
 
-  /**
-   * Transform mappings from the source operator using the projection
-   * @param {Object} item - The set of mappings on which we apply the projection
-   * @param {function} done - To be called when projection is done
-   * @return {void}
-   */
-  _transform (item, done) {
-    if (this._selectAll || _.has(item, this._variables)) this._push(_.pick(item, this._variables));
-    done();
-  }
-}
+  // no union found in the bgp
+  if (! _.some(bgp.triples, [ 'type', 'union' ])) return bgp;
 
-module.exports = SelectOperator;
+  // decompose each union we found
+  bgp.triples.forEach(tp => {
+    if ('type' in tp && tp.type === 'union') {
+      patterns = _.flatMap(tp.patterns, unionPattern => {
+        return patterns.map(pattern => {
+          return _.mergeWith({ triples: [ unionPattern ] }, pattern, mergeArray);
+        });
+      });
+    } else {
+      patterns.forEach(p => p.triples.push(tp));
+    }
+  });
+  return {
+    type: 'union',
+    patterns,
+  };
+};
+
+module.exports = {
+  joinReduction
+};
