@@ -33,7 +33,7 @@ const _ = require('lodash');
  * @param  {string} fragment - The url on which the fragment is hosted
  * @return {Object} The fragment metadata
  */
-const getMetadata = (fragment, cache) => {
+const getMetadata = fragment => {
   const options = {
     url: fragment,
     headers: {
