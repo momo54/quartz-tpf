@@ -27,6 +27,7 @@ SOFTWARE.
 
 const should = require('chai').should();
 const Fragment = require('../../src/fragments/fragment.js');
+const request = require('request').forever({timeout:1000, minSockets:40});
 const LRU = require('lru-cache');
 const _ = require('lodash');
 
@@ -34,7 +35,7 @@ describe('Fragment', () => {
   it('should fetch data from server', done => {
     const cache = new LRU(50);
     const tp = { predicate: 'http://dbpedia.org/property/accessdate' };
-    const pages = new Fragment('http://fragments.mementodepot.org/dbpedia_201510', tp, { cache });
+    const pages = new Fragment('http://fragments.mementodepot.org/dbpedia_201510', tp, { cache, http: request });
     pages.fetch(2)
     .then(triples => {
       triples.length.should.equal(2);
@@ -46,7 +47,7 @@ describe('Fragment', () => {
   it('should fetch data from server, next from buffer', done => {
     const cache = new LRU(50);
     const tp = { predicate: 'http://dbpedia.org/property/accessdate' };
-    const pages = new Fragment('http://fragments.mementodepot.org/dbpedia_201510', tp, { cache });
+    const pages = new Fragment('http://fragments.mementodepot.org/dbpedia_201510', tp, { cache, http: request });
     pages.fetch(2)
     .then(triples => {
       triples.length.should.equal(2);
@@ -63,7 +64,7 @@ describe('Fragment', () => {
   it('should refill buffer when it is empty using triples from the server', done => {
     const cache = new LRU(50);
     const tp = { predicate: 'http://dbpedia.org/property/accessdate' };
-    const pages = new Fragment('http://fragments.mementodepot.org/dbpedia_201510', tp, { cache });
+    const pages = new Fragment('http://fragments.mementodepot.org/dbpedia_201510', tp, { cache, http: request });
     pages.fetch(2)
     .then(triples => {
       triples.length.should.equal(2);
@@ -88,7 +89,7 @@ describe('Fragment', () => {
   it('should stop after a given last page', done => {
     const cache = new LRU(50);
     const tp = { predicate: 'http://dbpedia.org/property/accessdate' };
-    const pages = new Fragment('http://fragments.mementodepot.org/dbpedia_201510', tp, { cache, lastPage: 2 });
+    const pages = new Fragment('http://fragments.mementodepot.org/dbpedia_201510', tp, { cache, http: request, lastPage: 2 });
     pages.fetch(2)
     .then(triples => {
       triples.length.should.equal(2);

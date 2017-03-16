@@ -25,20 +25,10 @@ SOFTWARE.
 
 'use strict';
 
-const jsonld = require('jsonld');
-const n3 = require('n3');
-const os = require('os');
 // keep http connection open for this fragment url
-const request = require('request').forever({timeout:1000, minSockets:40});
+const request = require('request');
 const _ = require('lodash');
-const metadata = require('./metadata.js');
-
-const defaultHeaders = {
-  'accept': 'application/json',
-  'accept-charset': 'utf-8',
-  'accept-encoding': 'gzip,deflate',
-  'user-agent': `Triple Pattern Fragments Client Lite (${os.type()} ${os.arch()})`
-};
+const LDFPage = require('./ldf-page.js');
 
 /**
  * Fragment allow to fetch triples that match a triple pattern from a TPF fragment
@@ -63,7 +53,7 @@ class Fragment {
     this._firstPage = this._makeFragmentURL(this._fragmentURL, this._pattern, this._firstPageIndex);
     this._nextPage = this._firstPage;
     this._cache = options.cache;
-    this._parser = new n3.Parser();
+    this._http = options.http || request.forever({timeout:1000, minSockets:40});
     this.isClosed = false;
     this._buffer = [];
     this._stats = null;
@@ -85,68 +75,6 @@ class Fragment {
     if ('predicate' in pattern && !pattern.predicate.startsWith('?')) tp += `predicate=${encodeURIComponent(pattern.predicate)}&`;
     if ('object' in pattern && !pattern.object.startsWith('?')) tp += `object=${encodeURIComponent(pattern.object)}&`;
     return `${fragmentURL}?${tp}page=${page}`;
-  }
-
-  /**
-   * Refill the internal buffer using the next page fetched from the cache or the online fragment
-   * @return {Promise} A Promise fullfilled when the buffer has been refilled
-   */
-  _refillBuffer () {
-    // try to fetch the page from the cache first
-    const cachedPage = this._cache.get(this._nextPage);
-    if (cachedPage !== undefined) {
-      this._buffer = cachedPage.items;
-      this.isClosed = (!('hydra:next' in cachedPage.stats)) || ('hydra:next' in cachedPage.stats && cachedPage.stats['hydra:next']['@id'].includes(`page=${this._lastPageIndex}`));
-      if (!this.isClosed) this._nextPage = cachedPage.stats['hydra:next']['@id'];
-      return Promise.resolve();
-    }
-
-    // otherwise, fetch the page from online fragment
-    return new Promise((resolve, reject) => {
-      const options = {
-        url: this._nextPage,
-        headers: defaultHeaders
-      };
-      request.get(options, (err, res, body) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        const data = JSON.parse(body);
-        const context = data['@context'];
-        const graph = _.partition(data['@graph'], obj => '@id' in obj && !obj['@id'].includes('#metadata'));
-
-        // no triples match this pattern on this fragment
-        if (graph[1].length === 0) {
-          this.isClosed = true;
-          resolve();
-          return;
-        }
-
-        const stats = metadata.getStats(this._nextPage, graph[1][0]);
-        // save the stats for the first time
-        if (this._stats === null) this._stats = _.merge({}, stats);
-        // check if there's no more pages or the last page has been reached
-        this.isClosed = (!('hydra:next' in stats)) || ('hydra:next' in stats && stats['hydra:next']['@id'].includes(`page=${this._lastPageIndex}`));
-        // set next page for later operations
-        if (!this.isClosed) this._nextPage = stats['hydra:next']['@id'];
-
-        // extract items fetched from the online fragment, then fill buffer with remaining items
-        jsonld.toRDF({'@context': context, '@graph': graph[0]}, { format: 'application/nquads' }, (err, raw) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          this._buffer = this._buffer.concat(this._parser.parse(_.trim(raw)));
-          // save page into the cache with its metadata, then resolve promise
-          this._cache.set(options.url, {
-            stats,
-            items: this._buffer
-          });
-          resolve();
-        });
-      });
-    });
   }
 
   /**
@@ -173,7 +101,17 @@ class Fragment {
       return Promise.resolve(null);
     } else {
       // fetch triples from online fragments, then retry fetching
-      return this._refillBuffer().then(() => this.fetch(count, previous));
+      return LDFPage.getPage(this._nextPage, this._http, this._cache)
+      .then(page => {
+        if (_.isNull(page)) {
+          this.isClosed = true;
+          return this.fetch(count, previous);
+        }
+        this._buffer = this._buffer.concat(page.items);
+        this.isClosed = (!('hydra:next' in page.stats)) || ('hydra:next' in page.stats && page.stats['hydra:next']['@id'].includes(`page=${this._lastPageIndex}`));
+        if (!this.isClosed) this._nextPage = page.stats['hydra:next']['@id'];
+        return this.fetch(count, previous);
+      });
     }
   }
 }
