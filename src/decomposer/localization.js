@@ -29,30 +29,40 @@ const _ = require('lodash');
 /**
  * Perform localization of a triple pattern, i.e. if the relation is fragmented, creates an union with all fragments
  * @param  {Object} triple - A triple pattern to localize
- * @param  {Object} catalog - The localization catalog
+ * @param  {Object} endpoints - The endpoints used for localization
  * @return {Object} The localized triple
  */
-const localizeTriple = (triple, catalog) => {
-  const key = `s=${triple.subject}&p=${triple.predicate}&o=${triple.object}`;
-  if (key in catalog) {
-    return {
-      type: 'union',
-      patterns: catalog[key].map(fragment => _.merge({ fragment }, triple))
-    };
-  }
-  return _.merge({ fragment: catalog.default }, triple);
+const localizeTriple = (triple, endpoints) => {
+  if (endpoints.length === 1) return _.merge({
+    fragment: {
+      endpoint: endpoints[0],
+      chunkIndex: 1,
+      nbChunks: 1
+    }
+  }, triple);
+
+  return {
+    type: 'union',
+    patterns: _.map(endpoints, (endpoint, i) => _.merge({
+      fragment: {
+        endpoint: endpoint,
+        chunkIndex: i + 1,
+        nbChunks: endpoints.length
+      }
+    }, triple))
+  };
 };
 
 /**
  * Perform localization on each triple pattern of a BGP
  * @param  {Object} bgp - A BGP to localize
- * @param  {Object} catalog - The localization catalog
+ * @param  {Object} endpoints - The endpoints used for localization
  * @return {Object} The localized BGP
  */
-const localizeBGP = (bgp, catalog) => {
+const localizeBGP = (bgp, endpoints) => {
   return {
     type: 'bgp',
-    triples: bgp.triples.map(tp => localizeTriple(tp, catalog))
+    triples: bgp.triples.map(tp => localizeTriple(tp, endpoints))
   };
 };
 
