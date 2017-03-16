@@ -50,7 +50,7 @@ class FragmentFactory {
   }
 
   /**
-   * Create a new {@link Fragment} for a given pattern and first page
+   * Create a new {@link Fragment} for a given pattern, first page and last page
    * @param  {Object} pattern - The triple pattern to match against
    * @param {string} pattern.subject - The subject of the triple pattern
    * @param {string} pattern.predicate - The predicate of the triple pattern
@@ -68,8 +68,18 @@ class FragmentFactory {
     });
   }
 
-  getVirtual (pattern, chunkIndex, nbChunks, metadata) {
-    return new VirtualFragment(this._fragmentURL, pattern, chunkIndex, nbChunks, metadata, {
+  /**
+   * Create a new {@link VirtualFragment} for a given pattern and its associated metadata
+   * @param  {Object} pattern - The triple pattern to match against
+   * @param {string} pattern.subject - The subject of the triple pattern
+   * @param {string} pattern.predicate - The predicate of the triple pattern
+   * @param {string} pattern.object - The object of the triple pattern
+   * @param {Object} pattern.fragment - Data about the virtual fragment associated with this pattern
+   * @param {Object} metadata - Metadata associated with this triple pattern
+   * @return {VirtualFragment} A new Virtual Fragment
+   */
+  getVirtual (pattern, metadata) {
+    return new VirtualFragment(this._fragmentURL, pattern, this.pattern.fragment.chunkIndex, this.pattern.fragment.nbChunks, metadata, {
       cache: this._cache,
       http: this._http
     });
