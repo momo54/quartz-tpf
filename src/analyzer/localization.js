@@ -73,14 +73,19 @@ const localizeBGP = (bgp, endpoints) => {
  * @return {Object} The localized query
  */
 const localizeQuery = (node, endpoints) => {
+  const type = node.type.toLowerCase();
   switch (node.type.toLowerCase()) {
     case 'bgp':
       return localizeBGP(node);
     case 'union':
+    case 'group':
+    case 'optional':
       return {
-        type: 'union',
+        type,
         patterns: node.patterns.map(p => localizeQuery(p, endpoints))
       };
+    case 'filter':
+      return node;
     default:
       throw new SyntaxError(`Unsupported type during localization: ${node.type.toLowerCase()}`);
   }

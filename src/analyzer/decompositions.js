@@ -66,14 +66,19 @@ const joinDistribution = bgp => {
  * @return {Object} The decomposed query
  */
 const decomposeQuery = node => {
+  const type = node.type.toLowerCase();
   switch (node.type.toLowerCase()) {
     case 'bgp':
       return joinDistribution(node);
     case 'union':
+    case 'group':
+    case 'optional':
       return {
-        type: 'union',
+        type,
         patterns: node.patterns.map(p => decomposeQuery(p))
       };
+    case 'filter':
+      return node;
     default:
       throw new SyntaxError(`Unsupported type during localization: ${node.type.toLowerCase()}`);
   }
