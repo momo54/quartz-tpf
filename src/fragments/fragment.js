@@ -44,6 +44,8 @@ class Fragment {
    * @param {LRU} options.cache - Cache store used to cache fragment pages
    * @param {int} options.firstPage - (optional) The index of the first page to use when fetching triples from pages
    * @param {int} options.lastPage - (optional) The index of the last page to read from this fragment
+   * @param {int} options.offset - (optional) The offset applied on the triples fetched from this fragment
+   * @param {int} options.limit - (optional) The limit applied on the triples fetched from this fragment
    */
   constructor (fragmentURL, pattern, options) {
     this._fragmentURL = fragmentURL;
@@ -52,6 +54,8 @@ class Fragment {
     this._lastPageIndex = options.lastPage || -1;
     this._firstPage = this._makeFragmentURL(this._fragmentURL, this._pattern, this._firstPageIndex);
     this._nextPage = this._firstPage;
+    this._offset = options.offset || 0;
+    this._limit = options.limit || -1;
     this._cache = options.cache;
     this._http = options.http || request.forever({timeout:1000, minSockets:40});
     this.isClosed = false;
@@ -85,6 +89,7 @@ class Fragment {
    * @return {Promise} A Promise fullfilled with the N triples from the fragment pages.
    */
   fetch (count, previous = []) {
+    // no need to fetch more items
     if (count <= 0) {
       return Promise.resolve(previous);
     } else if (this._buffer.length > 0) {

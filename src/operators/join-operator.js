@@ -45,13 +45,15 @@ class JoinOperator extends MultiTransformIterator {
    * @param {string} rightPattern.subject - The subject of the triple pattern
    * @param {string} rightPattern.predicate - The predicate of the triple pattern
    * @param {string} rightPattern.object - The object of the triple pattern
-   * @param {LRU} cache - The LRU cached used to cache fragment pages
+   * @param {Object} fragmentOptions - The options used to build fragments
+   * @param {LRU} fragmentOptions.cache - The LRU cached used to cache fragment pages
+   * @param {LRU} fragmentOptions.http - The HTTP client used to perform HTTP requests
    */
-  constructor (leftSource, rightFragment, rightPattern, cache) {
+  constructor (leftSource, rightFragment, rightPattern, fragmentOptions = {}) {
     super(leftSource);
     this._rightFragment = rightFragment;
     this._rightPattern = rightPattern;
-    this._fragmentFactory = new FragmentFactory(this._rightFragment, cache);
+    this._fragmentFactory = new FragmentFactory(this._rightFragment, fragmentOptions.cache, fragmentOptions.http);
     leftSource.on('error', err => this.emit(err));
   }
 

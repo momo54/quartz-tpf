@@ -25,6 +25,7 @@ SOFTWARE.
 'use strict';
 
 const Fragment = require('./fragment.js');
+const VirtualFragment = require('./virtual-fragment.js');
 
 /**
  * FragmentFactory is a factory used to build {@link Fragment} with the same fragment url and cache,
@@ -36,9 +37,11 @@ class FragmentFactory {
    * Constructor
    * @param {string} url - The fragment url
    * @param {LRU|undefined} cache - (optional) Cache store used to cache fragment pages
+   * @param {*} http - (optional) The HTTP client used to perform HTTP requests
    */
-  constructor (url, cache) {
+  constructor (url, cache, http) {
     this._fragmentURL = url;
+    this._http = http;
     // by default, use a fake cache that does not store anything
     this._cache = cache || {
       get: () => undefined,
@@ -59,8 +62,16 @@ class FragmentFactory {
   get (pattern, firstPage = 1, lastPage = -1) {
     return new Fragment(this._fragmentURL, pattern, {
       cache: this._cache,
+      http: this._http,
       firstPage,
       lastPage
+    });
+  }
+
+  getVirtual (pattern, chunkIndex, nbChunks, metadata) {
+    return new VirtualFragment(this._fragmentURL, pattern, chunkIndex, nbChunks, metadata, {
+      cache: this._cache,
+      http: this._http
     });
   }
 }

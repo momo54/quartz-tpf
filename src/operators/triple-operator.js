@@ -47,6 +47,19 @@ class TripleOperator extends BufferedIterator {
   }
 
   /**
+   * Create a new Triple Operator with solutions modifiers (offset & limit) from the fragment
+   * @param {Fragment} fragment - The fragment used to read triples
+   * @param {Object} pattern - The triple pattern to match against
+   * @return {TripleOperator} A Triple Operator with the given solution modifiers
+   */
+  static withModifiers (fragment, pattern) {
+    let operator = new TripleOperator(fragment, pattern);
+    if (fragment._offset > 0) operator = operator.skip(fragment._offset);
+    if (fragment._limit > -1) operator = operator.take(fragment._limit);
+    return operator;
+  }
+
+  /**
    * Apply a projection on a triple pattern
    * @param {Object} triple - The triple pattern on which the projection is applied
    * @return {Object} A set of mappings resulting from the projection
