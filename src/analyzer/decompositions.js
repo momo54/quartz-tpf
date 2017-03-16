@@ -36,7 +36,7 @@ const mergeArray = (target, src) => {
  * @param  {Object} bgp - The BGP to decompose
  * @return {Object} The decomposed BGP
  */
-const joinReduction = bgp => {
+const joinDistribution = bgp => {
   let patterns = [ { type: 'bgp', triples: [] } ];
 
   // no union found in the bgp
@@ -61,5 +61,5 @@ const joinReduction = bgp => {
 };
 
 module.exports = {
-  joinReduction
+  joinDistribution
 };

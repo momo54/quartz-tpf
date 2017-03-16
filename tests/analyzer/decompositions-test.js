@@ -24,11 +24,11 @@ SOFTWARE.
 
 'use strict';
 
-const decompositions = require('../../src/decomposer/decompositions.js');
+const decompositions = require('../../src/analyzer/decompositions.js');
 
 describe('Decompositions', () => {
-  describe('Join reduction', () => {
-    const joinReduction = decompositions.joinReduction;
+  describe('Join distribution', () => {
+    const joinDistribution = decompositions.joinDistribution;
     it('should reduce a BGP with one union into an union of BGPs', () => {
       const bgp = {
         type: 'bgp',
@@ -67,7 +67,7 @@ describe('Decompositions', () => {
         ]
       };
 
-      joinReduction(bgp).should.deep.equal(expected);
+      joinDistribution(bgp).should.deep.equal(expected);
     });
 
     it('should reduce a BGP with many unions into an union of BGPs', () => {
@@ -130,7 +130,7 @@ describe('Decompositions', () => {
         ]
       };
 
-      joinReduction(bgp).should.deep.equal(expected);
+      joinDistribution(bgp).should.deep.equal(expected);
     });
 
     it('should not apply join reduction when there is no union', () => {
@@ -141,7 +141,7 @@ describe('Decompositions', () => {
           { subject: 's4', predicate: 'p4', object: 'o4'}
         ]
       };
-      joinReduction(bgp).should.deep.equal(bgp);
+      joinDistribution(bgp).should.deep.equal(bgp);
     });
   });
 });

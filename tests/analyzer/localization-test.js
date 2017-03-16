@@ -25,7 +25,7 @@ SOFTWARE.
 'use strict';
 
 require('chai').should();
-const localization = require('../../src/decomposer/localization.js');
+const localization = require('../../src/analyzer/localization.js');
 
 describe('Localization', () => {
   it('should localize a triple pattern with only one endpoint', () => {
