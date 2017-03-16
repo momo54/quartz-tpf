@@ -66,7 +66,28 @@ const localizeBGP = (bgp, endpoints) => {
   };
 };
 
+/**
+ * Recursively perform localization on each BGP of a query
+ * @param  {Object} node - A SPARQL node to localize
+ * @param  {Object} endpoints - The endpoints used for localization
+ * @return {Object} The localized query
+ */
+const localizeQuery = (node, endpoints) => {
+  switch (node.type.toLowerCase()) {
+    case 'bgp':
+      return localizeBGP(node);
+    case 'union':
+      return {
+        type: 'union',
+        patterns: node.patterns.map(p => localizeQuery(p, endpoints))
+      };
+    default:
+      throw new SyntaxError(`Unsupported type during localization: ${node.type.toLowerCase()}`);
+  }
+};
+
 module.exports = {
   localizeTriple,
-  localizeBGP
+  localizeBGP,
+  localizeQuery
 };

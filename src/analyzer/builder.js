@@ -30,7 +30,7 @@ const SelectOperator = require('../operators/select-operator.js');
 const TripleOperator = require('../operators/triple-operator.js');
 const UnionOperator = require('../operators/union-operator.js');
 const FragmentFactory = require('../fragments/fragment-factory.js');
-const LDFPage = require('../fragments/ldf-page.js');
+// const LDFPage = require('../fragments/ldf-page.js');
 
 const patternToKey = pattern => {
   return JSON.stringify(pattern);

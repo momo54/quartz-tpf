@@ -60,6 +60,26 @@ const joinDistribution = bgp => {
   };
 };
 
+/**
+ * Recursively decompose each part of a query
+ * @param  {Object} node - A SPARQL node to decompose
+ * @return {Object} The decomposed query
+ */
+const decomposeQuery = node => {
+  switch (node.type.toLowerCase()) {
+    case 'bgp':
+      return joinDistribution(node);
+    case 'union':
+      return {
+        type: 'union',
+        patterns: node.patterns.map(p => decomposeQuery(p))
+      };
+    default:
+      throw new SyntaxError(`Unsupported type during localization: ${node.type.toLowerCase()}`);
+  }
+};
+
 module.exports = {
-  joinDistribution
+  joinDistribution,
+  decomposeQuery
 };
