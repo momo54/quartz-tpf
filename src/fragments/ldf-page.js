@@ -29,6 +29,7 @@ const jsonld = require('jsonld');
 const n3 = require('n3');
 const os = require('os');
 const _ = require('lodash');
+const Metadata = require('./metadata.js');
 
 const defaultHeaders = {
   'accept': 'application/json',
@@ -81,7 +82,7 @@ const getPage = (url, http, cache) => {
         resolve(null);
         return;
       }
-      const stats = getStats(url, graph[1][0]);
+      const stats = new Metadata(url, graph[1][0]);
 
       // extract items fetched from the online fragment, then fill buffer with remaining items
       jsonld.toRDF({'@context': context, '@graph': graph[0]}, { format: 'application/nquads' }, (err, raw) => {

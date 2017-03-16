@@ -108,8 +108,8 @@ class Fragment {
           return this.fetch(count, previous);
         }
         this._buffer = this._buffer.concat(page.items);
-        this.isClosed = (!('hydra:next' in page.stats)) || ('hydra:next' in page.stats && page.stats['hydra:next']['@id'].includes(`page=${this._lastPageIndex}`));
-        if (!this.isClosed) this._nextPage = page.stats['hydra:next']['@id'];
+        this.isClosed = (!page.stats.hasNextPage || (page.stats.hasNextPage && page.stats.nextPage.includes(`page=${this._lastPageIndex}`)));
+        if (!this.isClosed) this._nextPage = page.stats.nextPage;
         return this.fetch(count, previous);
       });
     }
