@@ -24,10 +24,12 @@ SOFTWARE.
 
 'use strict';
 
-const build = require('./builder.js');
+// const build = require('./builder.js');
 const decompositions = require('./decompositions.js');
 const localization = require('./localization.js');
 const normalize = require('./normalizer.js');
+// const SparqlGenerator = require('sparqljs').Generator;
+
 
 /**
  * Process a SPARQL query, from a string representation to a physical execution plan
@@ -37,10 +39,14 @@ const normalize = require('./normalizer.js');
  */
 const processQuery = (query, endpoints) => {
   let q = normalize(query);
-  let where = localization.localizeQuery(q.where[0], endpoints);
-  where = decompositions.decomposeQuery(q);
-  q.where = where;
-  return build(q);
+  // console.log(q.where.length);
+  q = localization.localizeQuery(q, endpoints);
+  q = decompositions.decomposeQuery(q);
+  // console.log(JSON.stringify(q, false, 2));
+  // var generator = new SparqlGenerator();
+  // var generatedQuery = generator.stringify(q);
+  // console.log(generatedQuery);
+  return q;
 };
 
 module.exports = processQuery;

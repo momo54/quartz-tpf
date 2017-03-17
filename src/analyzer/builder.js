@@ -31,6 +31,7 @@ const TripleOperator = require('../operators/triple-operator.js');
 const UnionOperator = require('../operators/union-operator.js');
 const FragmentFactory = require('../fragments/fragment-factory.js');
 // const LDFPage = require('../fragments/ldf-page.js');
+const _ = require('lodash');
 
 const patternToKey = pattern => {
   return JSON.stringify(pattern);
@@ -50,7 +51,7 @@ const buildPlan = (queryPlan, endpoints, cache, http) => {
   endpoints.forEach(e => factories[e] = new FragmentFactory(e, cache, http));
 
   // analyze most of the query plan located in the where clause
-  let operator = analyzePlan(queryPlan.where, factories, metadata);
+  let operator = analyzePlan(queryPlan.where, factories, metadata, { fragment: { cache, http }});
 
   // apply distinct modifier
   if (queryPlan.distinct) operator = new DistinctOperator(operator);
@@ -79,9 +80,10 @@ const buildPlan = (queryPlan, endpoints, cache, http) => {
  * @param  {Object} queryNode - The current node to analyze
  * @param  {Object} factories - Fragment factories, index by their associated endpoint
  * @param {Object} metadata - Metadata associated with each triple pattern
+ * @param {}
  * @return {AsyncIterator} The itrerator created by the evaluation of the node
  */
-const analyzePlan = (queryNode, factories, metadata) => {
+const analyzePlan = (queryNode, factories, metadata, options = {}) => {
   let operator = null;
   switch (queryNode.type.toLowerCase()) {
     case 'bgp': {
@@ -95,14 +97,25 @@ const analyzePlan = (queryNode, factories, metadata) => {
       } else {
         // otherwise, use a Basic Graph Pattern Operator
         // TODO ...
+        // DO NOT FORGET TO USE OPTIONAL FIELD FROM OPTIONS
         operator = new BasicGraphPatternOperator();
       }
       break;
     }
     case 'union': {
-      const sources = queryNode.patterns.map(p => analyzePlan(p, factories, metadata));
+      const sources = queryNode.patterns.map(p => analyzePlan(p, factories, metadata, options));
       operator = new UnionOperator(...sources);
       break;
+    }
+    case 'optional': {
+      const newOpts = _.merge({ optional: true }, options);
+      return analyzePlan(queryNode.patterns[0], factories, metadata, newOpts);
+      //   const first = queryNode.patterns[0];
+      //   const patterns = _.dropRight(queryNode.patterns, 1);
+      // return _.reduceRight(patterns, (source, operator) => {}, ??);
+    }
+    case 'group': {
+      return {};
     }
     default:
       throw new SyntaxError(`Unsupported query node type: ${queryNode.type.toLowerCase()}`);
