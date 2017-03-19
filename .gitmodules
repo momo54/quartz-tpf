@@ -1,0 +1,3 @@
+[submodule "Client.js"]
+	path = Client.js
+	url = https://github.com/Callidon/Client.js.git

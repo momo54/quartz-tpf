@@ -24,7 +24,6 @@ SOFTWARE.
 
 'use strict';
 
-// const build = require('./builder.js');
 const decompositions = require('./decompositions.js');
 const localization = require('./localization.js');
 const normalize = require('./normalizer.js');

@@ -41,8 +41,8 @@ describe('Localization', () => {
       object: 'o1',
       fragment: {
         endpoint: 'e1',
-        chunkIndex: 1,
-        nbChunks: endpoints.length
+        virtualIndex: 1,
+        nbVirtuals: endpoints.length
       }
     };
 
@@ -65,8 +65,8 @@ describe('Localization', () => {
           object: 'o1',
           fragment: {
             endpoint: 'e1',
-            chunkIndex: 1,
-            nbChunks: endpoints.length
+            virtualIndex: 1,
+            nbVirtuals: endpoints.length
           }
         },
         {
@@ -75,8 +75,8 @@ describe('Localization', () => {
           object: 'o1',
           fragment: {
             endpoint: 'e2',
-            chunkIndex: 2,
-            nbChunks: endpoints.length
+            virtualIndex: 2,
+            nbVirtuals: endpoints.length
           }
         },
         {
@@ -85,8 +85,8 @@ describe('Localization', () => {
           object: 'o1',
           fragment: {
             endpoint: 'e3',
-            chunkIndex: 3,
-            nbChunks: endpoints.length
+            virtualIndex: 3,
+            nbVirtuals: endpoints.length
           }
         }
       ]
@@ -116,8 +116,8 @@ describe('Localization', () => {
               object: 'o1',
               fragment: {
                 endpoint: 'e1',
-                chunkIndex: 1,
-                nbChunks: endpoints.length
+                virtualIndex: 1,
+                nbVirtuals: endpoints.length
               }
             },
             {
@@ -126,8 +126,8 @@ describe('Localization', () => {
               object: 'o1',
               fragment: {
                 endpoint: 'e2',
-                chunkIndex: 2,
-                nbChunks: endpoints.length
+                virtualIndex: 2,
+                nbVirtuals: endpoints.length
               }
             }
           ]
@@ -141,8 +141,8 @@ describe('Localization', () => {
               object: 'o2',
               fragment: {
                 endpoint: 'e1',
-                chunkIndex: 1,
-                nbChunks: endpoints.length
+                virtualIndex: 1,
+                nbVirtuals: endpoints.length
               }
             },
             {
@@ -151,8 +151,8 @@ describe('Localization', () => {
               object: 'o2',
               fragment: {
                 endpoint: 'e2',
-                chunkIndex: 2,
-                nbChunks: endpoints.length
+                virtualIndex: 2,
+                nbVirtuals: endpoints.length
               }
             }
           ]

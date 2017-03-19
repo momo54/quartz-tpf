@@ -4,8 +4,9 @@
   "description": "Lighter Triple Pattern Fragment Client",
   "main": "index.js",
   "scripts": {
+    "postinstall": "cd Client.js && git pull --rebase && npm i",
     "lint": "eslint src/",
-    "test": "mocha tests/**/*.js --trace-deprecation --timeout 10000",
+    "test": "mocha tests/**/*.js --trace-deprecation",
     "doc": "jsdoc -c jsdoc.json README.md src/"
   },
   "repository": {
@@ -19,12 +20,7 @@
   },
   "homepage": "https://github.com/Callidon/tpf-client-light#readme",
   "dependencies": {
-    "asynciterator": "^1.1.0",
-    "jsonld": "^0.4.11",
     "lodash": "^4.17.4",
-    "lru-cache": "^4.0.2",
-    "n3": "^0.9.1",
-    "request": "^2.80.0",
     "sparqljs": "^1.3.0"
   },
   "devDependencies": {
