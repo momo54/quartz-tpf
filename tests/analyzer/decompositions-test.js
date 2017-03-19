@@ -145,47 +145,47 @@ describe('Decompositions', () => {
     });
   });
 
-	describe('Flatten Union', () => {
-		const flattenUnion = decompositions.flattenUnion;
-		it('should flatten union of unions', () => {
-			const union = {
-				type: 'union',
-				patterns: [
-					{
-						type: 'union',
-						patterns: [ 'foo', 'bar' ]
-					},
-					{
-						type: 'union',
-						patterns: [ 'moo' ]
-					}
-				]
-			};
+  describe('Flatten Union', () => {
+    const flattenUnion = decompositions.flattenUnion;
+    it('should flatten union of unions', () => {
+      const union = {
+        type: 'union',
+        patterns: [
+          {
+            type: 'union',
+            patterns: [ 'foo', 'bar' ]
+          },
+          {
+            type: 'union',
+            patterns: [ 'moo' ]
+          }
+        ]
+      };
 
-			const expected = {
-				type: 'union',
-				patterns: [ 'foo', 'bar', 'moo' ]
-			};
+      const expected = {
+        type: 'union',
+        patterns: [ 'foo', 'bar', 'moo' ]
+      };
 
-			flattenUnion(union).should.deep.equal(expected);
-		});
+      flattenUnion(union).should.deep.equal(expected);
+    });
 
-		it('should not flatten an union where all its patterns are not unions', () => {
-			const union = {
-				type: 'union',
-				patterns: [
-					{
-						type: 'union',
-						patterns: [ 'foo', 'bar' ]
-					},
-					{
-						type: 'bgp',
-						triples: [ 'foo', 'bar', 'moo' ]
-					}
-				]
-			};
+    it('should not flatten an union where all its patterns are not unions', () => {
+      const union = {
+        type: 'union',
+        patterns: [
+          {
+            type: 'union',
+            patterns: [ 'foo', 'bar' ]
+          },
+          {
+            type: 'bgp',
+            triples: [ 'foo', 'bar', 'moo' ]
+          }
+        ]
+      };
 
-			flattenUnion(union).should.deep.equal(union);
-		});
-	});
+      flattenUnion(union).should.deep.equal(union);
+    });
+  });
 });
