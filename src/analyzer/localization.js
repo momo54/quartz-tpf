@@ -140,6 +140,7 @@ const localizeQuery = (node, endpoints) => {
 
 module.exports = {
   localizeTriple,
+	localizeService,
   localizeBGP,
   localizeQuery
 };
