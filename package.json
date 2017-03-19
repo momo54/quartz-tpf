@@ -4,7 +4,7 @@
   "description": "Lighter Triple Pattern Fragment Client",
   "main": "index.js",
   "scripts": {
-    "postinstall": "cd Client.js && git pull --rebase && npm i",
+    "postinstall": "cd Client.js && npm i",
     "lint": "eslint src/",
     "test": "mocha tests/**/*.js --trace-deprecation",
     "doc": "jsdoc -c jsdoc.json README.md src/"
