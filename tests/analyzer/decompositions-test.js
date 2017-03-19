@@ -144,4 +144,48 @@ describe('Decompositions', () => {
       joinDistribution(bgp).should.deep.equal(bgp);
     });
   });
+
+	describe('Flatten Union', () => {
+		const flattenUnion = decompositions.flattenUnion;
+		it('should flatten union of unions', () => {
+			const union = {
+				type: 'union',
+				patterns: [
+					{
+						type: 'union',
+						patterns: [ 'foo', 'bar' ]
+					},
+					{
+						type: 'union',
+						patterns: [ 'moo' ]
+					}
+				]
+			};
+
+			const expected = {
+				type: 'union',
+				patterns: [ 'foo', 'bar', 'moo' ]
+			};
+
+			flattenUnion(union).should.deep.equal(expected);
+		});
+
+		it('should not flatten an union where all its patterns are not unions', () => {
+			const union = {
+				type: 'union',
+				patterns: [
+					{
+						type: 'union',
+						patterns: [ 'foo', 'bar' ]
+					},
+					{
+						type: 'bgp',
+						triples: [ 'foo', 'bar', 'moo' ]
+					}
+				]
+			};
+
+			flattenUnion(union).should.deep.equal(union);
+		});
+	});
 });

@@ -60,7 +60,20 @@ const joinDistribution = bgp => {
   };
 };
 
-// TODO
+/**
+ * Flatten an union of unions
+ * @param  {Object} union - The union to flatten
+ * @return {Object} The flattened union
+ */
+const flattenUnion = union => {
+	// can only flatten an union where all patterns are also unions
+	if(! _.every(union.patterns, pattern => 'type' in pattern && pattern.type === 'union')) return union;
+
+	return {
+		type: 'union',
+		patterns: _.flatMap(union.patterns, pattern => pattern.patterns)
+	};
+};
 
 /**
  * Recursively decompose each part of a query
@@ -78,6 +91,10 @@ const decomposeQuery = node  => {
       return query;
     }
     case 'union':
+			return flattenUnion({
+				type,
+				patterns: node.patterns.map(p => decomposeQuery(p))
+			});
     case 'group':
     case 'optional':
       return {
@@ -93,5 +110,6 @@ const decomposeQuery = node  => {
 
 module.exports = {
   joinDistribution,
+	flattenUnion,
   decomposeQuery
 };
