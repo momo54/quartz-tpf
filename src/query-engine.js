@@ -1,4 +1,4 @@
-/* file : processor.js
+/* file : query-engine.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
@@ -24,20 +24,24 @@ SOFTWARE.
 
 'use strict';
 
-const decompositions = require('./decompositions.js');
-const localization = require('./localization.js');
-const normalize = require('./normalizer.js');
+const processor = require('./analyzer/processor.js');
+const ldf = require('../Client.js/ldf-client.js');
 
 /**
- * Process a SPARQL query, from a string representation to a logical query execution plan
+ * Build the physical query execution plan for a query and a set of endpoints
  * @param  {string} query - The SPARQL query to process
  * @param  {Object} endpoints - The endpoints used for localization
- * @return {Object} The root of the logical query execution plan
+ * @return {AsyncIterator} The root of the physical query execution plan
  */
-const processQuery = (query, endpoints) => {
-  let q = normalize(query);
-  q = localization.localizeQuery(q, endpoints);
-  return decompositions.decomposeQuery(q);
+const buildIterator = (query, endpoints) => {
+  const queryPlan = processor(query, endpoints);
+  const defaultClient = new ldf.FragmentsClient(endpoints[0], {});
+  const virtualClients = {};
+  endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, {}));
+  return new ldf.SparqlIterator(queryPlan, {
+    fragmentsClient: defaultClient,
+    virtualClients
+  });
 };
 
-module.exports = processQuery;
+module.exports = buildIterator;

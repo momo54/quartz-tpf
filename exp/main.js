@@ -24,11 +24,12 @@ WHERE {
 // const q4 = 'PREFIX wikidata: <http://www.wikidata.org/prop/statement/> PREFIX wikiba: <http://wikiba.se/ontology#> SELECT * WHERE { ?s wikidata:P3222 ?p . }';
 // const q5 = 'PREFIX wikidata: <http://www.wikidata.org/prop/statement/> PREFIX wikiba: <http://wikiba.se/ontology#> SELECT * WHERE { ?s wikidata:P3222 ?p . ?s wikiba:rank ?r . }';
 // const q6 = 'PREFIX wikidata: <http://www.wikidata.org/prop/statement/> PREFIX wikiba: <http://wikiba.se/ontology#> SELECT * WHERE { ?s wikidata:P31 ?p . ?p <http://schema.org/description> ?d . }';
-const q4 = 'PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX dbpedia-owl:<http://dbpedia.org/ontology/> PREFIX dbprop:<http://dbpedia.org/property/> SELECT * WHERE { ?s rdf:type dbpedia-owl:Architect . ?s dbprop:birthPlace ?place . }'
+const q4 = 'PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX dbpedia-owl:<http://dbpedia.org/ontology/> PREFIX dbprop:<http://dbpedia.org/property/> SELECT * WHERE { ?s rdf:type dbpedia-owl:Architect . ?s dbprop:birthPlace ?place . }';
 const q5 = 'SELECT * WHERE { ?s <http://dbpedia.org/property/newspaper> ?o .}';
 
 const e1 = [ 'http://localhost:5000/books', 'http://localhost:5000/books' ];
-const e2 = [ 'http://fragments.dbpedia.org/2016-04/en', 'http://curiosiphi.lina.sciences.univ-nantes.prive/dbpedia_3_8' ];
+// const e2 = [ 'http://fragments.mementodepot.org/dbpedia_3_9', 'http://curiosiphi.lina.sciences.univ-nantes.prive:5000/dbpedia_3_9' ];
+const e2 = [ 'http://fragments.dbpedia.org/2016-04/en', 'http://fragments.dbpedia.org/2016-04/en' ];
 const e3 = [ 'http://172.16.9.3:5000/dbpedia_3_9', 'http://172.16.9.3:5000/dbpedia_3_9' ];
 
 const queryPlan = processor(q4, e2);
@@ -37,8 +38,8 @@ const fragmentsClient = new ldf.FragmentsClient(e2[0], {});
 // const op = new ldf.SparqlIterator(queryPlan, {
 //   fragmentsClient,
 //   virtualClients: {
-//     1: new ldf.FragmentsClient(e2[0], {}),
-//     2: new ldf.FragmentsClient(e2[1], {})
+//     'http://fragments.dbpedia.org/2016-04/en': new ldf.FragmentsClient('http://fragments.dbpedia.org/2016-04/en', {}),
+//     // 'http://curiosiphi.lina.sciences.univ-nantes.prive:5000/dbpedia_3_9': new ldf.FragmentsClient('http://curiosiphi.lina.sciences.univ-nantes.prive:5000/dbpedia_3_9', {})
 //   }
 // });
 const op = new ldf.SparqlIterator(queryPlan, {
