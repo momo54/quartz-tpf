@@ -2,7 +2,10 @@
   "name": "tpf-client-light",
   "version": "1.0.0",
   "description": "Lighter Triple Pattern Fragment Client",
-  "main": "index.js",
+  "main": "./src/query-engine.js",
+  "bin": {
+    "tpf-client": "./bin/tpf-client.js"
+  },
   "scripts": {
     "postinstall": "git submodule update --init Client.js/ && cd Client.js && npm i --production",
     "lint": "eslint src/",
@@ -20,6 +23,7 @@
   },
   "homepage": "https://github.com/Callidon/tpf-client-light#readme",
   "dependencies": {
+    "commander": "^2.9.0",
     "lodash": "^4.17.4",
     "sparqljs": "^1.3.0"
   },
