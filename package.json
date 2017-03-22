@@ -1,7 +1,7 @@
 {
-  "name": "tpf-client-light",
+  "name": "virtual-decomposer",
   "version": "1.0.0",
-  "description": "Lighter Triple Pattern Fragment Client",
+  "description": "virtual-decomposer",
   "main": "./src/query-engine.js",
   "bin": {
     "tpf-client": "./bin/tpf-client.js"
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Callidon/tpf-client-light.git"
+    "url": "git+https://github.com/Callidon/virtual-decomposer.git"
   },
   "author": "Thomas Minier <thomas.minier@protonmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Callidon/tpf-client-light/issues"
+    "url": "https://github.com/Callidon/virtual-decomposer/issues"
   },
-  "homepage": "https://github.com/Callidon/tpf-client-light#readme",
+  "homepage": "https://github.com/Callidon/virtual-decomposer#readme",
   "dependencies": {
     "commander": "^2.9.0",
     "lodash": "^4.17.4",
