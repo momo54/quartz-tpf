@@ -29,10 +29,11 @@ const SparqlParser = require('sparqljs').Parser;
 /**
  * Parse a SPARQL query in string format using sparql.js
  * @param  {string} query - A SPARQL query
+ * @param  {Object} prefixes - Additional prefixes to be used by the normalizer
  * @return {Object} A normalized representation of a SPARQL query
  */
-const parseQuery = query => {
-  const parser = new SparqlParser();
+const parseQuery = (query, prefixes = {}) => {
+  const parser = new SparqlParser(prefixes);
   return parser.parse(query);
 };
 

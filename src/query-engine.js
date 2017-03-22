@@ -26,7 +26,6 @@ SOFTWARE.
 
 const processor = require('./analyzer/processor.js');
 const ldf = require('../Client.js/ldf-client.js');
-const _ = require('lodash');
 // load default config with common prefixes
 const defaultConfig = require('../Client.js/config-default.json');
 ldf.Logger.setLevel('EMERGENCY');
@@ -39,15 +38,14 @@ ldf.Logger.setLevel('EMERGENCY');
  * @return {AsyncIterator} The root of the physical query execution plan
  */
 const buildIterator = (query, endpoints, config = defaultConfig) => {
-  const queryPlan = processor(query, endpoints);
+  const queryPlan = processor(query, endpoints, config.prefixes);
   const defaultClient = new ldf.FragmentsClient(endpoints[0], config);
   const virtualClients = {};
   endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));
-  const options = _.merge({
+  return new ldf.SparqlIterator(queryPlan, {
     fragmentsClient: defaultClient,
     virtualClients
-  }, config);
-  return new ldf.SparqlIterator(queryPlan, options);
+  });
 };
 
 module.exports = buildIterator;

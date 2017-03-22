@@ -76,6 +76,25 @@ const flattenUnion = union => {
 };
 
 /**
+ * Transform a optional of unions into a set of optional
+ * @param  {Object} optional - The optional clause to transform
+ * @return {Object|Object[]} A set of optionals
+ */
+const flattenOptional = optional => {
+  // can only flatten an optional where all patterns are unions
+  if(! _.every(optional.patterns, pattern => 'type' in pattern && pattern.type === 'union')) return optional;
+
+  return _.flatMap(optional.patterns, union => {
+    return union.patterns.map(p => {
+      return {
+        type: 'optional',
+        patterns: [ p ]
+      };
+    });
+  });
+};
+
+/**
  * Recursively decompose each part of a query
  * @param  {Object} node - A SPARQL node to decompose
  * @return {Object} The decomposed query
@@ -87,7 +106,7 @@ const decomposeQuery = node  => {
       return joinDistribution(node);
     case 'query': {
       const query = _.merge({}, node);
-      query.where = query.where.map(p => decomposeQuery(p));
+      query.where = _.flatMap(query.where, p => decomposeQuery(p));
       return query;
     }
     case 'union':
@@ -96,11 +115,15 @@ const decomposeQuery = node  => {
         patterns: node.patterns.map(p => decomposeQuery(p))
       });
     case 'group':
-    case 'optional':
       return {
         type,
         patterns: node.patterns.map(p => decomposeQuery(p))
       };
+    case 'optional':
+      return flattenOptional({
+        type,
+        patterns: node.patterns.map(p => decomposeQuery(p))
+      });
     case 'filter':
       return node;
     default:
@@ -111,5 +134,6 @@ const decomposeQuery = node  => {
 module.exports = {
   joinDistribution,
   flattenUnion,
+  flattenOptional,
   decomposeQuery
 };

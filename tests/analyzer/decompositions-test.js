@@ -188,4 +188,32 @@ describe('Decompositions', () => {
       flattenUnion(union).should.deep.equal(union);
     });
   });
+
+  describe('Flatten Optional', () => {
+    const flattenOptional = decompositions.flattenOptional;
+    it('should transform an optional of unions into a set of optionals', () => {
+      const optional = {
+        type: 'optional',
+        patterns: [
+          {
+            type: 'union',
+            patterns: [ 'foo', 'bar' ]
+          }
+        ]
+      };
+
+      const expected = [
+        {
+          type: 'optional',
+          patterns: [ 'foo' ]
+        },
+        {
+          type: 'optional',
+          patterns: [ 'bar' ]
+        }
+      ];
+
+      flattenOptional(optional).should.deep.equal(expected);
+    });
+  });
 });
