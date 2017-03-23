@@ -54,7 +54,7 @@ const buildService = (triple, endpoint, virtualIndex, nbVirtuals) => {
 
 /**
  * Perform localization of a triple pattern, i.e. if the relation is fragmented, creates an union with all fragments
- * @param  {Object} triple - A triple pattern to localize
+ * @param  {Object} triple    - A triple pattern to localize
  * @param  {Object} endpoints - The endpoints used for localization
  * @return {Object} The localized triple
  */
@@ -82,7 +82,7 @@ const localizeTriple = (triple, endpoints) => {
 /**
  * Perform localization of a triple pattern, i.e. if the relation is fragmented, creates an union with all fragments.
  * Localize triple patterns into SPARQL service subqueries.
- * @param  {Object} triple - A triple pattern to localize
+ * @param  {Object} triple    - A triple pattern to localize
  * @param  {Object} endpoints - The endpoints used for localization
  * @return {Object} The localized triple
  */
@@ -97,7 +97,7 @@ const localizeService = (triple, endpoints) => {
 
 /**
  * Perform localization on each triple pattern of a BGP
- * @param  {Object} bgp - A BGP to localize
+ * @param  {Object} bgp       - A BGP to localize
  * @param  {Object} endpoints - The endpoints used for localization
  * @return {Object} The localized BGP
  */
@@ -110,7 +110,7 @@ const localizeBGP = (bgp, endpoints) => {
 
 /**
  * Recursively perform localization on each BGP of a query
- * @param  {Object} node - A SPARQL node to localize
+ * @param  {Object} node      - A SPARQL node to localize
  * @param  {Object} endpoints - The endpoints used for localization
  * @return {Object} The localized query
  */

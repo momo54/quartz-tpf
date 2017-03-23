@@ -39,9 +39,9 @@ ldf.Logger.setLevel('EMERGENCY');
  */
 const buildIterator = (query, endpoints, config = defaultConfig) => {
   const queryPlan = processor(query, endpoints, config.prefixes);
-  const defaultClient = new ldf.FragmentsClient(endpoints[0], {});
+  const defaultClient = new ldf.FragmentsClient(endpoints[0], config);
   const virtualClients = {};
-  endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, {}));
+  endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));
   return new ldf.SparqlIterator(queryPlan, {
     fragmentsClient: defaultClient,
     virtualClients

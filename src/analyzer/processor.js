@@ -30,9 +30,9 @@ const normalize = require('./normalizer.js');
 
 /**
  * Process a SPARQL query, from a string representation to a logical query execution plan
- * @param  {string} query - The SPARQL query to process
+ * @param  {string} query     - The SPARQL query to process
  * @param  {Object} endpoints - The endpoints used for localization
- * @param  {Object} prefixes - Additional prefixes to be used by the normalizer
+ * @param  {Object} prefixes  - Additional prefixes to be used by the normalizer
  * @return {Object} The root of the logical query execution plan
  */
 const processQuery = (query, endpoints, prefixes = {}) => {
