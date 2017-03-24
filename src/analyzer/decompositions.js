@@ -117,7 +117,7 @@ const decomposeQuery = node  => {
     case 'group':
       return {
         type,
-        patterns: node.patterns.map(p => decomposeQuery(p))
+        patterns: _.flatMap(node.patterns, p => decomposeQuery(p))
       };
     case 'optional':
       return flattenOptional({
