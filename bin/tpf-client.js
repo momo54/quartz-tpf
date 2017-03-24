@@ -35,11 +35,17 @@ const packageInfos = require('../package.json');
 program
   .version(packageInfos.version)
   .description(packageInfos.description)
-  .usage('[options] [endpoints...]')
+  .usage('[endpoints...] [options]')
   .option('-q, --query <query>', 'evaluates the given SPARQL query')
   .option('-f, --file <file>', 'evaluates the SPARQL query in the given file')
   .option('-t, --type <mime-type>', 'determines the MIME type of the output (e.g., application/json)', 'application/json')
   .parse(process.argv);
+
+// check number of endpoints
+if (program.args.length < 1) {
+  process.stderr.write('Error: you must specify at least one endpoint to execute the query.\nSee ./tpf-client --help for more details.\n');
+  process.exit(1);
+}
 
 // fetch SPARQL query to execute
 let query = null;
@@ -49,12 +55,6 @@ if (program.query) {
   query = fs.readFileSync(program.file, 'utf-8');
 } else {
   process.stderr.write('Error: you must specify a SPARQL query to execute.\nSee ./tpf-client --help for more details.\n');
-  process.exit(1);
-}
-
-// check number of endpoints
-if (program.args.length < 1) {
-  process.stderr.write('Error: you must specify at least one endpoint to execute the query.\nSee ./tpf-client --help for more details.\n');
   process.exit(1);
 }
 

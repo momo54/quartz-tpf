@@ -12,7 +12,7 @@ npm install
 
 Execute the script `tpf-client.js` located in `bin/`
 ```
-Usage: tpf-client [options] [endpoints...]
+Usage: tpf-client [endpoints...] [options]
 
   virtual-decomposer
 

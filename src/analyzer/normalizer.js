@@ -61,11 +61,13 @@ const parseQuery = (query, prefixes = {}) => {
   const parsedQuery = parser.parse(query);
   // Rewrite Group Graph Patterns to move down top-level triples patterns into each BGP of each union,
   // otherwise TPF will have trouble processing the query...
-  const triples = _.flatMap(parsedQuery.where.filter(p => p.type === 'bgp'), p => p.triples);
-  parsedQuery.where = parsedQuery.where.filter(p => p.type !== 'bgp').map(p => {
-    if (p.type !== 'union') return p;
-    return injectTriples(p, triples);
-  });
+  if (_.some(parsedQuery.where, [ 'type', 'bgp' ]) && _.some(parsedQuery.where, [ 'type', 'union' ])) {
+    const triples = _.flatMap(parsedQuery.where.filter(p => p.type === 'bgp'), p => p.triples);
+    parsedQuery.where = parsedQuery.where.filter(p => p.type !== 'bgp').map(p => {
+      if (p.type !== 'union') return p;
+      return injectTriples(p, triples);
+    });
+  }
   return parsedQuery;
 };
 
