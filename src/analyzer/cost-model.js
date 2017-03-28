@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-/* file : tpf-client.js
+/* file : cost-model.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
@@ -25,12 +24,22 @@ SOFTWARE.
 
 'use strict';
 
-const program = require('commander');
-const packageInfos = require('../package.json');
+const _ = require('lodash');
 
-program
-  .version(packageInfos.version)
-  .description(packageInfos.description)
-  .command('model [endpoints...]', 'generate the cost model & save it in json format').alias('m')
-  .command('run [model] [endpoints...] [options]', 'execute a SPARQL query against several endpoints').alias('r')
-  .parse(process.argv);
+/**
+ * Compute the cost model using a list of endpoints and their respective reponse times
+ * @param  {string[]} endpoints - The endpoints of the model
+ * @param  {number[]} times     - The reponse time of each endpoint
+ * @return {Object} The coefficient of the cost model for each endpoint and the sum of all coefficients
+ */
+const computeModel = (endpoints, times) => {
+  const weights = times.map(t => 1 / t);
+  const minWeight = Math.min(...weights);
+  const coefs = weights.map(w => Math.floor(w / minWeight));
+  return {
+    coefficients: _.zipObject(endpoints, coefs),
+    sumCoefs: coefs.reduce((acc, c) => acc + c, 0)
+  };
+};
+
+module.exports = computeModel;

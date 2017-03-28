@@ -5,21 +5,57 @@
 ```bash
 git clone htpps://github.com/Callidon/virtual-decomposer.git
 cd virtual-decomposer/
-npm install
+npm install --production
 ```
 
 # Usage
 
 Execute the script `tpf-client.js` located in `bin/`
 ```
-Usage: tpf-client [endpoints...] [options]
+Usage: tpf-client [options] [command]
+
+
+  Commands:
+
+    model [endpoints...]                  generate the cost model & save it in json format
+    run [model] [endpoints...] [options]  execute a SPARQL query against several endpoints
+    help [cmd]                            display help for [cmd]
 
   virtual-decomposer
 
   Options:
 
+    -h, --help     output usage information
+    -V, --version  output the version number
+```
+
+## Generate a cost-model
+
+```
+Usage: tpf-client-model [endpoints...] [options]
+
+  generate the cost model & save it in json format
+
+  Options:
+
+    -h, --help             output usage information
+    -o, --output <output>  save the model in the given file (default: model.json)
+```
+Example:
+```bash
+bin/tpf-client.js model http://example.fragments.server1/dbpedia_3.9 http://example.fragments.server2/dbpedia_3.9 -o model.json
+```
+
+## Run a query
+
+```
+Usage: tpf-client run [model] [endpoints...] [options]
+
+  execute a SPARQL query against several endpoints
+
+  Options:
+
     -h, --help              output usage information
-    -V, --version           output the version number
     -q, --query <query>     evaluates the given SPARQL query
     -f, --file <file>       evaluates the SPARQL query in the given file
     -t, --type <mime-type>  determines the MIME type of the output (e.g., application/json)
@@ -27,5 +63,5 @@ Usage: tpf-client [endpoints...] [options]
 
 Example:
 ```bash
-bin/tpf-client.js -q 'SELECT * WHERE { ?s rdf:type ?o . }' http://example.fragments.server1/dbpedia_3.9 http://example.fragments.server2/dbpedia_3.9
+bin/tpf-client.js run ./model.json http://example.fragments.server1/dbpedia_3.9 http://example.fragments.server2/dbpedia_3.9 -q 'SELECT * WHERE { ?s rdf:type ?o . }'
 ```

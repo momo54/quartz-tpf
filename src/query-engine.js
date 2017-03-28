@@ -31,20 +31,22 @@ const defaultConfig = require('../Client.js/config-default.json');
 ldf.Logger.setLevel('EMERGENCY');
 
 /**
- * Build the physical query execution plan for a query and a set of endpoints
+ * Build the physical query execution plan for a query, a set of endpoints and a cost model
  * @param {string} query            - The SPARQL query to process
  * @param {Object} endpoints        - The endpoints used for localization
+ * @param {Object} model            - The cost model used for this execution
  * @param {Object|undefined} config - (optional) Additional configuration options for LDF FragmentsClients & SparqlIterator
  * @return {AsyncIterator} The root of the physical query execution plan
  */
-const buildIterator = (query, endpoints, config = defaultConfig) => {
+const buildIterator = (query, endpoints, model, config = defaultConfig) => {
   const queryPlan = processor(query, endpoints, config.prefixes);
   const defaultClient = new ldf.FragmentsClient(endpoints[0], config);
   const virtualClients = {};
   endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));
   return new ldf.SparqlIterator(queryPlan, {
     fragmentsClient: defaultClient,
-    virtualClients
+    virtualClients,
+    model
   });
 };
 

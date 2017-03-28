@@ -24,6 +24,7 @@ SOFTWARE.
 
 'use strict';
 
+require('chai').should();
 const decompositions = require('../../src/analyzer/decompositions.js');
 
 describe('Decompositions', () => {

@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-/* file : tpf-client.js
+/* file : cost-model-test.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
@@ -25,12 +24,21 @@ SOFTWARE.
 
 'use strict';
 
-const program = require('commander');
-const packageInfos = require('../package.json');
+require('chai').should();
+const computeModel = require('../../src/analyzer/cost-model.js');
 
-program
-  .version(packageInfos.version)
-  .description(packageInfos.description)
-  .command('model [endpoints...]', 'generate the cost model & save it in json format').alias('m')
-  .command('run [model] [endpoints...] [options]', 'execute a SPARQL query against several endpoints').alias('r')
-  .parse(process.argv);
+describe('Cost Model', () => {
+  it('should compute the cost model given endpoints and their reponse times', () => {
+    const endpoints = [ 'a', 'b', 'c' ];
+    const times = [ 10, 5, 1 ];
+    const expected = {
+      coefficients: {
+        a: 1,
+        b: 2,
+        c: 10
+      },
+      sumCoefs: 13
+    };
+    computeModel(endpoints, times).should.deep.equal(expected);
+  });
+});
