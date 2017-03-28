@@ -32,7 +32,7 @@ Usage: tpf-client [options] [command]
 ## Generate a cost-model
 
 ```
-Usage: tpf-client-model [endpoints...] [options]
+Usage: tpf-client model [endpoints...] [options]
 
   generate the cost model & save it in json format
 
