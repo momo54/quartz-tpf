@@ -14,7 +14,8 @@ rm -rf execution_times.csv queries results errors
 mkdir -p queries/
 mkdir -p results/
 mkdir -p errors/
-touch execution_times.csv
+echo "time" > execution_times.csv
+
 while IFS='' read -r line || [[ -n "$line" ]]; do
   QFILE="queries/query$cpt"
   echo $line > $QFILE
