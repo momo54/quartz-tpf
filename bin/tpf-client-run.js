@@ -28,7 +28,7 @@ const fs = require('fs');
 const program = require('commander');
 const queryEngine = require('../src/query-engine.js');
 const ldf = require('../Client.js/ldf-client.js');
-const prefixes = require('../Client.js/config-default.json');
+const prefixes = require('../Client.js/config-default.json').prefixes;
 
 // Command line interface to execute queries
 program
