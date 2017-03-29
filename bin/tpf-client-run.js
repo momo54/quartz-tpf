@@ -28,12 +28,14 @@ const fs = require('fs');
 const program = require('commander');
 const queryEngine = require('../src/query-engine.js');
 const ldf = require('../Client.js/ldf-client.js');
+const prefixes = require('../Client.js/config-default.json');
 
 // Command line interface to execute queries
 program
   .description('execute a SPARQL query against several endpoints')
   .option('-q, --query <query>', 'evaluates the given SPARQL query')
   .option('-f, --file <file>', 'evaluates the SPARQL query in the given file')
+  .option('-l, --limit <limit>', 'limit the number of triples to localize per BGP in the query (default to 1)', 1)
   .option('-t, --type <mime-type>', 'determines the MIME type of the output (e.g., application/json)', 'application/json')
   .parse(process.argv);
 
@@ -62,7 +64,13 @@ if (program.query) {
   process.exit(1);
 }
 
-const sparqlIterator = queryEngine(query, program.args.slice(1), model);
+// build configuration for the query analyzer
+const config = {
+  prefixes,
+  locLimit: program.limit
+};
+
+const sparqlIterator = queryEngine(query, program.args.slice(1), model, config);
 const writer = ldf.SparqlResultWriter.instantiate(program.type, sparqlIterator);
 writer.on('data', data => process.stdout.write(data));
 writer.on('error', error => {

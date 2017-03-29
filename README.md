@@ -49,7 +49,7 @@ bin/tpf-client.js model http://example.fragments.server1/dbpedia_3.9 http://exam
 ## Run a query
 
 ```
-Usage: tpf-client run [model] [endpoints...] [options]
+Usage: tpf-client run [endpoints...] [options]
 
   execute a SPARQL query against several endpoints
 
@@ -58,6 +58,7 @@ Usage: tpf-client run [model] [endpoints...] [options]
     -h, --help              output usage information
     -q, --query <query>     evaluates the given SPARQL query
     -f, --file <file>       evaluates the SPARQL query in the given file
+    -l, --limit <limit>     limit the number of triples to localize per BGP in the query (default to 1)
     -t, --type <mime-type>  determines the MIME type of the output (e.g., application/json)
 ```
 

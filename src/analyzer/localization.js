@@ -99,12 +99,18 @@ const localizeService = (triple, endpoints) => {
  * Perform localization on each triple pattern of a BGP
  * @param  {Object} bgp       - A BGP to localize
  * @param  {Object} endpoints - The endpoints used for localization
+ * @param  {int} limit        - The maximum number of triples to localize in the BGP (default to all triples)
  * @return {Object} The localized BGP
  */
-const localizeBGP = (bgp, endpoints) => {
+const localizeBGP = (bgp, endpoints, limit = 0) => {
+  let triples = bgp.triples.map(tp => localizeTriple(tp, endpoints));
+  if (limit > 0) {
+    const localized = bgp.triples.slice(0, limit).map(tp => localizeTriple(tp, endpoints));
+    triples = localized.concat(bgp.triples.slice(limit).map(tp => _.merge({ unlocalized: true }, tp)));
+  }
   return {
     type: 'bgp',
-    triples: bgp.triples.map(tp => localizeTriple(tp, endpoints))
+    triples
   };
 };
 
@@ -112,16 +118,17 @@ const localizeBGP = (bgp, endpoints) => {
  * Recursively perform localization on each BGP of a query
  * @param  {Object} node      - A SPARQL node to localize
  * @param  {Object} endpoints - The endpoints used for localization
+ * @param  {int} limit        - The maximum number of triples to localize in each BGP (default to all triples)
  * @return {Object} The localized query
  */
-const localizeQuery = (node, endpoints) => {
+const localizeQuery = (node, endpoints, limit = 0) => {
   const type = node.type.toLowerCase();
   switch (type) {
     case 'bgp':
-      return localizeBGP(node, endpoints);
+      return localizeBGP(node, endpoints, limit);
     case 'query': {
       const query = _.merge({}, node);
-      query.where = query.where.map(p => localizeQuery(p, endpoints));
+      query.where = query.where.map(p => localizeQuery(p, endpoints, limit));
       return query;
     }
     case 'union':
@@ -129,7 +136,7 @@ const localizeQuery = (node, endpoints) => {
     case 'optional':
       return {
         type,
-        patterns: node.patterns.map(p => localizeQuery(p, endpoints))
+        patterns: node.patterns.map(p => localizeQuery(p, endpoints, limit))
       };
     case 'filter':
       return node;

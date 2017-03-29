@@ -161,4 +161,53 @@ describe('Localization', () => {
     };
     localization.localizeBGP(bgp, endpoints).should.deep.equal(expected);
   });
+
+  it('should localize a BGP with a limit', () => {
+    const endpoints = [ 'e1', 'e2' ];
+    const bgp = {
+      type: 'bgp',
+      triples: [
+        { subject: 's1', predicate: 'p1', object: 'o1'},
+        { subject: 's2', predicate: 'p2', object: 'o2'}
+      ]
+    };
+
+    const expected = {
+      type: 'bgp',
+      triples: [
+        {
+          type: 'union',
+          patterns: [
+            {
+              subject: 's1',
+              predicate: 'p1',
+              object: 'o1',
+              fragment: {
+                endpoint: 'e1',
+                virtualIndex: 1,
+                nbVirtuals: endpoints.length
+              }
+            },
+            {
+              subject: 's1',
+              predicate: 'p1',
+              object: 'o1',
+              fragment: {
+                endpoint: 'e2',
+                virtualIndex: 2,
+                nbVirtuals: endpoints.length
+              }
+            }
+          ]
+        },
+        {
+          subject: 's2',
+          predicate: 'p2',
+          object: 'o2',
+          unlocalized: true
+        }
+      ]
+    };
+    localization.localizeBGP(bgp, endpoints, 1).should.deep.equal(expected);
+  });
 });
