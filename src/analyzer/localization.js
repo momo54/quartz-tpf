@@ -24,7 +24,14 @@ SOFTWARE.
 
 'use strict';
 
+const rdf = require('../../Client.js/lib/util/RdfUtil.js');
 const _ = require('lodash');
+
+// sort patterns with the same algorithm used by TPF + sort triple by number of variables
+const sortPatterns = pattern => _.sortBy(rdf.findConnectedPatterns(pattern), patterns => {
+  const distinctVariableCount = _.union.apply(_, patterns.map(rdf.getVariables)).length;
+  return -(pattern.length * distinctVariableCount + patterns.length);
+}).map(patterns => _.sortBy(patterns, pattern => rdf.getVariables(pattern).length));
 
 /**
  * Build a SPARQL service subquery
@@ -103,10 +110,13 @@ const localizeService = (triple, endpoints) => {
  * @return {Object} The localized BGP
  */
 const localizeBGP = (bgp, endpoints, limit = 0) => {
-  let triples = bgp.triples.map(tp => localizeTriple(tp, endpoints));
+  // sort triples like TPF does, to ensure the order of the localized triples match the order in which TPF execute triples
+  let triples = _.flattenDeep(sortPatterns(bgp.triples));
   if (limit > 0) {
-    const localized = bgp.triples.slice(0, limit).map(tp => localizeTriple(tp, endpoints));
-    triples = localized.concat(bgp.triples.slice(limit).map(tp => _.merge({ unlocalized: true }, tp)));
+    const localized = triples.slice(0, limit).map(tp => localizeTriple(tp, endpoints));
+    triples = localized.concat(triples.slice(limit).map(tp => _.merge({ unlocalized: true }, tp)));
+  } else {
+    triples = triples.map(tp => localizeTriple(tp, endpoints));
   }
   return {
     type: 'bgp',
