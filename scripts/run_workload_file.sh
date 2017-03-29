@@ -3,8 +3,13 @@
 
 cpt=1
 QUERIES=$1
+rm -rf execution_times.csv queries results errors
+mkdir -p queries/
+mkdir -p results/
+mkdir -p errors/
+touch execution_times.csv
 while IFS='' read -r line || [[ -n "$line" ]]; do
-  QFILE="query$cpt"
+  QFILE="queries/query$cpt"
   echo $line > $QFILE
   ./scripts/run_with_time.sh $QFILE
   rm -f tempQuery.sparql
