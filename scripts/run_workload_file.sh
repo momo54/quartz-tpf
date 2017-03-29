@@ -12,6 +12,6 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
   QFILE="queries/query$cpt"
   echo $line > $QFILE
   ./scripts/run_with_time.sh $QFILE
-  rm -f tempQuery.sparql
+  rm -f $QFILE
   cpt=$((cpt+1))
 done < "$QUERIES"
