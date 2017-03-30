@@ -11,7 +11,7 @@ if [ "$#" -ne 3 ]; then
   exit
 fi
 
-echo "query;completeness" > $output
+echo "query,completeness" > $output
 
 ls $reference | while read file; do
   name=`basename $file`
@@ -20,7 +20,7 @@ ls $reference | while read file; do
   groundTruth=`wc -l tempRef | sed 's/^[ ^t]*//' | cut -d' ' -f1`
   commons=`comm -12 tempRef tempRes | wc -l`
   completeness=`echo "scale=2; $commons/$groundTruth" | bc`
-  echo "$name;$completeness" >> $output
+  echo "$name,$completeness" >> $output
 done
 
 rm -f tempRef tempRes
