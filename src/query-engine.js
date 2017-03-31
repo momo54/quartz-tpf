@@ -26,13 +26,8 @@ SOFTWARE.
 
 const processor = require('./analyzer/processor.js');
 const ldf = require('../Client.js/ldf-client.js');
+const Cache = require('lru-cache');
 ldf.Logger.setLevel('EMERGENCY');
-
-// Default config with common prefixes & all triples localized
-const defaultConfig = {
-  prefixes: {},
-  locLimit: 1
-};
 
 /**
  * Build the physical query execution plan for a query, a set of endpoints and a cost model
@@ -43,6 +38,13 @@ const defaultConfig = {
  * @return {AsyncIterator} The root of the physical query execution plan
  */
 const buildIterator = (query, endpoints, model, config = defaultConfig) => {
+  // Default config with common prefixes & all triples localized
+  const defaultConfig = {
+    prefixes: {},
+    locLimit: 1,
+    mainCache: new Cache({ max: 100 })
+  };
+
   const queryPlan = processor(query, endpoints, model.nbTriples, config.locLimit, config.prefixes);
   const defaultClient = new ldf.FragmentsClient(endpoints[0], config);
   const virtualClients = {};
