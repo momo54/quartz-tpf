@@ -27,11 +27,16 @@ const fs = require('fs');
 const http = require('http');
 const program = require('commander');
 const computeModel = require('../src/analyzer/cost-model.js');
+const SparqlParser = require('sparqljs').Parser;
+const _ = require('lodash');
+const ldf = require('../Client.js/ldf-client.js');
+const prefixes = require('../Client.js/config-default.json').prefixes;
+ldf.Logger.setLevel('EMERGENCY');
 
 /**
  * Measure the reponse time of a endpoint
  * @param  {string} url - The url of the endpoint
- * @return {Promise} A promise fullfilled with the reponse time of the endpoint (in milliseconds)
+ * @return {Promise} A Promise fullfilled with the reponse time of the endpoint (in milliseconds)
  */
 const measureResponseTime = url => {
   return new Promise((resolve, reject) => {
@@ -48,8 +53,46 @@ const measureResponseTime = url => {
   });
 };
 
+/**
+ * Extract all triples from a query
+ * @param  {Object} query - The current node of the query
+ * @return {Object[]} The triples of the query
+ */
+const extractTriples = query => {
+  switch (query.type) {
+    case 'bgp':
+      return query.triples;
+    case 'union':
+    case 'group':
+      return _.flatMap(query.patterns, p => extractTriples(p));
+    case 'query':
+      return _.flatMap(query.where, p => extractTriples(p));
+    default:
+      return [];
+  }
+};
+
+/**
+ * Find the cardinality of a triple pattern
+ * @param  {Object} triple   - The triple pattern
+ * @param  {FragmentsClient} client - The fragment client used to fetch the data
+ * @return {Promise} A Promise fullfilled with the triple associated with its cardinality (as a tuple)
+ */
+const findCardinality = (triple, client) => {
+  return new Promise(resolve => {
+    const fragment = client.getFragmentByPattern(triple);
+    fragment.getProperty('metadata', metadata => {
+      fragment.close();
+      resolve([ JSON.stringify(triple), metadata.totalTriples ]);
+    });
+  });
+};
+
 program
   .description('generate the cost model & save it in json format')
+  .option('-q, --query <query>', 'evaluates the given SPARQL query')
+  .option('-f, --file <file>', 'evaluates the SPARQL query in the given file')
+  .option('-s, --size <page-size>', 'the number of triples per page (default: 100)', 100)
   .option('-o, --output <output>', 'save the model in the given file (default: model.json)', './model.json')
   .parse(process.argv);
 
@@ -59,10 +102,32 @@ if (program.args.length < 1) {
   process.exit(1);
 }
 
-// generate the cost model, then save it in a file
+// fetch SPARQL query to analyze
+let query = null;
+if (program.query) {
+  query = program.query;
+} else if (program.file && fs.existsSync(program.file)) {
+  query = fs.readFileSync(program.file, 'utf-8');
+} else {
+  process.stderr.write('Error: you must specify a SPARQL query to analyze.\nSee ./tpf-client model --help for more details.\n');
+  process.exit(1);
+}
+
+const client = new ldf.FragmentsClient(program.args[0], {});
+const parser = new SparqlParser(prefixes);
+const parsedQuery = parser.parse(query);
+let latencies = [];
+
+// find the latencies of the endpoints first, then the metadata of each triple in the query
 Promise.all(program.args.map(measureResponseTime))
 .then(times => {
-  const model = computeModel(program.args, times);
+  latencies = times.slice(0);
+  return Promise.all(extractTriples(parsedQuery).map(t => findCardinality(t, client)));
+})
+.then(cardinalities => {
+  // generate the cost model, and save it in a file
+  const nbTriples = _.fromPairs(cardinalities);
+  const model = computeModel(program.args, latencies, {nbTriples, triplesPerPage: program.size});
   fs.writeFile(program.output, JSON.stringify(model, false, 2), err => {
     if (err) {
       process.stderr.write(err);

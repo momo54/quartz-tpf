@@ -43,7 +43,7 @@ const defaultConfig = {
  * @return {AsyncIterator} The root of the physical query execution plan
  */
 const buildIterator = (query, endpoints, model, config = defaultConfig) => {
-  const queryPlan = processor(query, endpoints, config.locLimit, config.prefixes);
+  const queryPlan = processor(query, endpoints, model.nbTriples, config.locLimit, config.prefixes);
   const defaultClient = new ldf.FragmentsClient(endpoints[0], config);
   const virtualClients = {};
   endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));

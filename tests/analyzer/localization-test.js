@@ -208,6 +208,6 @@ describe('Localization', () => {
         }
       ]
     };
-    localization.localizeBGP(bgp, endpoints, 1).should.deep.equal(expected);
+    localization.localizeBGP(bgp, endpoints, {}, 1).should.deep.equal(expected);
   });
 });

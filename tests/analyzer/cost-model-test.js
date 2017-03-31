@@ -37,7 +37,9 @@ describe('Cost Model', () => {
         b: 2,
         c: 10
       },
-      sumCoefs: 13
+      sumCoefs: 13,
+      nbTriples: {},
+      triplesPerPage: -1
     };
     computeModel(endpoints, times).should.deep.equal(expected);
   });

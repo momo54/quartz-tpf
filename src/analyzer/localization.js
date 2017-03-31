@@ -28,10 +28,10 @@ const rdf = require('../../Client.js/lib/util/RdfUtil.js');
 const _ = require('lodash');
 
 // sort patterns with the same algorithm used by TPF + sort triple by number of variables
-const sortPatterns = pattern => _.sortBy(rdf.findConnectedPatterns(pattern), patterns => {
+const sortPatterns = (pattern, cardinalities) => _.sortBy(rdf.findConnectedPatterns(pattern), patterns => {
   const distinctVariableCount = _.union.apply(_, patterns.map(rdf.getVariables)).length;
   return -(pattern.length * distinctVariableCount + patterns.length);
-}).map(patterns => _.sortBy(patterns, pattern => rdf.getVariables(pattern).length));
+}).map(patterns => _.sortBy(patterns, pattern => cardinalities[JSON.stringify(pattern)] || Infinity));
 
 /**
  * Build a SPARQL service subquery
@@ -106,12 +106,13 @@ const localizeService = (triple, endpoints) => {
  * Perform localization on each triple pattern of a BGP
  * @param  {Object} bgp       - A BGP to localize
  * @param  {Object} endpoints - The endpoints used for localization
+ * @param  {Object} cardinalities  - The cardinality associated with each triple pattern of the BGP
  * @param  {int} limit        - The maximum number of triples to localize in the BGP (default to all triples)
  * @return {Object} The localized BGP
  */
-const localizeBGP = (bgp, endpoints, limit = 0) => {
+const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = 0) => {
   // sort triples like TPF does, to ensure the order of the localized triples match the order in which TPF execute triples
-  let triples = _.flattenDeep(sortPatterns(bgp.triples));
+  let triples = _.flattenDeep(sortPatterns(bgp.triples, cardinalities));
   if (limit > 0) {
     const localized = triples.slice(0, limit).map(tp => localizeTriple(tp, endpoints));
     triples = localized.concat(triples.slice(limit).map(tp => _.merge({ unlocalized: true }, tp)));
@@ -128,17 +129,18 @@ const localizeBGP = (bgp, endpoints, limit = 0) => {
  * Recursively perform localization on each BGP of a query
  * @param  {Object} node      - A SPARQL node to localize
  * @param  {Object} endpoints - The endpoints used for localization
+ * @param  {Object} cardinalities  - The cardinality associated with each triple pattern of the BGP
  * @param  {int} limit        - The maximum number of triples to localize in each BGP (default to all triples)
  * @return {Object} The localized query
  */
-const localizeQuery = (node, endpoints, limit = 0) => {
+const localizeQuery = (node, endpoints, cardinalities = {}, limit = 0) => {
   const type = node.type.toLowerCase();
   switch (type) {
     case 'bgp':
-      return localizeBGP(node, endpoints, limit);
+      return localizeBGP(node, endpoints, cardinalities, limit);
     case 'query': {
       const query = _.merge({}, node);
-      query.where = query.where.map(p => localizeQuery(p, endpoints, limit));
+      query.where = query.where.map(p => localizeQuery(p, endpoints, cardinalities, limit));
       return query;
     }
     case 'union':
@@ -146,7 +148,7 @@ const localizeQuery = (node, endpoints, limit = 0) => {
     case 'optional':
       return {
         type,
-        patterns: node.patterns.map(p => localizeQuery(p, endpoints, limit))
+        patterns: node.patterns.map(p => localizeQuery(p, endpoints, cardinalities, limit))
       };
     case 'filter':
       return node;
