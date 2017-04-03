@@ -2,24 +2,24 @@
 # run the tpf client with a workload of queries, all stored in the same file
 
 QUERIES=$1
+OUTPUT=$2
 cpt=1
 
-if [ "$#" -ne 1 ]; then
+if [ "$#" -ne 2 ]; then
   echo "Illegal number of parameters."
-  echo "Usage: ./run_workload_file.sh <queries-file>"
+  echo "Usage: ./run_workload_file.sh <queries-file> <output-folder>"
   exit
 fi
 
-rm -rf execution_times.csv queries results errors
-mkdir -p queries/
-mkdir -p results/
-mkdir -p errors/
-echo "time" > execution_times.csv
+mkdir -p $OUTPUT/queries/
+mkdir -p $OUTPUT/results/
+mkdir -p $OUTPUT/errors/
+echo "time" > $OUTPUT/execution_times.csv
 
 while IFS='' read -r line || [[ -n "$line" ]]; do
   QFILE="queries/query$cpt"
   echo $line > $QFILE
-  ./scripts/run_with_time.sh $QFILE
+  ./scripts/run_with_time.sh $QFILE $OUTPUT
   rm -f $QFILE
   cpt=$((cpt+1))
 done < "$QUERIES"
