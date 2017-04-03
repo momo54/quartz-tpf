@@ -42,7 +42,8 @@ const buildIterator = (query, endpoints, model, config = defaultConfig) => {
   const defaultConfig = {
     prefixes: {},
     locLimit: 1,
-    mainCache: new Cache({ max: 100 })
+    mainCache: new Cache({ max: 100 }),
+    sharedCache: new Cache({ max: 5000 })
   };
 
   const queryPlan = processor(query, endpoints, model.nbTriples, config.locLimit, config.prefixes);
