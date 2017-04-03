@@ -1,0 +1,12 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://52.33.245.25/watDiv_100": 1
+  },
+  "sumCoefs": 2,
+  "nbTriples": {
+    "{\"subject\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Retailer1096\",\"predicate\":\"http://purl.org/goodrelations/offers\",\"object\":\"?v1\"}": 54,
+    "{\"subject\":\"?v1\",\"predicate\":\"http://purl.org/goodrelations/validThrough\",\"object\":\"?v2\"}": 35920
+  },
+  "triplesPerPage": 100
+}

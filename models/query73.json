@@ -1,0 +1,21 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://52.33.245.25/watDiv_100": 1
+  },
+  "sumCoefs": 2,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/includes\",\"object\":\"?v1\"}": 90000,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://purl.org/goodrelations/offers\",\"object\":\"?v0\"}": 121568,
+    "{\"subject\":\"?v1\",\"predicate\":\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/ProductCategory4\"}": 1647,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/aggregateRating\",\"object\":\"?v4\"}": 464,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/aggregateRating\",\"object\":\"?v5\"}": 464,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/contactPoint\",\"object\":\"?v6\"}": 989,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/email\",\"object\":\"?v7\"}": 91056,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/email\",\"object\":\"?v8\"}": 91056,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/faxNumber\",\"object\":\"?v9\"}": 124,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/legalName\",\"object\":\"?v10\"}": 126,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/paymentAccepted\",\"object\":\"?v11\"}": 707
+  },
+  "triplesPerPage": 100
+}

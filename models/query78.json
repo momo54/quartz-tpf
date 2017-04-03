@@ -1,0 +1,13 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://52.33.245.25/watDiv_100": 1
+  },
+  "sumCoefs": 2,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/ProductCategory8\"}": 1704,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://schema.org/caption\",\"object\":\"?v2\"}": 2458,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://schema.org/contentRating\",\"object\":\"?v3\"}": 7553
+  },
+  "triplesPerPage": 100
+}

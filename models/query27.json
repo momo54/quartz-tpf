@@ -1,0 +1,11 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://52.33.245.25/watDiv_100": 1
+  },
+  "sumCoefs": 2,
+  "nbTriples": {
+    "{\"subject\":\"http://db.uwaterloo.ca/~galuc/wsdbm/User39669\",\"predicate\":\"http://xmlns.com/foaf/familyName\",\"object\":\"?v1\"}": 1
+  },
+  "triplesPerPage": 100
+}

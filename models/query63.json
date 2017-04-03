@@ -1,0 +1,12 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://52.33.245.25/watDiv_100": 1
+  },
+  "sumCoefs": 2,
+  "nbTriples": {
+    "{\"subject\":\"http://db.uwaterloo.ca/~galuc/wsdbm/City168\",\"predicate\":\"http://www.geonames.org/ontology#parentCountry\",\"object\":\"?v1\"}": 1,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/nationality\",\"object\":\"?v1\"}": 19959
+  },
+  "triplesPerPage": 100
+}

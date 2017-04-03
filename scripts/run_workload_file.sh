@@ -1,5 +1,5 @@
 #!/bin/bash
-# un the tpf client with a workload of queries, all stored in the same file
+# run the tpf client with a workload of queries, all stored in the same file
 
 QUERIES=$1
 cpt=1

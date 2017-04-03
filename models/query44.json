@@ -1,0 +1,19 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://52.33.245.25/watDiv_100": 1
+  },
+  "sumCoefs": 2,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/includes\",\"object\":\"?v1\"}": 90000,
+    "{\"subject\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Retailer1074\",\"predicate\":\"http://purl.org/goodrelations/offers\",\"object\":\"?v0\"}": 136,
+    "{\"subject\":\"?v3\",\"predicate\":\"http://purl.org/goodrelations/price\",\"object\":\"?v4\"}": 240000,
+    "{\"subject\":\"?v3\",\"predicate\":\"http://purl.org/goodrelations/price\",\"object\":\"?v5\"}": 240000,
+    "{\"subject\":\"?v1\",\"predicate\":\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\",\"object\":\"?v6\"}": 136012,
+    "{\"subject\":\"?v7\",\"predicate\":\"http://purl.org/stuff/rev#reviewer\",\"object\":\"?v8\"}": 150000,
+    "{\"subject\":\"?v1\",\"predicate\":\"http://schema.org/editor\",\"object\":\"?v8\"}": 1635,
+    "{\"subject\":\"?v3\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate\",\"object\":\"?v9\"}": 45150,
+    "{\"subject\":\"?v3\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor\",\"object\":\"?v1\"}": 150000
+  },
+  "triplesPerPage": 100
+}
