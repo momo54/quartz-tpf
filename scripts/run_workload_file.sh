@@ -11,7 +11,7 @@ if [ "$#" -ne 2 ]; then
   exit
 fi
 
-mkdir -p $OUTPUT/queries/
+mkdir -p queries/
 mkdir -p $OUTPUT/results/
 mkdir -p $OUTPUT/errors/
 echo "time" > $OUTPUT/execution_times.csv
