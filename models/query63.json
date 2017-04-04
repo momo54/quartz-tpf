@@ -1,0 +1,18 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://52.33.245.25/watDiv_100": 1
+  },
+  "sumCoefs": 2,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/dc/terms/Location\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/City239\"}": 26,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://ogp.me/ns#tag\",\"object\":\"?v3\"}": 148673,
+    "{\"subject\":\"?v4\",\"predicate\":\"http://ogp.me/ns#tag\",\"object\":\"?v3\"}": 148673,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/description\",\"object\":\"?v5\"}": 15032,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://schema.org/email\",\"object\":\"?v6\"}": 91056,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/keywords\",\"object\":\"?v7\"}": 7481,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/gender\",\"object\":\"?v8\"}": 60117,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/likes\",\"object\":\"?v2\"}": 113044
+  },
+  "triplesPerPage": 100
+}

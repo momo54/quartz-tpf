@@ -1,0 +1,13 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://52.33.245.25/watDiv_100": 1
+  },
+  "sumCoefs": 2,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://schema.org/email\",\"object\":\"?v1\"}": 91056,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/gender\",\"object\":\"?v2\"}": 60117,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/subscribes\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Website4970\"}": 32
+  },
+  "triplesPerPage": 100
+}
