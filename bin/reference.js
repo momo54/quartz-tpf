@@ -1,4 +1,5 @@
-/* file : tpf-client-run.js
+#!/usr/bin/env node
+/* file : reference.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
@@ -26,33 +27,26 @@ SOFTWARE.
 
 const fs = require('fs');
 const program = require('commander');
-const queryEngine = require('../src/query-engine.js');
-const ldf = require('../Client.js/ldf-client.js');
+const ldf = require('../../Client-fix.js/ldf-client.js');
 const prefixes = require('../Client.js/config-default.json').prefixes;
+ldf.Logger.setLevel('EMERGENCY');
 
 // Command line interface to execute queries
 program
-  .description('execute a SPARQL query against several endpoints')
+  .description('execute a SPARQL query using reference TPF client')
+  .usage('model <endpoint>', 'generate the cost model & save it in json format')
   .option('-q, --query <query>', 'evaluates the given SPARQL query')
   .option('-f, --file <file>', 'evaluates the SPARQL query in the given file')
   .option('-l, --limit <limit>', 'limit the number of triples to localize per BGP in the query (default to 1)', 1)
   .option('-t, --type <mime-type>', 'determines the MIME type of the output (e.g., application/json)', 'application/json')
-  .option('-m, --measure <output>', 'measure the query execution time (in seconds) & append it to a file', './execution_times.csv')
+  .option('-m, --measure <output>', 'measure the query execution time (in seconds) & append it to a file', './execution_times_ref.csv')
   .parse(process.argv);
 
 // check number of endpoints
-if (program.args.length < 1) {
-  process.stderr.write('Error: invalid number of arguments.\nSee ./tpf-client --help for more details.\n');
+if (program.args.length <= 0) {
+  process.stderr.write('Error: invalid number of arguments.\nSee ./reference --help for more details.\n');
   process.exit(1);
 }
-
-// fetch the model
-const modelFile = program.args[0];
-if (!fs.existsSync(modelFile)) {
-  process.stderr.write('Error: you must specify a valid model file as input.\nSee ./tpf-client --help for more details.\n');
-  process.exit(1);
-}
-const model = JSON.parse(fs.readFileSync(modelFile, 'utf-8'));
 
 // fetch SPARQL query to execute
 let query = null;
@@ -61,18 +55,17 @@ if (program.query) {
 } else if (program.file && fs.existsSync(program.file)) {
   query = fs.readFileSync(program.file, 'utf-8');
 } else {
-  process.stderr.write('Error: you must specify a SPARQL query to execute.\nSee ./tpf-client --help for more details.\n');
+  process.stderr.write('Error: you must specify a SPARQL query to execute.\nSee ./reference --help for more details.\n');
   process.exit(1);
 }
 
-// build configuration for the query analyzer
 const config = {
-  prefixes,
-  locLimit: program.limit
+  prefixes
 };
 
-const sparqlIterator = queryEngine(query, program.args.slice(1), model, config);
-const writer = ldf.SparqlResultWriter.instantiate(program.type, sparqlIterator);
+const fragmentsClient = new ldf.FragmentsClient(program.args[0], config);
+const iterator = new ldf.SparqlIterator(query, { fragmentsClient });
+const writer = ldf.SparqlResultWriter.instantiate(program.type, iterator);
 writer.on('error', error => {
   process.stderr.write('ERROR: An error occurred during query execution.\n');
   process.stderr.write(error.stack);
@@ -82,6 +75,5 @@ writer.on('end', () => {
   const time = endTime - startTime;
   fs.appendFileSync(program.measure, (time/1000) + '\n');
 });
-
 const startTime = Date.now();
 writer.on('data', data => process.stdout.write(data));

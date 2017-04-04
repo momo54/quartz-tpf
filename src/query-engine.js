@@ -37,17 +37,12 @@ ldf.Logger.setLevel('EMERGENCY');
  * @param {Object|undefined} config - (optional) Additional configuration options for LDF FragmentsClients & SparqlIterator
  * @return {AsyncIterator} The root of the physical query execution plan
  */
-const buildIterator = (query, endpoints, model, config = defaultConfig) => {
-  // Default config with common prefixes & all triples localized
-  const defaultConfig = {
-    prefixes: {},
-    locLimit: 1,
-    mainCache: new Cache({ max: 100 }),
-    sharedCache: new Cache({ max: 5000 })
-  };
-
+const buildIterator = (query, endpoints, model, config = {}) => {
   const queryPlan = processor(query, endpoints, model.nbTriples, config.locLimit, config.prefixes);
+  config.sharedCache = new Cache({ max: 5000 });
   const defaultClient = new ldf.FragmentsClient(endpoints[0], config);
+  // main cache must not be shared with the default client!
+  config.mainCache = new Cache({ max: 100 });
   const virtualClients = {};
   endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));
   return new ldf.SparqlIterator(queryPlan, {
