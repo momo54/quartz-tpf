@@ -13,4 +13,4 @@ fi
 RESULTS=`basename $FILE`
 SERVERS='http://52.39.116.115/watDiv_100 http://52.33.245.25/watDiv_100'
 /usr/bin/time -f %e -o $OUTPUT/execution_times.csv -a bin/tpf-client.js run models/$RESULTS.json $SERVERS -f $FILE -t application/sparql-results+xml > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
-/usr/bin/time -f %e -o $OUTPUT/execution_times.csv -a ../Client-fix.js/bin/ldf-client http://52.39.116.115/watDiv_100 -f $FILE -t application/sparql-results+xml > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+# /usr/bin/time -f %e -o $OUTPUT/execution_times.csv -a ../Client-fix.js/bin/ldf-client http://52.39.116.115/watDiv_100 -f $FILE -t application/sparql-results+xml > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
