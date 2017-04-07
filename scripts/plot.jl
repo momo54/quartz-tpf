@@ -1,15 +1,9 @@
 using Gadfly
 using RDatasets
 
-panel_theme = Theme(
-    key_position = :none
-)
-
-Gadfly.push_theme(panel_theme)
-
 # Custom color scale for plots
 function colors()
- return Scale.color_discrete_manual(colorant"#990000", colorant"#ff4000", colorant"#ffbf00")
+ return Scale.color_discrete_manual(colorant"#ff4000",colorant"#0080ff")
 end
 
 # Concat results from three distinct runs
@@ -40,17 +34,18 @@ data_run1 = readtable("amazon/run1/execution_times.csv")
 # ref[:l] = 1
 # data[:servers] = 2
 # data[:l] = 1
-
-ref_run1[:servers] = 1
-data_run1[:servers] = 2
+ref_run1[:query] = 1:nrow(ref_run1)
+ref_run1[:servers] = "1 server"
+data_run1[:query] = 1:nrow(data_run1)
+data_run1[:servers] = "2 servers"
 
 
 # all = [ref;data]
 all = [ref_run1;data_run1]
 big = all[all[:time] .>= 1.0, :]
 
-p = plot(all, x=:servers, y=:time, color=:servers, Geom.boxplot, Guide.xlabel("Number of servers"), Guide.ylabel("Execution time (s)"), Scale.x_discrete, Scale.y_log10, colors())
-pbig = plot(big, x=:servers, y=:time, color=:servers, Geom.boxplot, Guide.xlabel("Number of servers"), Guide.ylabel("Execution time (s)"), Scale.x_discrete, Scale.y_log10, colors())
+p = plot(all, x=:query, y=:time, color=:servers, Geom.bar(position=:dodge), Guide.xlabel("Query"), Guide.ylabel("Execution time (s)"), Guide.colorkey("Server(s)"), Scale.x_continuous, colors())
+# pbig = plot(big, x=:servers, y=:time, color=:servers, Geom.boxplot, Guide.xlabel("Number of servers"), Guide.ylabel("Execution time (s)"), Scale.x_discrete, Scale.y_log10, colors())
 
 draw(PDF("amazon/execution_time.pdf", 7inch, 5inch), p)
-draw(PDF("amazon/execution_time_greater_3s.pdf", 7inch, 5inch), pbig)
+# draw(PDF("amazon/execution_time_greater_3s.pdf", 7inch, 5inch), pbig)
