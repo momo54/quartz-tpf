@@ -5,7 +5,7 @@ FILE=$1
 OUTPUTREF=$2
 OUTPUT=$3
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 3 ]; then
   echo "Illegal number of parameters."
   echo "Usage: ./run_three.sh <file> <output-ref> <output-prototype>"
   exit
