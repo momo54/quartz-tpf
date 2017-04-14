@@ -7,7 +7,7 @@ cpt=1
 
 if [ "$#" -ne 2 ]; then
   echo "Illegal number of parameters."
-  echo "Usage: ./run_workload_file.sh <queries-file> <output-folder>"
+  echo "Usage: ./run_workload_file_ref.sh <queries-file> <output-folder>"
   exit
 fi
 
@@ -19,7 +19,7 @@ echo "time" > $OUTPUT/execution_times.csv
 while IFS='' read -r line || [[ -n "$line" ]]; do
   QFILE="queries/query$cpt"
   echo $line > $QFILE
-  ./scripts/run_with_time.sh $QFILE $OUTPUT
+  ./scripts/run_with_time_ref.sh $QFILE $OUTPUT
   rm -f $QFILE
   cpt=$((cpt+1))
 done < "$QUERIES"
