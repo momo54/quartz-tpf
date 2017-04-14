@@ -12,5 +12,10 @@ fi
 
 RESULTS=`basename $FILE`
 SERVERS='http://52.39.116.115/watDiv_100 http://52.33.245.25/watDiv_100'
+
+# tell eventual proxies to move to the next query
+GET http://52.39.116.115/move-to-query?name=$RESULTS
+GET http://52.33.245.25/move-to-query?name=$RESULTS
+
 bin/tpf-client.js run models/$RESULTS.json $SERVERS -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
 # bin/reference.js http://52.39.116.115/watDiv_100 -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS

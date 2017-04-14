@@ -16,6 +16,9 @@ mkdir -p $OUTPUT/results/
 mkdir -p $OUTPUT/errors/
 echo "time" > $OUTPUT/execution_times.csv
 
+# start proxies
+./scripts/start_proxies.sh
+
 while IFS='' read -r line || [[ -n "$line" ]]; do
   QFILE="queries/query$cpt"
   echo $line > $QFILE

@@ -24,6 +24,7 @@
   "homepage": "https://github.com/Callidon/virtual-decomposer#readme",
   "dependencies": {
     "commander": "^2.9.0",
+    "http-proxy": "^1.16.2",
     "lodash": "^4.17.4",
     "lru-cache": "^4.0.2",
     "sparqljs": "^1.3.0"
