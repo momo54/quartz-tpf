@@ -1,0 +1,14 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 5
+  },
+  "sumCoefs": 6,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/price\",\"object\":\"?v1\"}": 240000,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/price\",\"object\":\"?v2\"}": 240000,
+    "{\"subject\":\"?v3\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/makesPurchase\",\"object\":\"?v0\"}": 150000,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Product11655\"}": 3
+  },
+  "triplesPerPage": 100
+}

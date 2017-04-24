@@ -1,0 +1,13 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 5
+  },
+  "sumCoefs": 6,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/dc/terms/Location\",\"object\":\"?v1\"}": 40011,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://purl.org/ontology/mo/artist\",\"object\":\"?v0\"}": 1330,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/gender\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Gender1\"}": 45104
+  },
+  "triplesPerPage": 100
+}

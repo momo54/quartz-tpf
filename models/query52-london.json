@@ -1,0 +1,12 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 4
+  },
+  "sumCoefs": 5,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://xmlns.com/foaf/age\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/AgeGroup3\"}": 8123,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/subscribes\",\"object\":\"?v2\"}": 148805
+  },
+  "triplesPerPage": 100
+}

@@ -1,0 +1,16 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 4
+  },
+  "sumCoefs": 5,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://ogp.me/ns#tag\",\"object\":\"?v1\"}": 148673,
+    "{\"subject\":\"http://db.uwaterloo.ca/~galuc/wsdbm/SubGenre42\",\"predicate\":\"http://ogp.me/ns#tag\",\"object\":\"?v1\"}": 1,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://ogp.me/ns#title\",\"object\":\"?v3\"}": 25000,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://schema.org/contentRating\",\"object\":\"?v4\"}": 7553,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://schema.org/keywords\",\"object\":\"?v5\"}": 7481,
+    "{\"subject\":\"?v6\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor\",\"object\":\"?v0\"}": 150000
+  },
+  "triplesPerPage": 100
+}

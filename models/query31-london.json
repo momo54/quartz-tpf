@@ -1,0 +1,11 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 3
+  },
+  "sumCoefs": 4,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://ogp.me/ns#tag\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Topic79\"}": 621
+  },
+  "triplesPerPage": 100
+}

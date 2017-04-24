@@ -1,0 +1,15 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 5
+  },
+  "sumCoefs": 6,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://xmlns.com/foaf/homepage\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Website381\"}": 3,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://purl.org/goodrelations/includes\",\"object\":\"?v0\"}": 90000,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://ogp.me/ns#title\",\"object\":\"?v3\"}": 25000,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre\",\"object\":\"?v4\"}": 58538,
+    "{\"subject\":\"?v5\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/likes\",\"object\":\"?v0\"}": 113044
+  },
+  "triplesPerPage": 100
+}

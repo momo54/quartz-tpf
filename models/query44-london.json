@@ -1,0 +1,11 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 4
+  },
+  "sumCoefs": 5,
+  "nbTriples": {
+    "{\"subject\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Review97507\",\"predicate\":\"http://purl.org/stuff/rev#reviewer\",\"object\":\"?v1\"}": 1
+  },
+  "triplesPerPage": 100
+}

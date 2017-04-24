@@ -1,0 +1,11 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 6
+  },
+  "sumCoefs": 7,
+  "nbTriples": {
+    "{\"subject\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Product13623\",\"predicate\":\"http://schema.org/publisher\",\"object\":\"?v1\"}": 1
+  },
+  "triplesPerPage": 100
+}

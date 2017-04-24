@@ -1,0 +1,16 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 7
+  },
+  "sumCoefs": 8,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://ogp.me/ns#tag\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Topic151\"}": 605,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/contentSize\",\"object\":\"?v3\"}": 2502,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/text\",\"object\":\"?v4\"}": 7476,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://schema.org/text\",\"object\":\"?v5\"}": 7476,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre\",\"object\":\"?v0\"}": 58538,
+    "{\"subject\":\"?v6\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/likes\",\"object\":\"?v2\"}": 113044
+  },
+  "triplesPerPage": 100
+}

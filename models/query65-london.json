@@ -1,0 +1,17 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 3
+  },
+  "sumCoefs": 4,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/includes\",\"object\":\"?v1\"}": 90000,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://purl.org/goodrelations/offers\",\"object\":\"?v0\"}": 121568,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/serialNumber\",\"object\":\"?v3\"}": 90000,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/validFrom\",\"object\":\"?v4\"}": 36214,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/validThrough\",\"object\":\"?v5\"}": 35920,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://schema.org/eligibleRegion\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Country6\"}": 7792,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://schema.org/priceValidUntil\",\"object\":\"?v7\"}": 17847
+  },
+  "triplesPerPage": 100
+}

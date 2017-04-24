@@ -1,0 +1,13 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 4
+  },
+  "sumCoefs": 5,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://ogp.me/ns#tag\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Topic62\"}": 662,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://schema.org/description\",\"object\":\"?v2\"}": 15032,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://schema.org/expires\",\"object\":\"?v3\"}": 1235
+  },
+  "triplesPerPage": 100
+}

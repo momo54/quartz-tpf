@@ -1,0 +1,18 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://35.177.243.45/watDiv_100": 5
+  },
+  "sumCoefs": 6,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://xmlns.com/foaf/age\",\"object\":\"?v1\"}": 50132,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://xmlns.com/foaf/homepage\",\"object\":\"?v2\"}": 11250,
+    "{\"subject\":\"?v3\",\"predicate\":\"http://purl.org/goodrelations/price\",\"object\":\"?v4\"}": 240000,
+    "{\"subject\":\"?v5\",\"predicate\":\"http://ogp.me/ns#tag\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Topic208\"}": 559,
+    "{\"subject\":\"?v5\",\"predicate\":\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\",\"object\":\"?v7\"}": 136012,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/makesPurchase\",\"object\":\"?v3\"}": 150000,
+    "{\"subject\":\"?v3\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate\",\"object\":\"?v8\"}": 45150,
+    "{\"subject\":\"?v3\",\"predicate\":\"http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor\",\"object\":\"?v5\"}": 150000
+  },
+  "triplesPerPage": 100
+}
