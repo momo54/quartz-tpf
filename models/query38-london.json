@@ -1,9 +1,9 @@
 {
   "coefficients": {
     "http://52.39.116.115/watDiv_100": 1,
-    "http://35.177.243.45/watDiv_100": 5
+    "http://35.177.243.45/watDiv_100": 2
   },
-  "sumCoefs": 6,
+  "sumCoefs": 3,
   "nbTriples": {
     "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/dc/terms/Location\",\"object\":\"?v1\"}": 40011,
     "{\"subject\":\"?v2\",\"predicate\":\"http://purl.org/ontology/mo/artist\",\"object\":\"?v0\"}": 1330,

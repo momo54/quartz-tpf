@@ -1,9 +1,9 @@
 {
   "coefficients": {
     "http://52.39.116.115/watDiv_100": 1,
-    "http://35.177.243.45/watDiv_100": 5
+    "http://35.177.243.45/watDiv_100": 2
   },
-  "sumCoefs": 6,
+  "sumCoefs": 3,
   "nbTriples": {
     "{\"subject\":\"?v0\",\"predicate\":\"http://ogp.me/ns#title\",\"object\":\"?v1\"}": 25000,
     "{\"subject\":\"?v0\",\"predicate\":\"http://ogp.me/ns#title\",\"object\":\"?v2\"}": 25000,

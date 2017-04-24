@@ -1,9 +1,9 @@
 {
   "coefficients": {
     "http://52.39.116.115/watDiv_100": 1,
-    "http://35.177.243.45/watDiv_100": 4
+    "http://35.177.243.45/watDiv_100": 2
   },
-  "sumCoefs": 5,
+  "sumCoefs": 3,
   "nbTriples": {
     "{\"subject\":\"?v0\",\"predicate\":\"http://xmlns.com/foaf/age\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/AgeGroup0\"}": 176
   },

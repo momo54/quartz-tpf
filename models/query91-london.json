@@ -1,9 +1,9 @@
 {
   "coefficients": {
     "http://52.39.116.115/watDiv_100": 1,
-    "http://35.177.243.45/watDiv_100": 6
+    "http://35.177.243.45/watDiv_100": 2
   },
-  "sumCoefs": 7,
+  "sumCoefs": 3,
   "nbTriples": {
     "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/includes\",\"object\":\"?v1\"}": 90000,
     "{\"subject\":\"?v2\",\"predicate\":\"http://purl.org/goodrelations/offers\",\"object\":\"?v0\"}": 121568,

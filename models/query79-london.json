@@ -1,9 +1,9 @@
 {
   "coefficients": {
     "http://52.39.116.115/watDiv_100": 1,
-    "http://35.177.243.45/watDiv_100": 8
+    "http://35.177.243.45/watDiv_100": 2
   },
-  "sumCoefs": 9,
+  "sumCoefs": 3,
   "nbTriples": {
     "{\"subject\":\"?v0\",\"predicate\":\"http://xmlns.com/foaf/homepage\",\"object\":\"?v1\"}": 11250,
     "{\"subject\":\"?v2\",\"predicate\":\"http://purl.org/goodrelations/includes\",\"object\":\"?v0\"}": 90000,

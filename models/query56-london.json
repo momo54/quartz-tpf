@@ -1,9 +1,9 @@
 {
   "coefficients": {
     "http://52.39.116.115/watDiv_100": 1,
-    "http://35.177.243.45/watDiv_100": 3
+    "http://35.177.243.45/watDiv_100": 2
   },
-  "sumCoefs": 4,
+  "sumCoefs": 3,
   "nbTriples": {
     "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/description\",\"object\":\"?v1\"}": 1200,
     "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/offers\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Offer55000\"}": 1
