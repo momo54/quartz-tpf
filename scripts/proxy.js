@@ -29,17 +29,23 @@ const http = require('http');
 const url = require('url');
 const HttpProxy = require('http-proxy');
 const program = require('commander');
+const _ = require('lodash');
+
+const tripleEquals = (left, right) => {
+  return (left.subject === right.subject) && (left.predicate === right.predicate) && (left.object === right.object);
+};
 
 program
   .description('deploy a reverse proxy to monitor a target HTTP server')
-  .usage('<target>')
+  .usage('<target> <model>')
   .option('-p, --port <port>', 'the port on which the reverse proxy will be running', 8000)
   .option('-o, --output <file>', 'the output file to store results', 'http-calls.csv')
-  .option('-s, --start <name>', 'the name of the first query (start query) of the workload', 'query1')
+  .option('-s, --start <name>', 'the name of the first query (start query) of the workload', 'query0')
+  .option('-m, --minus <value>', 'value to substract from the final value', 0)
   .parse(process.argv);
 
-if (program.args.length < 1) {
-  process.stderr.write('Error: you must supply the target HTTP server url as an argument to this script.\nSee ./proxy.js -h for usage\n');
+if (program.args.length < 2) {
+  process.stderr.write('Error: invalid number of arguments.\nSee ./proxy.js -h for usage\n');
   process.exit(1);
 }
 
@@ -47,20 +53,41 @@ const proxyConfig = {
   target: program.args[0]
 };
 
-let currentQuery = program.start;
-let httpCalls = 0;
+// load model & search for the the first triple pattern evaluated
+if (!fs.existsSync(program.args[1])) {
+  process.stderr.write('Error: invalid model supplied, no file found\n');
+  process.exit(1);
+}
+const model = JSON.parse(fs.readFileSync(program.args[1], 'utf-8'));
+let refTriple = null, min = Infinity;
+_.forEach(model.nbTriples, (count, triple) => {
+  if (count < min) {
+    refTriple = JSON.parse(triple);
+    min = count;
+  }
+});
+
+// replace vars by undefined values
+refTriple = _.mapValues(refTriple, v => {
+  if (v.startsWith('?')) return undefined;
+  return v;
+});
+
+let currentQuery = program.start.split('query')[1] || '0';
+let httpCalls = 0, triple = {};
 const proxy = HttpProxy.createProxyServer();
 const proxyServer = http.createServer((req, res) => {
   if (!req.url.includes('move-to-query')) {
-    httpCalls++;
+    triple = _.pick(url.parse(req.url, true).query, [ 'subject', 'predicate', 'object' ]);
+    if (tripleEquals(refTriple, triple)) httpCalls++;
     proxy.web(req, res, proxyConfig);
   } else {
     // write results to file
-    fs.appendFileSync(program.output, `${currentQuery},${httpCalls},"${proxyConfig.target}"\n`);
+    if (currentQuery !== '0') fs.appendFileSync(program.output, `${currentQuery},${httpCalls - program.minus},"${proxyConfig.target}"\n`);
     httpCalls = 0;
     // move to next query
     const query = url.parse(req.url, true);
-    currentQuery = query.query.name;
+    currentQuery = query.query.name.split('query')[1];
     process.stdout.write(`current results saved, moving to query ${currentQuery}\n`);
     res.end();
   }
