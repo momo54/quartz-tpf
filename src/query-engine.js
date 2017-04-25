@@ -27,7 +27,17 @@ SOFTWARE.
 const processor = require('./analyzer/processor.js');
 const ldf = require('../Client.js/ldf-client.js');
 const Cache = require('lru-cache');
+const UnionStream = require('./union-stream.js');
+const _ = require('lodash');
 ldf.Logger.setLevel('EMERGENCY');
+
+const buildMultiUnion = (plan, ldfConfig) => {
+  return plan.where[0].patterns.map(pattern => {
+    const newPlan = _.pickBy(plan, key => key !== 'where');
+    newPlan.where = [ pattern ];
+    return new ldf.SparqlIterator(newPlan, ldfConfig);
+  });
+};
 
 /**
  * Build the physical query execution plan for a query, a set of endpoints and a cost model
@@ -35,21 +45,25 @@ ldf.Logger.setLevel('EMERGENCY');
  * @param {Object} endpoints        - The endpoints used for localization
  * @param {Object} model            - The cost model used for this execution
  * @param {Object|undefined} config - (optional) Additional configuration options for LDF FragmentsClients & SparqlIterator
- * @return {AsyncIterator} The root of the physical query execution plan
+ * @return {AsyncIterator} The root operator of the physical query execution plan
  */
 const buildIterator = (query, endpoints, model, config = {}) => {
   const queryPlan = processor(query, endpoints, model.nbTriples, config.locLimit, config.prefixes);
   config.sharedCache = new Cache({ max: 5000 });
   const defaultClient = new ldf.FragmentsClient(endpoints[0], config);
-  // main cache must not be shared with the default client!
+  // important: main cache must not be shared with the default client!
   config.mainCache = new Cache({ max: 100 });
   const virtualClients = {};
   endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));
-  return new ldf.SparqlIterator(queryPlan, {
+  const ldfConfig = {
     fragmentsClient: defaultClient,
     virtualClients,
     model
-  });
+  };
+  // performance hack: transform a top level union into an union of SparqlIterors
+  if (queryPlan.where.length === 1 && queryPlan.where[0].type === 'union')
+    return new UnionStream(buildMultiUnion(queryPlan, ldfConfig));
+  return new ldf.SparqlIterator(queryPlan, ldfConfig);
 };
 
 module.exports = buildIterator;

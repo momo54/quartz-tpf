@@ -65,15 +65,14 @@ const config = {
 
 const fragmentsClient = new ldf.FragmentsClient(program.args[0], config);
 const iterator = new ldf.SparqlIterator(query, { fragmentsClient });
-const writer = ldf.SparqlResultWriter.instantiate(program.type, iterator);
-writer.on('error', error => {
+iterator.on('error', error => {
   process.stderr.write('ERROR: An error occurred during query execution.\n');
   process.stderr.write(error.stack);
 });
-writer.on('end', () => {
+iterator.on('end', () => {
   const endTime = Date.now();
   const time = endTime - startTime;
   fs.appendFileSync(program.measure, (time/1000) + '\n');
 });
 const startTime = Date.now();
-writer.on('data', data => process.stdout.write(data));
+iterator.on('data', data => process.stdout.write(JSON.stringify(data) + '\n'));

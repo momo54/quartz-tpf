@@ -27,7 +27,6 @@ SOFTWARE.
 const fs = require('fs');
 const program = require('commander');
 const queryEngine = require('../src/query-engine.js');
-const ldf = require('../Client.js/ldf-client.js');
 const prefixes = require('../Client.js/config-default.json').prefixes;
 
 // Command line interface to execute queries
@@ -72,16 +71,17 @@ const config = {
 };
 
 const sparqlIterator = queryEngine(query, program.args.slice(1), model, config);
-const writer = ldf.SparqlResultWriter.instantiate(program.type, sparqlIterator);
-writer.on('error', error => {
+// const writer = ldf.SparqlResultWriter.instantiate(program.type, sparqlIterator);
+sparqlIterator.on('error', error => {
   process.stderr.write('ERROR: An error occurred during query execution.\n');
   process.stderr.write(error.stack);
 });
-writer.on('end', () => {
+sparqlIterator.on('end', () => {
   const endTime = Date.now();
   const time = endTime - startTime;
   fs.appendFileSync(program.measure, (time/1000) + '\n');
 });
 
 const startTime = Date.now();
-writer.on('data', data => process.stdout.write(data));
+// start exeucion by switching iterator in flow mode
+sparqlIterator.on('data', data => process.stdout.write(JSON.stringify(data) + '\n'));
