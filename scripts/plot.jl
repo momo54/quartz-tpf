@@ -40,10 +40,12 @@ time_data_run1 = readtable("amazon/run1/execution_times.csv")
 time_data_run2 = readtable("amazon/run2/execution_times.csv")
 time_data_run3 = readtable("amazon/run3/execution_times.csv")
 time_london_run1 = readtable("amazon/run1/execution_times_london.csv")
+time_london_run2 = readtable("amazon/run2/execution_times_london.csv")
+time_london_run3 = readtable("amazon/run3/execution_times_london.csv")
 
 time_ref = meanRun(concatRuns(time_ref_run1, time_ref_run2, time_ref_run3))
 time_data = meanRun(concatRuns(time_data_run1, time_data_run2, time_data_run3))
-time_london = meanRun(time_london_run1)
+time_london = meanRun(concatRuns(time_london_run1, time_london_run2, time_london_run3))
 
 time_ref[:query] = 1:nrow(time_ref_run1)
 time_ref[:servers] = "TPF-1"
