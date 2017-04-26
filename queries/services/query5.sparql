@@ -1,0 +1,23 @@
+SELECT DISTINCT ?v0 ?v1 ?v2 WHERE {
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/subscribes> <http://db.uwaterloo.ca/~galuc/wsdbm/Website4970>. }
+        LIMIT 16
+      }
+    }
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> ?v2.
+    ?v0 <http://schema.org/email> ?v1.
+  }
+  UNION
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/subscribes> <http://db.uwaterloo.ca/~galuc/wsdbm/Website4970>. }
+        OFFSET 16
+      }
+    }
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> ?v2.
+    ?v0 <http://schema.org/email> ?v1.
+  }
+}

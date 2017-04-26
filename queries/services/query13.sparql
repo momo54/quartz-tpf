@@ -1,0 +1,23 @@
+SELECT DISTINCT ?v0 ?v2 ?v3 WHERE {
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://schema.org/trailer> ?v2. }
+        LIMIT 125
+      }
+    }
+    ?v0 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic232>.
+    ?v3 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v0.
+  }
+  UNION
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://schema.org/trailer> ?v2. }
+        OFFSET 125
+      }
+    }
+    ?v0 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic232>.
+    ?v3 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v0.
+  }
+}

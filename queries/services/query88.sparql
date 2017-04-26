@@ -1,0 +1,33 @@
+SELECT DISTINCT ?v0 ?v1 ?v2 ?v3 ?v4 ?v6 WHERE {
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/subscribes> <http://db.uwaterloo.ca/~galuc/wsdbm/Website2705>. }
+        LIMIT 14
+      }
+    }
+    ?v0 <http://schema.org/telephone> ?v2.
+    ?v0 <http://schema.org/telephone> ?v3.
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> ?v4.
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> ?v4.
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/userId> ?v6.
+    ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v1.
+    ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v1.
+  }
+  UNION
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/subscribes> <http://db.uwaterloo.ca/~galuc/wsdbm/Website2705>. }
+        OFFSET 14
+      }
+    }
+    ?v0 <http://schema.org/telephone> ?v2.
+    ?v0 <http://schema.org/telephone> ?v3.
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> ?v4.
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> ?v4.
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/userId> ?v6.
+    ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v1.
+    ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v1.
+  }
+}

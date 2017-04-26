@@ -1,0 +1,25 @@
+SELECT DISTINCT ?v0 ?v1 ?v2 ?v4 WHERE {
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/ProductCategory6>. }
+        LIMIT 838
+      }
+    }
+    ?v0 <http://ogp.me/ns#title> ?v1.
+    ?v0 <http://ogp.me/ns#title> ?v2.
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> ?v4.
+  }
+  UNION
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/ProductCategory6>. }
+        OFFSET 838
+      }
+    }
+    ?v0 <http://ogp.me/ns#title> ?v1.
+    ?v0 <http://ogp.me/ns#title> ?v2.
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> ?v4.
+  }
+}

@@ -24,6 +24,7 @@ SOFTWARE.
 
 'use strict';
 
+const formulas = require('./formulas.js');
 const rdf = require('../../Client.js/lib/util/RdfUtil.js');
 const _ = require('lodash');
 
@@ -37,18 +38,17 @@ const sortPatterns = (pattern, cardinalities) => _.sortBy(rdf.findConnectedPatte
  * Build a SPARQL service subquery
  * @param  {Object} triple    - The unique triple pattern of the subquery
  * @param  {string} endpoint  - The endpoint of the service query
- * @param  {int} virtualIndex - The index of the current virtual fragment
- * @param  {int} nbVirtuals   - The total number of virtual fragments
+ * @param  {Object} stats     - Metadata about the triple pattern to localize
  * @return {Object} The related SPARQL service subquery
  */
-const buildService = (triple, endpoint, virtualIndex, nbVirtuals) => {
+const buildService = (triple, endpoint, stats) => {
   return {
     type: 'service',
     name: endpoint,
     queryType: 'SELECT',
     silent: false,
-    virtualIndex,
-    nbVirtuals,
+    limit: formulas.computeLimit(stats.totalTriples, stats.index, stats.nbVirtuals, stats.coef, stats.sumCoefs),
+    offset: formulas.computeOffset(stats.totalTriples, stats.index, stats.nbVirtuals, stats.coef, stats.sumCoefs),
     variables: [ '*' ],
     where: [
       {

@@ -1,0 +1,33 @@
+SELECT DISTINCT ?v0 ?v1 ?v2 ?v3 ?v4 ?v5 ?v7 WHERE {
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://schema.org/eligibleRegion> <http://db.uwaterloo.ca/~galuc/wsdbm/Country6>. }
+        LIMIT 3896
+      }
+    }
+    ?v0 <http://schema.org/priceValidUntil> ?v7.
+    ?v0 <http://purl.org/goodrelations/validThrough> ?v5.
+    ?v0 <http://purl.org/goodrelations/validFrom> ?v4.
+    ?v0 <http://purl.org/goodrelations/includes> ?v1.
+    ?v0 <http://purl.org/goodrelations/serialNumber> ?v3.
+    ?v2 <http://purl.org/goodrelations/offers> ?v0.
+    ?v2 <http://purl.org/goodrelations/offers> ?v0.
+  }
+  UNION
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://schema.org/eligibleRegion> <http://db.uwaterloo.ca/~galuc/wsdbm/Country6>. }
+        OFFSET 3896
+      }
+    }
+    ?v0 <http://schema.org/priceValidUntil> ?v7.
+    ?v0 <http://purl.org/goodrelations/validThrough> ?v5.
+    ?v0 <http://purl.org/goodrelations/validFrom> ?v4.
+    ?v0 <http://purl.org/goodrelations/includes> ?v1.
+    ?v0 <http://purl.org/goodrelations/serialNumber> ?v3.
+    ?v2 <http://purl.org/goodrelations/offers> ?v0.
+    ?v2 <http://purl.org/goodrelations/offers> ?v0.
+  }
+}

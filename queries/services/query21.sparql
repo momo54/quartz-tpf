@@ -1,0 +1,29 @@
+SELECT DISTINCT ?v0 ?v1 ?v2 ?v4 ?v5 ?v6 WHERE {
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/SubGenre114> <http://ogp.me/ns#tag> ?v2. }
+        LIMIT 2
+      }
+    }
+    ?v0 <http://schema.org/text> ?v6.
+    ?v0 <http://schema.org/contentRating> ?v4.
+    ?v0 <http://xmlns.com/foaf/homepage> ?v1.
+    ?v0 <http://schema.org/description> ?v5.
+    ?v0 <http://ogp.me/ns#tag> ?v2.
+  }
+  UNION
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/SubGenre114> <http://ogp.me/ns#tag> ?v2. }
+        OFFSET 2
+      }
+    }
+    ?v0 <http://schema.org/text> ?v6.
+    ?v0 <http://schema.org/contentRating> ?v4.
+    ?v0 <http://xmlns.com/foaf/homepage> ?v1.
+    ?v0 <http://schema.org/description> ?v5.
+    ?v0 <http://ogp.me/ns#tag> ?v2.
+  }
+}

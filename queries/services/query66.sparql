@@ -1,0 +1,27 @@
+SELECT DISTINCT ?v0 ?v2 ?v3 ?v4 ?v5 WHERE {
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://xmlns.com/foaf/homepage> <http://db.uwaterloo.ca/~galuc/wsdbm/Website2357>. }
+        LIMIT 1
+      }
+    }
+    ?v0 <http://ogp.me/ns#title> ?v3.
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> ?v4.
+    ?v2 <http://purl.org/goodrelations/includes> ?v0.
+    ?v5 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v0.
+  }
+  UNION
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://xmlns.com/foaf/homepage> <http://db.uwaterloo.ca/~galuc/wsdbm/Website2357>. }
+        OFFSET 1
+      }
+    }
+    ?v0 <http://ogp.me/ns#title> ?v3.
+    ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> ?v4.
+    ?v2 <http://purl.org/goodrelations/includes> ?v0.
+    ?v5 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v0.
+  }
+}

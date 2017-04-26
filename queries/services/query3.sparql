@@ -1,0 +1,1 @@
+SELECT DISTINCT ?v1 WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/User13719> <http://xmlns.com/foaf/givenName> ?v1. }

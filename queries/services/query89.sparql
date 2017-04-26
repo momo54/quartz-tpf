@@ -1,0 +1,13 @@
+SELECT DISTINCT ?v0 WHERE {
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic219>. }
+        LIMIT 300
+      }
+    }
+    
+  }
+  UNION
+  { ?v0 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic219>. }
+}

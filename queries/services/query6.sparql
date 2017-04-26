@@ -1,0 +1,1 @@
+SELECT DISTINCT ?v1 WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/Website3636> <http://schema.org/language> ?v1. }

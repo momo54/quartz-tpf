@@ -1,0 +1,23 @@
+SELECT DISTINCT ?v0 ?v2 ?v3 WHERE {
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://purl.org/dc/terms/Location> <http://db.uwaterloo.ca/~galuc/wsdbm/City3>. }
+        LIMIT 790
+      }
+    }
+    ?v0 <http://schema.org/jobTitle> ?v2.
+    ?v0 <http://schema.org/nationality> ?v3.
+  }
+  UNION
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { ?v0 <http://purl.org/dc/terms/Location> <http://db.uwaterloo.ca/~galuc/wsdbm/City3>. }
+        OFFSET 790
+      }
+    }
+    ?v0 <http://schema.org/jobTitle> ?v2.
+    ?v0 <http://schema.org/nationality> ?v3.
+  }
+}

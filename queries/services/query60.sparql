@@ -1,0 +1,23 @@
+SELECT DISTINCT ?v1 ?v2 ?v3 WHERE {
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/User12412> <http://db.uwaterloo.ca/~galuc/wsdbm/makesPurchase> ?v1. }
+        LIMIT 4
+      }
+    }
+    ?v1 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate> ?v2.
+    ?v1 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate> ?v3.
+  }
+  UNION
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/User12412> <http://db.uwaterloo.ca/~galuc/wsdbm/makesPurchase> ?v1. }
+        OFFSET 4
+      }
+    }
+    ?v1 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate> ?v2.
+    ?v1 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate> ?v3.
+  }
+}

@@ -1,0 +1,37 @@
+SELECT DISTINCT ?v0 ?v1 ?v3 ?v4 ?v5 ?v6 ?v7 ?v8 ?v9 WHERE {
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/Retailer1074> <http://purl.org/goodrelations/offers> ?v0. }
+        LIMIT 68
+      }
+    }
+    ?v1 <http://schema.org/editor> ?v8.
+    ?v3 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate> ?v9.
+    ?v0 <http://purl.org/goodrelations/includes> ?v1.
+    ?v1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v6.
+    ?v1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v6.
+    ?v7 <http://purl.org/stuff/rev#reviewer> ?v8.
+    ?v3 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor> ?v1.
+    ?v3 <http://purl.org/goodrelations/price> ?v4.
+    ?v3 <http://purl.org/goodrelations/price> ?v5.
+  }
+  UNION
+  {
+    SERVICE <http://52.33.245.25/watDiv_100/query> {
+      {
+        SELECT * WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/Retailer1074> <http://purl.org/goodrelations/offers> ?v0. }
+        OFFSET 68
+      }
+    }
+    ?v1 <http://schema.org/editor> ?v8.
+    ?v3 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate> ?v9.
+    ?v0 <http://purl.org/goodrelations/includes> ?v1.
+    ?v1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v6.
+    ?v1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v6.
+    ?v7 <http://purl.org/stuff/rev#reviewer> ?v8.
+    ?v3 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor> ?v1.
+    ?v3 <http://purl.org/goodrelations/price> ?v4.
+    ?v3 <http://purl.org/goodrelations/price> ?v5.
+  }
+}
