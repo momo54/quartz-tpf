@@ -11,11 +11,9 @@ SELECT DISTINCT ?v0 ?v2 ?v3 WHERE {
   }
   UNION
   {
-    SERVICE <http://52.33.245.25/watDiv_100/query> {
-      {
-        SELECT * WHERE { ?v0 <http://purl.org/goodrelations/includes> <http://db.uwaterloo.ca/~galuc/wsdbm/Product20096>. }
-        OFFSET 2
-      }
+    {
+      SELECT * WHERE { ?v0 <http://purl.org/goodrelations/includes> <http://db.uwaterloo.ca/~galuc/wsdbm/Product20096>. }
+      OFFSET 2
     }
     ?v0 <http://purl.org/goodrelations/validThrough> ?v3.
     ?v0 <http://purl.org/goodrelations/serialNumber> ?v2.

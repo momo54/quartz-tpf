@@ -15,11 +15,9 @@ SELECT DISTINCT ?v0 ?v1 ?v3 ?v4 ?v5 ?v6 WHERE {
   }
   UNION
   {
-    SERVICE <http://52.33.245.25/watDiv_100/query> {
-      {
-        SELECT * WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/SubGenre96> <http://ogp.me/ns#tag> ?v1. }
-        OFFSET 1
-      }
+    {
+      SELECT * WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/SubGenre96> <http://ogp.me/ns#tag> ?v1. }
+      OFFSET 1
     }
     ?v0 <http://schema.org/keywords> ?v5.
     ?v0 <http://schema.org/contentRating> ?v4.

@@ -12,11 +12,9 @@ SELECT DISTINCT ?v0 ?v2 ?v3 WHERE {
   }
   UNION
   {
-    SERVICE <http://52.33.245.25/watDiv_100/query> {
-      {
-        SELECT * WHERE { ?v0 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic73>. }
-        OFFSET 296
-      }
+    {
+      SELECT * WHERE { ?v0 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic73>. }
+      OFFSET 296
     }
     ?v0 <http://schema.org/expires> ?v3.
     ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v2.

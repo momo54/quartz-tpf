@@ -37,32 +37,24 @@ const sortPatterns = (pattern, cardinalities) => _.sortBy(rdf.findConnectedPatte
 /**
  * Build a SPARQL service subquery
  * @param  {Object} triple    - The unique triple pattern of the subquery
- * @param  {string} endpoint  - The endpoint of the service query
  * @param  {Object} stats     - Metadata about the triple pattern to localize
  * @return {Object} The related SPARQL service subquery
  */
-const buildService = (triple, endpoint, stats) => {
+const buildSubquery = (triple, stats) => {
   let limit = formulas.computeLimit(stats.totalTriples, stats.index, stats.nbVirtuals, stats.coef, stats.sumCoefs);
   const offset = formulas.computeOffset(stats.totalTriples, stats.index, stats.nbVirtuals, stats.coef, stats.sumCoefs);
   if (limit === stats.totalTriples || limit <= -1)
     limit = undefined;
   return {
-    type: 'service',
-    name: endpoint + '/query',
-    silent: false,
-    patterns: [
+    type: 'query',
+    queryType: 'SELECT',
+    limit,
+    offset,
+    variables: [ '*' ],
+    where: [
       {
-        type: 'query',
-        queryType: 'SELECT',
-        limit,
-        offset,
-        variables: [ '*' ],
-        where: [
-          {
-            type: 'bgp',
-            triples: [ _.merge({}, triple) ]
-          }
-        ]
+        type: 'bgp',
+        triples: [ _.merge({}, triple) ]
       }
     ]
   };
@@ -88,7 +80,12 @@ const localizeService = (bgp, endpoints, model) => {
         {
           type: 'group',
           patterns: [
-            buildService(triples[0], endpoints[1], _.merge({index: 1}, stats)),
+            {
+              type: 'service',
+              name: endpoints[1] + '/query',
+              silent: false,
+              patterns: [ buildSubquery(triples[0], _.merge({index: 1}, stats)) ]
+            },
             {
               type: 'bgp',
               triples: triples.slice(1)
@@ -107,7 +104,12 @@ const localizeService = (bgp, endpoints, model) => {
       {
         type: 'group',
         patterns: [
-          buildService(triples[0], endpoints[1], _.merge({index: 1}, stats)),
+          {
+            type: 'service',
+            name: endpoints[1] + '/query',
+            silent: false,
+            patterns: [ buildSubquery(triples[0], _.merge({index: 1}, stats)) ]
+          },
           {
             type: 'bgp',
             triples: triples.slice(1)
@@ -117,7 +119,7 @@ const localizeService = (bgp, endpoints, model) => {
       {
         type: 'group',
         patterns: [
-          buildService(triples[0], endpoints[1], _.merge({index: 2}, stats)),
+          buildSubquery(triples[0], _.merge({index: 2}, stats)),
           {
             type: 'bgp',
             triples: triples.slice(1)

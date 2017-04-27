@@ -27,7 +27,7 @@ echo "time" > $OUTPUT/execution_times.csv
 #   cpt=$((cpt+1))
 # done < "$QUERIES"
 
-ls $QUERIES | while read QFILE; do
+ls -d -1 $QUERIES/* | while read QFILE; do
   name=`basename $QFILE`
   /usr/bin/time -f %e -o $OUTPUT/execution_times.csv -a s-query --service $ENDPOINT --query $QFILE --output xml > $OUTPUT/results/$name 2> $OUTPUT/errors/$name
 done

@@ -14,11 +14,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v3 ?v4 WHERE {
   }
   UNION
   {
-    SERVICE <http://52.33.245.25/watDiv_100/query> {
-      {
-        SELECT * WHERE { ?v1 <http://schema.org/contentSize> ?v3. }
-        OFFSET 1251
-      }
+    {
+      SELECT * WHERE { ?v1 <http://schema.org/contentSize> ?v3. }
+      OFFSET 1251
     }
     ?v1 <http://schema.org/contentSize> ?v4.
     ?v0 <http://schema.org/eligibleRegion> <http://db.uwaterloo.ca/~galuc/wsdbm/Country21>.

@@ -17,11 +17,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v3 ?v4 ?v5 ?v7 ?v8 WHERE {
   }
   UNION
   {
-    SERVICE <http://52.33.245.25/watDiv_100/query> {
-      {
-        SELECT * WHERE { ?v5 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic208>. }
-        OFFSET 279
-      }
+    {
+      SELECT * WHERE { ?v5 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic208>. }
+      OFFSET 279
     }
     ?v0 <http://xmlns.com/foaf/homepage> ?v2.
     ?v3 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate> ?v8.
