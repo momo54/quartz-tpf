@@ -51,9 +51,9 @@ time_london = meanRun(concatRuns(time_london_run1, time_london_run2, time_london
 time_ref[:query] = 1:nrow(time_ref_run1)
 time_ref[:servers] = "TPF-1"
 time_data[:query] = 1:nrow(time_data_run1)
-time_data[:servers] = "TPF+QR-VTP-EQ"
+time_data[:servers] = "TPF+QUaRTz-EQ"
 time_london[:query] = 1:nrow(time_london_run1)
-time_london[:servers] = "TPF+QR-VTP-NEQ"
+time_london[:servers] = "TPF+QUaRTz-NEQ"
 
 # Completeness
 compl_ref_run1 = readtable("amazon/run1/completeness_ref.csv")
@@ -71,11 +71,11 @@ compl_data = meanRun(concatRuns(compl_data_run1, compl_data_run2, compl_data_run
 compl_london = meanRun(concatRuns(compl_london_run1, compl_london_run2, compl_london_run3))
 
 compl_ref[:query] = 1:nrow(compl_ref_run1)
-compl_ref[:servers] = "TPF-1"
+compl_ref[:servers] = "TPF"
 compl_data[:query] = 1:nrow(compl_data_run1)
-compl_data[:servers] = "TPF+QR-VTP-EQ"
+compl_data[:servers] = "TPF+QUaRTz-EQ"
 compl_london[:query] = 1:nrow(compl_london_run1)
-compl_london[:servers] = "TPF+QR-VTP-NEQ"
+compl_london[:servers] = "TPF+QUaRTz-NEQ"
 
 # Gather dataframes for plots
 time_all = [time_ref;time_data;time_london]
