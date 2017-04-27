@@ -77,7 +77,10 @@ const localizeService = (bgp, endpoints, model) => {
     sumCoefs: model.sumCoefs
   };
   if (stats.totalTriples === 1)
-    return bgp;
+    return {
+      type: 'bgp',
+      triples
+    };
   if (triples.length === 1)
     return {
       type: 'union',

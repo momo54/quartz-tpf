@@ -1,0 +1,10 @@
+SELECT DISTINCT ?v0 ?v1 ?v2 ?v3 ?v4 ?v5 ?v7 WHERE {
+  ?v0 <http://schema.org/eligibleRegion> <http://db.uwaterloo.ca/~galuc/wsdbm/Country6>.
+  ?v0 <http://schema.org/priceValidUntil> ?v7.
+  ?v0 <http://purl.org/goodrelations/validThrough> ?v5.
+  ?v0 <http://purl.org/goodrelations/validFrom> ?v4.
+  ?v0 <http://purl.org/goodrelations/includes> ?v1.
+  ?v0 <http://purl.org/goodrelations/serialNumber> ?v3.
+  ?v2 <http://purl.org/goodrelations/offers> ?v0.
+  ?v2 <http://purl.org/goodrelations/offers> ?v0.
+}

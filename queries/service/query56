@@ -1,4 +1,4 @@
 SELECT DISTINCT ?v0 ?v1 WHERE {
-  ?v0 <http://purl.org/goodrelations/description> ?v1.
   ?v0 <http://purl.org/goodrelations/offers> <http://db.uwaterloo.ca/~galuc/wsdbm/Offer55000>.
+  ?v0 <http://purl.org/goodrelations/description> ?v1.
 }

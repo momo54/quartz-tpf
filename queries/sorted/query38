@@ -1,0 +1,5 @@
+SELECT DISTINCT ?v0 ?v1 ?v2 WHERE {
+  ?v2 <http://purl.org/ontology/mo/artist> ?v0.
+  ?v0 <http://purl.org/dc/terms/Location> ?v1.
+  ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> <http://db.uwaterloo.ca/~galuc/wsdbm/Gender1>.
+}

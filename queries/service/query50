@@ -1,9 +1,9 @@
 SELECT DISTINCT ?v0 ?v1 ?v3 ?v4 ?v5 ?v6 WHERE {
-  ?v0 <http://ogp.me/ns#tag> ?v1.
-  ?v0 <http://ogp.me/ns#tag> ?v1.
   <http://db.uwaterloo.ca/~galuc/wsdbm/SubGenre42> <http://ogp.me/ns#tag> ?v1.
-  ?v0 <http://ogp.me/ns#title> ?v3.
-  ?v0 <http://schema.org/contentRating> ?v4.
   ?v0 <http://schema.org/keywords> ?v5.
+  ?v0 <http://schema.org/contentRating> ?v4.
+  ?v0 <http://ogp.me/ns#title> ?v3.
+  ?v0 <http://ogp.me/ns#tag> ?v1.
+  ?v0 <http://ogp.me/ns#tag> ?v1.
   ?v6 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor> ?v0.
 }

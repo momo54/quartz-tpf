@@ -1,0 +1,1 @@
+SELECT DISTINCT ?v1 WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/User75276> <http://db.uwaterloo.ca/~galuc/wsdbm/subscribes> ?v1. }

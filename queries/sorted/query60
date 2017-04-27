@@ -1,0 +1,5 @@
+SELECT DISTINCT ?v1 ?v2 ?v3 WHERE {
+  <http://db.uwaterloo.ca/~galuc/wsdbm/User12412> <http://db.uwaterloo.ca/~galuc/wsdbm/makesPurchase> ?v1.
+  ?v1 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate> ?v2.
+  ?v1 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseDate> ?v3.
+}

@@ -25,14 +25,8 @@ SOFTWARE.
 'use strict';
 
 const formulas = require('./formulas.js');
-const rdf = require('../../Client.js/lib/util/RdfUtil.js');
+const sortPatterns = require('./join-ordering.js');
 const _ = require('lodash');
-
-// sort patterns with the same algorithm used by TPF + sort triple by number of variables
-const sortPatterns = (pattern, cardinalities) => _.sortBy(rdf.findConnectedPatterns(pattern), patterns => {
-  const distinctVariableCount = _.union.apply(_, patterns.map(rdf.getVariables)).length;
-  return -(pattern.length * distinctVariableCount + patterns.length);
-}).map(patterns => _.sortBy(patterns, pattern => cardinalities[JSON.stringify(pattern)] || Infinity));
 
 /**
  * Build a SPARQL service subquery

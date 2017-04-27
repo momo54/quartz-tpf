@@ -1,0 +1,11 @@
+SELECT DISTINCT ?v0 ?v2 ?v3 ?v4 ?v5 ?v6 ?v7 ?v8 WHERE {
+  ?v0 <http://purl.org/dc/terms/Location> <http://db.uwaterloo.ca/~galuc/wsdbm/City227>.
+  ?v2 <http://schema.org/keywords> ?v7.
+  ?v2 <http://schema.org/description> ?v5.
+  ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> ?v8.
+  ?v0 <http://schema.org/email> ?v6.
+  ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v2.
+  ?v4 <http://ogp.me/ns#tag> ?v3.
+  ?v2 <http://ogp.me/ns#tag> ?v3.
+  ?v2 <http://ogp.me/ns#tag> ?v3.
+}
