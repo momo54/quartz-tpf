@@ -109,7 +109,9 @@ const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = 0) => {
   let triples = _.flattenDeep(sortPatterns(bgp.triples, cardinalities));
   if (limit > 0) {
     const localized = triples.slice(0, limit).map(tp => localizeTriple(tp, endpoints));
-    triples = localized.concat(triples.slice(limit).map(tp => _.merge({ unlocalized: true }, tp)));
+    triples = localized.map(tp => {
+      return tp;
+    }).concat(triples.slice(limit).map(tp => _.merge({ unlocalized: true }, tp)));
   } else {
     triples = triples.map(tp => localizeTriple(tp, endpoints));
   }
