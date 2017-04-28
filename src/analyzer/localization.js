@@ -61,6 +61,7 @@ const buildService = (triple, endpoint, stats) => {
  */
 const localizeTriple = (triple, endpoints) => {
   if (endpoints.length === 1) return _.merge({
+    peneloop: false,
     fragment: {
       endpoint: endpoints[0],
       virtualIndex: 1,
@@ -71,6 +72,7 @@ const localizeTriple = (triple, endpoints) => {
   return {
     type: 'union',
     patterns: _.map(endpoints, (endpoint, i) => _.merge({
+      peneloop: false,
       fragment: {
         endpoint,
         virtualIndex: i + 1,
@@ -107,17 +109,22 @@ const localizeService = (triple, endpoints) => {
 const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = 0) => {
   // sort triples like TPF does, to ensure the order of the localized triples match the order in which TPF execute triples
   let triples = _.flattenDeep(sortPatterns(bgp.triples, cardinalities));
-  if (limit > 0) {
-    const localized = triples.slice(0, limit).map(tp => localizeTriple(tp, endpoints));
-    triples = localized.map(tp => {
-      return tp;
-    }).concat(triples.slice(limit).map(tp => _.merge({ unlocalized: true }, tp)));
-  } else {
-    triples = triples.map(tp => localizeTriple(tp, endpoints));
-  }
+  // if (cardinalities[JSON.stringify(triples[0])] > 1) {
+  //   if (limit > 0) {
+  //     const localized = triples.slice(0, limit).map(tp => localizeTriple(tp, endpoints));
+  //     triples = localized.concat(triples.slice(limit));
+  //   } else if (limit === -1) {
+  //     triples = triples.map(tp => localizeTriple(tp, endpoints));
+  //   }
+  // }
   return {
     type: 'bgp',
-    triples
+    triples: triples.map(tp => _.merge({
+      fragment: {
+        peneloop: true,
+        endpoints
+      }
+    }, tp))
   };
 };
 
