@@ -62,9 +62,6 @@ time_peneloop[:query] = 1:nrow(time_london_run1)
 time_peneloop[:servers] = "TPF+PeNeLoop-EQ"
 
 # Completeness
-compl_ref_run1 = readtable("amazon/run1/completeness_ref.csv")
-compl_ref_run2 = readtable("amazon/run2/completeness_ref.csv")
-compl_ref_run3 = readtable("amazon/run3/completeness_ref.csv")
 compl_data_run1 = readtable("amazon/run1/completeness.csv")
 compl_data_run2 = readtable("amazon/run2/completeness.csv")
 compl_data_run3 = readtable("amazon/run3/completeness.csv")
@@ -72,12 +69,9 @@ compl_london_run1 = readtable("amazon/run1/completeness_london.csv")
 compl_london_run2 = readtable("amazon/run2/completeness_london.csv")
 compl_london_run3 = readtable("amazon/run3/completeness_london.csv")
 
-compl_ref = meanRun(concatRuns(compl_ref_run1, compl_ref_run2, compl_ref_run3))
 compl_data = meanRun(concatRuns(compl_data_run1, compl_data_run2, compl_data_run3))
 compl_london = meanRun(concatRuns(compl_london_run1, compl_london_run2, compl_london_run3))
 
-compl_ref[:query] = 1:nrow(compl_ref_run1)
-compl_ref[:servers] = "TPF"
 compl_data[:query] = 1:nrow(compl_data_run1)
 compl_data[:servers] = "TPF+QUaRTz-EQ"
 compl_london[:query] = 1:nrow(compl_london_run1)
@@ -85,15 +79,15 @@ compl_london[:servers] = "TPF+QUaRTz-NEQ"
 
 # Gather dataframes for plots
 time_all = [time_ref;time_peneloop;time_data;time_london]
-compl_all = [compl_ref;compl_data;compl_london]
+compl_all = [compl_data;compl_london]
 # big = all[all[:time] .>= 1.0, :]
 
 time_plot_1 = plot(time_all[time_all[:query] .<= 50, :], x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[0,10,20,30,40,50]))
 time_plot_2 = plot(time_all[time_all[:query] .> 50, :], x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors())
-# compl_plot = plot(compl_all, x=:query, y=:mean_value, color=:servers, Geom.boxplot, Guide.xlabel("Queries"), Guide.ylabel("Answer completeness"), Guide.colorkey("Servers"), Scale.x_continuous, colors())
-compl_plot = plot(compl_all, xgroup=:servers, y=:query, x=:mean_value, color=:servers, Geom.subplot_grid(Geom.point, Guide.xticks(ticks=:auto, orientation=:horizontal)), Guide.ylabel("Queries"), Guide.xlabel("Answer completeness"), Scale.x_continuous, colors(), no_colors_guide)
-# pbig = plot(big, x=:servers, y=:time, color=:servers, Geom.boxplot, Guide.xlabel("Number of servers"), Guide.ylabel("Execution time (s)"), Scale.x_discrete, Scale.y_log10, colors())
+
+compl_plot = plot(compl_all, xgroup=:servers, x=:query, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar, Guide.xticks(ticks=:auto, orientation=:horizontal)), Guide.xlabel("Queries"), Guide.ylabel("Answer completeness"), Scale.y_continuous, colors(), no_colors_guide)
+
 
 draw(PDF("amazon/execution_time.pdf", 8inch, 5inch), vstack(time_plot_1, time_plot_2))
-draw(PDF("amazon/completeness.pdf", 7inch, 7inch), compl_plot)
+draw(PDF("amazon/completeness.pdf", 7inch, 4inch), compl_plot)
 # draw(PDF("amazon/execution_time_greater_3s.pdf", 7inch, 5inch), pbig)
