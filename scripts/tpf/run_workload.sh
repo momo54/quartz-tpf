@@ -15,5 +15,5 @@ mkdir -p errors/
 echo "time" > execution_times.csv
 
 for f in $WORKLOAD; do
-  ./scripts/run_with_time.sh $f
+  ./scripts/tpf/run_with_time.sh $f
 done

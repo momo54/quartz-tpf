@@ -19,7 +19,7 @@ echo "time" > $OUTPUT/execution_times.csv
 while IFS='' read -r line || [[ -n "$line" ]]; do
   QFILE="queries/query$cpt"
   echo $line > $QFILE
-  ./scripts/run_with_time.sh $QFILE $OUTPUT
+  ./scripts/tpf/run_with_time.sh $QFILE $OUTPUT
   rm -f $QFILE
   cpt=$((cpt+1))
 done < "$QUERIES"
