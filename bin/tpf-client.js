@@ -32,5 +32,5 @@ program
   .version(packageInfos.version)
   .description(packageInfos.description)
   .command('model [endpoints...]', 'generate the cost model & save it in json format').alias('m')
-  .command('run [model] [endpoints...] [options]', 'execute a SPARQL query against several endpoints').alias('r')
+  .command('run [model] [options]', 'execute a SPARQL query against several endpoints').alias('r')
   .parse(process.argv);

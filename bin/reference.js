@@ -34,10 +34,9 @@ ldf.Logger.setLevel('EMERGENCY');
 // Command line interface to execute queries
 program
   .description('execute a SPARQL query using reference TPF client')
-  .usage('model <endpoint>', 'generate the cost model & save it in json format')
+  .usage('<endpoint>')
   .option('-q, --query <query>', 'evaluates the given SPARQL query')
   .option('-f, --file <file>', 'evaluates the SPARQL query in the given file')
-  .option('-l, --limit <limit>', 'limit the number of triples to localize per BGP in the query (default to 1)', 1)
   .option('-t, --type <mime-type>', 'determines the MIME type of the output (e.g., application/json)', 'application/json')
   .option('-m, --measure <output>', 'measure the query execution time (in seconds) & append it to a file', './execution_times_ref.csv')
   .parse(process.argv);

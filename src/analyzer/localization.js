@@ -100,13 +100,14 @@ const localizeService = (triple, endpoints) => {
 
 /**
  * Perform localization on each triple pattern of a BGP
- * @param  {Object} bgp       - A BGP to localize
- * @param  {Object} endpoints - The endpoints used for localization
+ * @param  {Object} bgp            - A BGP to localize
+ * @param  {Object} endpoints      - The endpoints used for localization
  * @param  {Object} cardinalities  - The cardinality associated with each triple pattern of the BGP
- * @param  {int} limit        - The maximum number of triples to localize in the BGP (default to all triples)
+ * @param  {int} limit             - The maximum number of triples to localize in the BGP (default to all triples)
+ * @param  {boolean} usePeneloop   - Use peneloop to process joins if set to True
  * @return {Object} The localized BGP
  */
-const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = 0) => {
+const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = 0, usePeneloop = true) => {
   // sort triples like TPF does, to ensure the order of the localized triples match the order in which TPF execute triples
   let triples = _.flattenDeep(sortPatterns(bgp.triples, cardinalities));
   if (cardinalities[JSON.stringify(triples[0])] > 1) {
@@ -121,7 +122,7 @@ const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = 0) => {
     type: 'bgp',
     triples: triples.map(tp => _.merge({
       fragment: {
-        peneloop: true,
+        peneloop: usePeneloop,
         endpoints
       }
     }, tp))
@@ -134,16 +135,17 @@ const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = 0) => {
  * @param  {Object} endpoints - The endpoints used for localization
  * @param  {Object} cardinalities  - The cardinality associated with each triple pattern of the BGP
  * @param  {int} limit        - The maximum number of triples to localize in each BGP (default to all triples)
+ * @param  {boolean} usePeneloop   - Use peneloop to process joins if set to True
  * @return {Object} The localized query
  */
-const localizeQuery = (node, endpoints, cardinalities = {}, limit = 0) => {
+const localizeQuery = (node, endpoints, cardinalities = {}, limit = 0, usePeneloop = true) => {
   const type = node.type.toLowerCase();
   switch (type) {
     case 'bgp':
-      return localizeBGP(node, endpoints, cardinalities, limit);
+      return localizeBGP(node, endpoints, cardinalities, limit, usePeneloop);
     case 'query': {
       const query = _.merge({}, node);
-      query.where = query.where.map(p => localizeQuery(p, endpoints, cardinalities, limit));
+      query.where = query.where.map(p => localizeQuery(p, endpoints, cardinalities, limit, usePeneloop));
       return query;
     }
     case 'union':
@@ -151,7 +153,7 @@ const localizeQuery = (node, endpoints, cardinalities = {}, limit = 0) => {
     case 'optional':
       return {
         type,
-        patterns: node.patterns.map(p => localizeQuery(p, endpoints, cardinalities, limit))
+        patterns: node.patterns.map(p => localizeQuery(p, endpoints, cardinalities, limit, usePeneloop))
       };
     case 'filter':
       return node;

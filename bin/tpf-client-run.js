@@ -28,22 +28,18 @@ const fs = require('fs');
 const program = require('commander');
 const queryEngine = require('../src/query-engine.js');
 const prefixes = require('../Client.js/config-default.json').prefixes;
+const _ = require('lodash');
 
 // Command line interface to execute queries
 program
   .description('execute a SPARQL query against several endpoints')
+  .option('-p, --peneloop', 'use peneloop to process joins', true)
   .option('-q, --query <query>', 'evaluates the given SPARQL query')
   .option('-f, --file <file>', 'evaluates the SPARQL query in the given file')
   .option('-l, --limit <limit>', 'limit the number of triples to localize per BGP in the query (default to 1)', 1)
   .option('-t, --type <mime-type>', 'determines the MIME type of the output (e.g., application/json)', 'application/json')
   .option('-m, --measure <output>', 'measure the query execution time (in seconds) & append it to a file', './execution_times.csv')
   .parse(process.argv);
-
-// check number of endpoints
-if (program.args.length < 1) {
-  process.stderr.write('Error: invalid number of arguments.\nSee ./tpf-client --help for more details.\n');
-  process.exit(1);
-}
 
 // fetch the model
 const modelFile = program.args[0];
@@ -52,6 +48,7 @@ if (!fs.existsSync(modelFile)) {
   process.exit(1);
 }
 const model = JSON.parse(fs.readFileSync(modelFile, 'utf-8'));
+const endpoints = _.keys(model.coefficients);
 
 // fetch SPARQL query to execute
 let query = null;
@@ -67,10 +64,11 @@ if (program.query) {
 // build configuration for the query analyzer
 const config = {
   prefixes,
+  usePeneloop: program.peneloop || false,
   locLimit: program.limit
 };
 
-const sparqlIterator = queryEngine(query, program.args.slice(1), model, config);
+const sparqlIterator = queryEngine(query, endpoints, model, config);
 // const writer = ldf.SparqlResultWriter.instantiate(program.type, sparqlIterator);
 sparqlIterator.on('error', error => {
   process.stderr.write('ERROR: An error occurred during query execution.\n');
@@ -83,5 +81,4 @@ sparqlIterator.on('end', () => {
 });
 
 const startTime = Date.now();
-// start exeucion by switching iterator in flow mode
 sparqlIterator.on('data', data => process.stdout.write(JSON.stringify(data) + '\n'));

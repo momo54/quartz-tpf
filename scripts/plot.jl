@@ -37,20 +37,28 @@ end
 time_ref_run1 = readtable("amazon/run1/execution_times_ref.csv")
 time_ref_run2 = readtable("amazon/run2/execution_times_ref.csv")
 time_ref_run3 = readtable("amazon/run3/execution_times_ref.csv")
+
 time_data_run1 = readtable("amazon/run1/execution_times.csv")
 time_data_run2 = readtable("amazon/run2/execution_times.csv")
 time_data_run3 = readtable("amazon/run3/execution_times.csv")
+
 time_london_run1 = readtable("amazon/run1/execution_times_london.csv")
 time_london_run2 = readtable("amazon/run2/execution_times_london.csv")
 time_london_run3 = readtable("amazon/run3/execution_times_london.csv")
+
 time_peneloop_run1 = readtable("amazon/run1/execution_times_peneloop.csv")
 time_peneloop_run2 = readtable("amazon/run2/execution_times_peneloop.csv")
 time_peneloop_run3 = readtable("amazon/run3/execution_times_peneloop.csv")
+
+time_all_eq_run1 = readtable("amazon/run1/execution_times_all.csv")
+time_all_eq_run2 = readtable("amazon/run2/execution_times_all.csv")
+time_all_eq_run3 = readtable("amazon/run3/execution_times_all.csv")
 
 time_ref = meanRun(concatRuns(time_ref_run1, time_ref_run2, time_ref_run3))
 time_data = meanRun(concatRuns(time_data_run1, time_data_run2, time_data_run3))
 time_london = meanRun(concatRuns(time_london_run1, time_london_run2, time_london_run3))
 time_peneloop = meanRun(concatRuns(time_peneloop_run1, time_peneloop_run2, time_peneloop_run3))
+time_all_eq = meanRun(concatRuns(time_all_eq_run1, time_all_eq_run2, time_all_eq_run3))
 
 time_ref[:query] = 1:nrow(time_ref_run1)
 time_ref[:servers] = "TPF-1"
@@ -58,8 +66,10 @@ time_data[:query] = 1:nrow(time_data_run1)
 time_data[:servers] = "TPF+QUaRTz-EQ"
 time_london[:query] = 1:nrow(time_london_run1)
 time_london[:servers] = "TPF+QUaRTz-NEQ"
-time_peneloop[:query] = 1:nrow(time_london_run1)
+time_peneloop[:query] = 1:nrow(time_peneloop_run1)
 time_peneloop[:servers] = "TPF+PeNeLoop-EQ"
+time_all_eq[:query] = 1:nrow(time_all_eq_run1)
+time_all_eq[:servers] = "TPF+PeNeLoop+QUaRTz-EQ"
 
 # Completeness
 compl_data_run1 = readtable("amazon/run1/completeness.csv")
@@ -78,7 +88,7 @@ compl_london[:query] = 1:nrow(compl_london_run1)
 compl_london[:servers] = "TPF+QUaRTz-NEQ"
 
 # Gather dataframes for plots
-time_all = [time_ref;time_peneloop;time_data;time_london]
+time_all = [time_ref;time_peneloop;time_data;time_all_eq]
 compl_all = [compl_data;compl_london]
 # big = all[all[:time] .>= 1.0, :]
 

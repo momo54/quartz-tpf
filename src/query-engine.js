@@ -48,7 +48,7 @@ const buildMultiUnion = (plan, ldfConfig) => {
  * @return {AsyncIterator} The root operator of the physical query execution plan
  */
 const buildIterator = (query, endpoints, model, config = {}) => {
-  const queryPlan = processor(query, endpoints, model.nbTriples, config.locLimit, config.prefixes);
+  const queryPlan = processor(query, endpoints, model.nbTriples, config.locLimit, config.usePeneloop, config.prefixes);
   config.sharedCache = new Cache({ max: 5000 });
   const defaultClient = new ldf.FragmentsClient(endpoints[0], config);
   // important: main cache must not be shared with the default client!

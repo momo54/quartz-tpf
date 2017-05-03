@@ -1,1 +1,0 @@
-SELECT DISTINCT ?v0 ?v1 ?v2 ?v3 ?v5 WHERE { ?v0 <http://ogp.me/ns#tag> ?v1 . ?v0 <http://ogp.me/ns#title> ?v2 . ?v0 <http://schema.org/language> ?v3 . <http://db.uwaterloo.ca/~galuc/wsdbm/Website3048> <http://schema.org/language> ?v3 . ?v0 <http://schema.org/text> ?v5 }

@@ -11,11 +11,9 @@ if [ "$#" -ne 2 ]; then
 fi
 
 RESULTS=`basename $FILE`
-SERVERS='http://52.39.116.115/watDiv_100 http://52.33.245.25/watDiv_100'
-# SERVERS='http://52.39.116.115/watDiv_100 http://35.177.243.45/watDiv_100'
 
 # tell eventual proxies to move to the next query
-# GET http://localhost:8000/move-to-query?name=$RESULTS
-# GET http://localhost:8001/move-to-query?name=$RESULTS
+GET http://localhost:8000/move-to-query?name=$RESULTS
+GET http://localhost:8001/move-to-query?name=$RESULTS
 
-bin/tpf-client.js run models/$RESULTS.json $SERVERS -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+bin/tpf-client.js run models-local/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
