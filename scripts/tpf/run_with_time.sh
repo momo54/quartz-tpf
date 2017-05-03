@@ -13,7 +13,7 @@ fi
 RESULTS=`basename $FILE`
 
 # tell eventual proxies to move to the next query
-GET http://localhost:8000/move-to-query?name=$RESULTS
-GET http://localhost:8001/move-to-query?name=$RESULTS
+# GET http://localhost:8000/move-to-query?name=$RESULTS
+# GET http://localhost:8001/move-to-query?name=$RESULTS
 
-bin/tpf-client.js run models-local/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+bin/tpf-client.js run models/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
