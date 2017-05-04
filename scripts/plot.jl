@@ -78,31 +78,39 @@ time_london[:query] = 1:nrow(time_london_run1)
 time_london[:servers] = "TPF+QUaRTz-NEQ"
 
 # Completeness
-# compl_data_run1 = readtable("amazon/run1/completeness.csv")
-# compl_data_run2 = readtable("amazon/run2/completeness.csv")
-# compl_data_run3 = readtable("amazon/run3/completeness.csv")
-# compl_london_run1 = readtable("amazon/run1/completeness_london.csv")
-# compl_london_run2 = readtable("amazon/run2/completeness_london.csv")
-# compl_london_run3 = readtable("amazon/run3/completeness_london.csv")
-#
-# compl_data = meanRun(concatRuns(compl_data_run1, compl_data_run2, compl_data_run3))
-# compl_london = meanRun(concatRuns(compl_london_run1, compl_london_run2, compl_london_run3))
-#
-# compl_data[:query] = 1:nrow(compl_data_run1)
-# compl_data[:servers] = "TPF+QUaRTz-EQ"
-# compl_london[:query] = 1:nrow(compl_london_run1)
-# compl_london[:servers] = "TPF+QUaRTz-NEQ"
+compl_quartz_eq_run1 = readtable("amazon/run1/eq/completeness_quartz_eq.csv")
+compl_quartz_eq_run2 = readtable("amazon/run2/eq/completeness_quartz_eq.csv")
+compl_quartz_eq_run3 = readtable("amazon/run3/eq/completeness_quartz_eq.csv")
+
+compl_peneloop_eq_run1 = readtable("amazon/run1/eq/completeness_peneloop_eq.csv")
+compl_peneloop_eq_run2 = readtable("amazon/run2/eq/completeness_peneloop_eq.csv")
+compl_peneloop_eq_run3 = readtable("amazon/run3/eq/completeness_peneloop_eq.csv")
+
+compl_all_eq_run1 = readtable("amazon/run1/eq/completeness_all_eq.csv")
+compl_all_eq_run2 = readtable("amazon/run2/eq/completeness_all_eq.csv")
+compl_all_eq_run3 = readtable("amazon/run3/eq/completeness_all_eq.csv")
+
+compl_quartz_eq = meanRun(concatRuns(compl_quartz_eq_run1, compl_quartz_eq_run2, compl_quartz_eq_run3))
+compl_peneloop_eq = meanRun(concatRuns(compl_peneloop_eq_run1, compl_peneloop_eq_run2, compl_peneloop_eq_run3))
+compl_all_eq = meanRun(concatRuns(compl_all_eq_run1, compl_all_eq_run2, compl_all_eq_run3))
+
+compl_quartz_eq[:query] = 1:nrow(compl_quartz_eq_run1)
+compl_quartz_eq[:servers] = "TPF+Q-EQ"
+compl_peneloop_eq[:query] = 1:nrow(compl_peneloop_eq_run1)
+compl_peneloop_eq[:servers] = "TPF+P-EQ"
+compl_all_eq[:query] = 1:nrow(compl_all_eq_run1)
+compl_all_eq[:servers] = "TPF+P+Q-EQ"
 
 # Gather dataframes for plots
 time_all = [time_ref;time_peneloop_eq;time_quartz_eq;time_all_eq]
-# compl_all = [compl_data;compl_london]
+compl_all = [compl_peneloop_eq;compl_quartz_eq;compl_all_eq]
 
 time_plot_1 = plot(time_all[time_all[:query] .<= 50, :], x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[0,10,20,30,40,50]))
 time_plot_2 = plot(time_all[time_all[:query] .> 50, :], x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors())
 
-# compl_plot = plot(compl_all, xgroup=:servers, x=:query, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar, Guide.xticks(ticks=:auto, orientation=:horizontal)), Guide.xlabel("Queries"), Guide.ylabel("Answer completeness"), Scale.y_continuous, colors(), no_colors_guide)
+compl_plot = plot(compl_all, xgroup=:servers, x=:query, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar), Guide.xlabel("Queries"), Guide.ylabel("Answer completeness"), Scale.y_continuous, colors(), no_colors_guide)
 
 
 draw(PDF("amazon/execution_time_eq.pdf", 8inch, 5inch), vstack(time_plot_1, time_plot_2))
-# draw(PDF("amazon/completeness.pdf", 7inch, 4inch), compl_plot)
+draw(PDF("amazon/completeness.pdf", 8inch, 4inch), compl_plot)
 # draw(PDF("amazon/execution_time_greater_3s.pdf", 7inch, 5inch), pbig)
