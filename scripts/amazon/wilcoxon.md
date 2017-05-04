@@ -8,21 +8,21 @@ Computed with the [R project](http://www.r-project.org/).
 
 ## Run 1
 
-* TPF+PeNeLoop: V = 2290, p-value = 0.5866
-* TPF+QUaRTz: V = 540, p-value = 8.82e-11
-* TPF+PeNeLoop+QUaRTz: V = 708.5, p-value = 7.683e-09
+* TPF+PeNeLoop: V = 2196, p-value = 0.5168
+* TPF+QUaRTz: V = 448, p-value = 1.41e-11
+* TPF+PeNeLoop+QUaRTz: V = 616.5, p-value = 1.547e-09
 
 ## Run 2
 
-* TPF+PeNeLoop: V = 2273.5, p-value = 0.819
-* TPF+QUaRTz: V = 601.5, p-value = 3.909e-10
-* TPF+PeNeLoop+QUaRTz: V = 1053.5, p-value = 1.195e-05
+* TPF+PeNeLoop: V = 2183.5, p-value = 0.7711
+* TPF+QUaRTz: V = 509.5, p-value = 6.817e-11
+* TPF+PeNeLoop+QUaRTz: V = 962.5, p-value = 3.866e-06
 
 ## Run 3
 
-* TPF+PeNeLoop: V = 1911.5, p-value = 0.1473
-* TPF+QUaRTz: V = 666, p-value = 1.76e-09
-* TPF+PeNeLoop+QUaRTz: V = 908.5, p-value = 3.005e-07
+* TPF+PeNeLoop: V = 1818.5, p-value = 0.1064
+* TPF+QUaRTz: V = 574, p-value = 3.356e-10
+* TPF+PeNeLoop+QUaRTz: V = 816.5, p-value = 7.874e-08
 
 # Non equivalent servers
 
