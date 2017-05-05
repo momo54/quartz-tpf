@@ -20,6 +20,19 @@ all_eq_2 <- read.table("amazon/run2/eq/execution_times_all_eq.csv", header = TRU
 all_eq_3 <- read.table("amazon/run3/eq/execution_times_all_eq.csv", header = TRUE)
 
 # NEQ
+peneloop_neq_1 <- read.table("amazon/run1/neq/execution_times_peneloop_neq.csv", header = TRUE)
+peneloop_neq_2 <- read.table("amazon/run2/neq/execution_times_peneloop_neq.csv", header = TRUE)
+peneloop_neq_3 <- read.table("amazon/run3/neq/execution_times_peneloop_neq.csv", header = TRUE)
+
+quartz_neq_1 <- read.table("amazon/run1/neq/execution_times_quartz_neq.csv", header = TRUE)
+quartz_neq_2 <- read.table("amazon/run2/neq/execution_times_quartz_neq.csv", header = TRUE)
+quartz_neq_3 <- read.table("amazon/run3/neq/execution_times_quartz_neq.csv", header = TRUE)
+
+all_neq_1 <- read.table("amazon/run1/neq/execution_times_all_neq.csv", header = TRUE)
+all_neq_2 <- read.table("amazon/run2/neq/execution_times_all_neq.csv", header = TRUE)
+all_neq_3 <- read.table("amazon/run3/neq/execution_times_all_neq.csv", header = TRUE)
+
+# NEQ
 # TODO
 
 # Compute tests
@@ -57,3 +70,35 @@ wilcox.test(quartz_eq_3$time, reference_3$time, alternative="less", conf.level=0
 
 print("TPF+PeNeLoop+QUaRTz: ")
 wilcox.test(all_eq_3$time, reference_3$time, alternative="less", conf.level=0.90, paired=TRUE)
+
+print("------- NEQ -------")
+
+print("------ Run 1 -----")
+print("TPF+PeNeLoop: ")
+wilcox.test(peneloop_neq_1$time, reference_1$time, alternative="less", conf.level=0.90, paired=TRUE)
+
+print("TPF+QUaRTz: ")
+wilcox.test(quartz_neq_1$time, reference_1$time, alternative="less", conf.level=0.90, paired=TRUE)
+
+print("TPF+PeNeLoop+QUaRTz: ")
+wilcox.test(all_neq_1$time, reference_1$time, alternative="less", conf.level=0.90, paired=TRUE)
+
+print("------ Run 2 -----")
+print("TPF+PeNeLoop: ")
+wilcox.test(peneloop_neq_2$time, reference_2$time, alternative="less", conf.level=0.90, paired=TRUE)
+
+print("TPF+QUaRTz: ")
+wilcox.test(quartz_neq_2$time, reference_2$time, alternative="less", conf.level=0.90, paired=TRUE)
+
+print("TPF+PeNeLoop+QUaRTz: ")
+wilcox.test(all_neq_2$time, reference_2$time, alternative="less", conf.level=0.90, paired=TRUE)
+
+print("------ Run 3 -----")
+print("TPF+PeNeLoop: ")
+wilcox.test(peneloop_neq_3$time, reference_3$time, alternative="less", conf.level=0.90, paired=TRUE)
+
+print("TPF+QUaRTz: ")
+wilcox.test(quartz_neq_3$time, reference_3$time, alternative="less", conf.level=0.90, paired=TRUE)
+
+print("TPF+PeNeLoop+QUaRTz: ")
+wilcox.test(all_neq_3$time, reference_3$time, alternative="less", conf.level=0.90, paired=TRUE)

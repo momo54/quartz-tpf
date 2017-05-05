@@ -76,20 +76,20 @@ time_peneloop_neq_run1 = readtable("amazon/run1/neq/execution_times_peneloop_neq
 time_peneloop_neq_run2 = readtable("amazon/run2/neq/execution_times_peneloop_neq.csv")
 time_peneloop_neq_run3 = readtable("amazon/run3/neq/execution_times_peneloop_neq.csv")
 
-# time_all_neq_run1 = readtable("amazon/run1/neq/execution_times_all_neq.csv")
-# time_all_neq_run2 = readtable("amazon/run2/neq/execution_times_all_neq.csv")
-# time_all_neq_run3 = readtable("amazon/run3/neq/execution_times_all_neq.csv")
+time_all_neq_run1 = readtable("amazon/run1/neq/execution_times_all_neq.csv")
+time_all_neq_run2 = readtable("amazon/run2/neq/execution_times_all_neq.csv")
+time_all_neq_run3 = readtable("amazon/run3/neq/execution_times_all_neq.csv")
 
 time_quartz_neq = meanRun(concatRuns(time_quartz_neq_run1, time_quartz_neq_run2, time_quartz_neq_run3))
 time_peneloop_neq = meanRun(concatRuns(time_peneloop_neq_run1, time_peneloop_neq_run2, time_peneloop_neq_run3))
-# time_all_neq = meanRun(concatRuns(time_all_neq_run1, time_all_neq_run2, time_all_neq_run3))
+time_all_neq = meanRun(concatRuns(time_all_neq_run1, time_all_neq_run2, time_all_neq_run3))
 
 time_quartz_neq[:query] = 1:nrow(time_quartz_neq_run1)
 time_quartz_neq[:servers] = "TPF+QUaRTz-NEQ"
 time_peneloop_neq[:query] = 1:nrow(time_peneloop_neq_run1)
 time_peneloop_neq[:servers] = "TPF+PeNeLoop-NEQ"
-# time_all_neq[:query] = 1:nrow(time_all_neq_run1)
-# time_all_neq[:servers] = "TPF+PeNeLoop+QUaRTz-NEQ"
+time_all_neq[:query] = 1:nrow(time_all_neq_run1)
+time_all_neq[:servers] = "TPF+PeNeLoop+QUaRTz-NEQ"
 
 # Completeness
 
@@ -143,7 +143,7 @@ compl_all_eq[:servers] = "TPF+P+Q-EQ"
 
 # Gather dataframes for plots
 time_all = [time_ref;time_peneloop_eq;time_quartz_eq;time_all_eq]
-time_all2 = [time_ref;time_peneloop_neq;time_quartz_neq]
+time_all2 = [time_ref;time_peneloop_neq;time_quartz_neq;time_all_neq]
 compl_all = [compl_peneloop_eq;compl_quartz_eq;compl_all_eq]
 
 time_plot_1 = plot(time_all[time_all[:query] .<= 50, :], x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[0,5,10,15,20,25,30,35,40,45,50]),
