@@ -28,18 +28,18 @@ Computed with the [R project](http://www.r-project.org/).
 
 ## Run 1
 
-* TPF+PeNeLoop: ??
-* TPF+QUaRTz: ??
-* TPF+PeNeLoop+QUaRTz: ??
+* TPF+PeNeLoop: 0.03062
+* TPF+QUaRTz: 6.589e-12
+* TPF+PeNeLoop+QUaRTz: 6.124e-10
 
 ## Run 2
 
-* TPF+PeNeLoop: ??
-* TPF+QUaRTz: ??
-* TPF+PeNeLoop+QUaRTz: ??
+* TPF+PeNeLoop: 0.1933
+* TPF+QUaRTz: 7.321e-08
+* TPF+PeNeLoop+QUaRTz: 2.611e-4
 
 ## Run 3
 
-* TPF+PeNeLoop: ??
-* TPF+QUaRTz: ??
-* TPF+PeNeLoop+QUaRTz: ??
+* TPF+PeNeLoop: 0.008944
+* TPF+QUaRTz: 2.863e-07
+* TPF+PeNeLoop+QUaRTz: 1.573e-05
