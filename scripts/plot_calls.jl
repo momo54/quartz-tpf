@@ -47,19 +47,29 @@ end
 # end
 
 calls_ref = processData(readtable("amazon/load/http_calls_ref.csv"))
+calls_ref[:approach] = "TPF"
 
 calls_quartz_eq = processData(readtable("amazon/load/eq/http_calls_quartz_eq.csv"))
 calls_peneloop_eq = processData(readtable("amazon/load/eq/http_calls_peneloop_eq.csv"))
 calls_all_eq = processData(readtable("amazon/load/eq/http_calls_all_eq.csv"))
 
-calls_ref[:approach] = "TPF"
-calls_quartz_eq[:approach] = "TPF+Q-EQ"
-calls_peneloop_eq[:approach] = "TPF+P-EQ"
-calls_all_eq[:approach] = "TPF+P+Q-EQ"
+calls_quartz_eq[:approach] = " TPF+VTP-EQ"
+calls_peneloop_eq[:approach] = " TPF+PeN-EQ"
+calls_all_eq[:approach] = " QUaRTz-EQ"
 
-calls_eq = [calls_ref;calls_peneloop_eq;calls_quartz_eq;calls_all_eq]
+calls_quartz_neq = processData(readtable("amazon/load/neq/http_calls_quartz_neq.csv"))
+calls_peneloop_neq = processData(readtable("amazon/load/neq/http_calls_peneloop_neq.csv"))
+calls_all_neq = processData(readtable("amazon/load/neq/http_calls_all_neq.csv"))
 
-# plot_eq = plot(calls_eq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel("Server"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
-plot_eq = plot(calls_all_eq, x=:query, y=:calls, color=:server, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors())
+calls_quartz_neq[:approach] = "TPF+VTP-NEQ"
+calls_peneloop_neq[:approach] = "TPF+PeN-NEQ"
+calls_all_neq[:approach] = "QUaRTz-NEQ"
 
-draw(PDF("amazon/http_calls_eq.pdf", 7inch, 4inch), plot_eq)
+calls_eq = [calls_peneloop_eq;calls_quartz_eq;calls_all_eq]
+calls_neq = [calls_peneloop_neq;calls_quartz_neq;calls_all_neq]
+
+plot_eq = plot(calls_eq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_neq = plot(calls_neq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel(""), Guide.ylabel(""), Guide.colorkey(""), Scale.x_discrete, colors())
+# plot_eq = plot(calls_all_eq, x=:query, y=:calls, color=:server, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors())
+
+draw(PDF("amazon/http_calls.pdf", 7inch, 4inch), hstack(plot_eq, plot_neq))
