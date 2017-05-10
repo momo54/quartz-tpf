@@ -61,11 +61,11 @@ time_peneloop_eq = meanRun(concatRuns(time_peneloop_eq_run1, time_peneloop_eq_ru
 time_all_eq = meanRun(concatRuns(time_all_eq_run1, time_all_eq_run2, time_all_eq_run3))
 
 time_quartz_eq[:query] = 1:nrow(time_quartz_eq_run1)
-time_quartz_eq[:servers] = "TPF+QUaRTz-EQ"
+time_quartz_eq[:servers] = "TPF+VTP-EQ"
 time_peneloop_eq[:query] = 1:nrow(time_peneloop_eq_run1)
-time_peneloop_eq[:servers] = "TPF+PeNeLoop-EQ"
+time_peneloop_eq[:servers] = "TPF+PeN-EQ"
 time_all_eq[:query] = 1:nrow(time_all_eq_run1)
-time_all_eq[:servers] = "TPF+PeNeLoop+QUaRTz-EQ"
+time_all_eq[:servers] = "QUaRTz-EQ"
 
 # NEQ
 time_quartz_neq_run1 = readtable("amazon/run1/neq/execution_times_quartz_neq.csv")
@@ -85,11 +85,11 @@ time_peneloop_neq = meanRun(concatRuns(time_peneloop_neq_run1, time_peneloop_neq
 time_all_neq = meanRun(concatRuns(time_all_neq_run1, time_all_neq_run2, time_all_neq_run3))
 
 time_quartz_neq[:query] = 1:nrow(time_quartz_neq_run1)
-time_quartz_neq[:servers] = "TPF+QUaRTz-NEQ"
+time_quartz_neq[:servers] = "TPF+VTP-NEQ"
 time_peneloop_neq[:query] = 1:nrow(time_peneloop_neq_run1)
-time_peneloop_neq[:servers] = "TPF+PeNeLoop-NEQ"
+time_peneloop_neq[:servers] = "TPF+PeN-NEQ"
 time_all_neq[:query] = 1:nrow(time_all_neq_run1)
-time_all_neq[:servers] = "TPF+PeNeLoop+QUaRTz-NEQ"
+time_all_neq[:servers] = "QUaRTz-NEQ"
 
 # Completeness
 
@@ -128,11 +128,11 @@ compl_all_eq = meanRun(concatRuns(compl_all_eq_run1, compl_all_eq_run2, compl_al
 # compl_all_neq = meanRun(concatRuns(compl_all_neq_run1, compl_all_neq_run2, compl_all_neq_run3))
 
 compl_quartz_eq[:query] = 1:nrow(compl_quartz_eq_run1)
-compl_quartz_eq[:servers] = "TPF+Q-EQ"
+compl_quartz_eq[:servers] = "TPF+VTP-EQ"
 compl_peneloop_eq[:query] = 1:nrow(compl_peneloop_eq_run1)
-compl_peneloop_eq[:servers] = "TPF+P-EQ"
+compl_peneloop_eq[:servers] = "TPF+PeN-EQ"
 compl_all_eq[:query] = 1:nrow(compl_all_eq_run1)
-compl_all_eq[:servers] = "TPF+P+Q-EQ"
+compl_all_eq[:servers] = "QUaRTz-EQ"
 
 # compl_quartz_neq[:query] = 1:nrow(compl_quartz_neq_run1)
 # compl_quartz_neq[:servers] = "TPF+Q-NEQ"

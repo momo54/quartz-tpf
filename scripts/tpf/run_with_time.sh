@@ -14,13 +14,13 @@ fi
 RESULTS=`basename $FILE`
 
 # tell eventual proxies to move to the next query
-GET http://localhost:8000/move-to-query?name=$RESULTS
-GET http://localhost:8001/move-to-query?name=$RESULTS
+# GET http://localhost:8000/move-to-query?name=$RESULTS
+# GET http://localhost:8001/move-to-query?name=$RESULTS
 
 if [[ "$MODE" = "peneloop" ]]; then
-  bin/tpf-client.js run models-local-neq/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -l -1 -p > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+  bin/tpf-client.js run models-3/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -l -1 -p > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
 elif [[ "$MODE" = "quartz" ]]; then
-  bin/tpf-client.js run models-local-neq/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+  bin/tpf-client.js run models-3/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
 else
-  bin/tpf-client.js run models-local-neq/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -p > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+  bin/tpf-client.js run models-3/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -p > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
 fi

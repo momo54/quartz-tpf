@@ -68,8 +68,8 @@ calls_all_neq[:approach] = "QUaRTz-NEQ"
 calls_eq = [calls_peneloop_eq;calls_quartz_eq;calls_all_eq]
 calls_neq = [calls_peneloop_neq;calls_quartz_neq;calls_all_neq]
 
-plot_eq = plot(calls_eq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
-plot_neq = plot(calls_neq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel(""), Guide.ylabel(""), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_eq = plot(calls_eq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel("Equivalent servers"), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_neq = plot(calls_neq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel("Non equivalent servers"), Guide.ylabel(""), Guide.colorkey(""), Scale.x_discrete, colors())
 # plot_eq = plot(calls_all_eq, x=:query, y=:calls, color=:server, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors())
 
 draw(PDF("amazon/http_calls.pdf", 7inch, 4inch), hstack(plot_eq, plot_neq))
