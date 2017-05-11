@@ -16,7 +16,7 @@ Moreover, a cost model is utilized by the **QUaRTz** optimizer to estimate the c
 
 ## Datasets and [queries](https://github.com/Callidon/quartz-tpf/blob/master/scripts/queriesWatDiv100)
 
-We use one instance of the Waterloo SPARQL Diversity Test Suite (WatDiv) synthetic dataset[2,3] with 10^5 triples, encoded in the HDT format.
+We use one instance of the Waterloo SPARQL Diversity Test Suite (WatDiv) synthetic dataset[2,3] with 10^5 triples, encoded in the HDT[4] format.
 We generate 50,000 queries from 500 templates.
 
 Next, we eliminate all duplicated queries and then pick 100 random queries to be executed against our dataset. Generated queries are STAR, PATH and SNOWFLAKE shaped queries, all using the DISTINCT modifier.
@@ -25,7 +25,7 @@ Queries used during the experiments are available [here](https://github.com/Call
 
 ## Execution time
 
-We compare the average execution time with the reference TPF client (TPF), TPF with PeNeLoop operator[4] (TPF+PeN), TPF with query optimization using virtual triple patterns (TPF+VTP) and the QUaRTz client itself.
+We compare the average execution time with the reference TPF client (TPF), TPF with PeNeLoop operator[5] (TPF+PeN), TPF with query optimization using virtual triple patterns (TPF+VTP) and the QUaRTz client itself.
 
 * **Configuration with two equivalent server (EQ)** ([PDF version](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/execution_time_eq.pdf))
 ![execution time eq](https://raw.githubusercontent.com/Callidon/quartz-tpf/master/scripts/amazon/execution_time_eq.png)
@@ -53,21 +53,18 @@ We compare the answer completeness with TPF, TPF+PeN, TPF+VTP and QUaRTz, with b
 
 ## Wilcoxon ranking test
 
-Results from all the Wilcoxon ranking tests[5] performed are available [here](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/wilcoxon.md).
+Results from all the Wilcoxon ranking tests[6] performed are available [here](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/wilcoxon.md).
 
 ## References
 
 1. Verborgh, R., Vander Sande, M., Hartig, O., Van Herwegen, J., De Vocht, L.,
-De Meester, B., Haesendonck, G., Colpaert, P.: [Triple pattern fragments: A low-cost knowledge graph interface for the web](https://biblio.ugent.be/publication/8050661/file/8050671.pdf). Web Semantics: Science, Services and
-Agents on the World Wide Web 37, 184–206 (2016)
+De Meester, B., Haesendonck, G., Colpaert, P.: [Triple pattern fragments: A low-cost knowledge graph interface for the web](https://biblio.ugent.be/publication/8050661/file/8050671.pdf). Web Semantics: Science, Services and Agents on the World Wide Web 37, 184–206 (2016)
 2. Aluc, G., Hartig, O., Ozsu, M.T., Daudjee, K.: [Diversified stress testing of rdf data management systems.](http://olafhartig.de/files/AlucEtAl_ISWC14_Preprint.pdf) In: International Semantic Web Conference. pp. 197–212. Springer (2014)
 3. Aluç, G., Ozsu, M., Daudjee, K., Hartig, O.: [chameleon-db: a workload-aware robust rdf data management system](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.636.9612&rep=rep1&type=pdf). University of waterloo. Tech. rep., Tech. Rep.
 CS-2013-10 (2013)
-4. Minier, T., Montoya, G., Skaf-Molli, H., Molli, P.: PeNeLoop: Parallelizing federated SPARQL queries in presence of replicated fragments. In: QuWeDa 2017:
-Querying the Web of Data at ESWC 2017, Portorož, Slovenia, May 28 - June 1,
-2017 (2017)
-5. Wilcoxon, F.: [Individual comparisons by ranking methods](http://hbanaszak.mjr.uw.edu.pl/TempTxt/Wilcoxon_1946_IndividualComparisonByRankingMethods.pdf). In: Breakthroughs in
-Statistics, pp. 196–202. Springer (1992)
+4. Fernández, J.D., Martínez-Prieto, M.A., Gutiérrez, C., Polleres, A., Arias, M.: [Binary rdf representation for publication and exchange (hdt)](http://www.imap.websemanticsjournal.org/preprints/index.php/ps/article/viewFile/328/333). Web Semantics: Science, Services and Agents on the World Wide Web 19, 22–41 (2013)
+5. Minier, T., Montoya, G., Skaf-Molli, H., Molli, P.: PeNeLoop: Parallelizing federated SPARQL queries in presence of replicated fragments. In: QuWeDa 2017: Querying the Web of Data at ESWC 2017, Portorož, Slovenia, May 28 - June 1, 2017 (2017)
+6. Wilcoxon, F.: [Individual comparisons by ranking methods](http://hbanaszak.mjr.uw.edu.pl/TempTxt/Wilcoxon_1946_IndividualComparisonByRankingMethods.pdf). In: Breakthroughs in Statistics, pp. 196–202. Springer (1992)
 
 # Installation
 
