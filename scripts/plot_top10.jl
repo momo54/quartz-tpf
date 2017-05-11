@@ -1,44 +1,15 @@
+# Draw plot for Exec per query per server for top10 queries
+# Author: Thomas Minier
+
 using Gadfly
 using RDatasets
 
-# Themes
-panel_theme = Theme(
-  key_position = :top,
-  bar_spacing = 0.2px
-)
-
-no_colors_guide = Theme(
-  key_position = :none,
-  default_point_size = 2px
-)
+include("utils.jl")
 
 Gadfly.push_theme(panel_theme)
 
-# Custom color scale for plots
-function colors()
- return Scale.color_discrete_manual(colorant"#990000", colorant"#ff4000", colorant"#ffbf00")
-end
-
-# Concat results from three distinct runs
-function concatRuns(run1, run2, run3)
-  return hcat(run1, run2, run3)
-end
-
-# Compute the mean of three runs
-function meanRun(runs)
-  res = DataFrame(mean_value = [])
-  for row in eachrow(runs)
-    push!(res, [ mean(convert(Array, row)) ])
-  end
-  return res
-end
-
-function qNumbers(nb)
-  return map(x -> "Q$x", 1:nb)
-end
-
 function makePlot(df)
-  return plot(df, xgroup=:qname, x=:servers, y=:mean_value, Geom.subplot_grid(Geom.line, Geom.point, Guide.xticks(ticks=[1,2,3,4], orientation=:horizontal), Guide.yticks(ticks=[1200,1000,800,600,400,200, 0])), Guide.xlabel("Number of servers per query"), Guide.ylabel("Execution time (s)", orientation=:vertical), Scale.x_discrete)
+  return plot(df, xgroup=:qname, x=:servers, y=:mean_value, Geom.subplot_grid(Geom.line, Geom.point, Guide.xticks(ticks=[1,2,3,4], orientation=:horizontal), Guide.yticks(ticks=[1200,1000,800,600,400,200,0])), Guide.xlabel("Number of servers per query"), Guide.ylabel("Execution time (s)", orientation=:vertical), Scale.x_discrete)
 end
 
 # Execution times
@@ -83,3 +54,4 @@ time_plot_1 = makePlot(time_all1)
 time_plot_2 = makePlot(time_all2)
 
 draw(PDF("amazon/top10_many_servers.pdf", 7inch, 5inch), vstack(time_plot_1, time_plot_2))
+draw(PNG("amazon/top10_many_servers.png", 7inch, 5inch), vstack(time_plot_1, time_plot_2))
