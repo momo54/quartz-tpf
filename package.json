@@ -1,7 +1,7 @@
 {
-  "name": "virtual-decomposer",
+  "name": "quartz-tpf",
   "version": "1.0.0",
-  "description": "virtual-decomposer",
+  "description": "QUaRTz",
   "main": "./src/query-engine.js",
   "bin": {
     "tpf-client": "./bin/tpf-client.js"
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Callidon/virtual-decomposer.git"
+    "url": "git+https://github.com/Callidon/quartz-tpf.git"
   },
   "author": "Thomas Minier <thomas.minier@protonmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Callidon/virtual-decomposer/issues"
+    "url": "https://github.com/Callidon/quartz-tpf/issues"
   },
-  "homepage": "https://github.com/Callidon/virtual-decomposer#readme",
+  "homepage": "https://github.com/Callidon/quartz-tpf#readme",
   "dependencies": {
     "commander": "^2.9.0",
     "http-proxy": "^1.16.2",

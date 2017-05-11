@@ -25,7 +25,7 @@ Queries used during the experiments are available [here](https://github.com/Call
 
 ## Execution time
 
-We compare the average execution time with the reference TPF client (TPF), TPF with PeNeLoop operator[4] (TPF+PeN), TPF using query optimization with virtual triple patterns (TPF+VTP) and the QUaRTz client itself.
+We compare the average execution time with the reference TPF client (TPF), TPF with PeNeLoop operator[4] (TPF+PeN), TPF with query optimization using virtual triple patterns (TPF+VTP) and the QUaRTz client itself.
 
 * **Configuration with two equivalent server (EQ)** ([PDF version](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/execution_time_eq.pdf))
 ![execution time eq](https://raw.githubusercontent.com/Callidon/quartz-tpf/master/scripts/amazon/execution_time_eq.png)
@@ -39,7 +39,7 @@ We also run experiments for the ten most expensive queries to evaluate, using 1,
 
 [PDF version](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/http_calls.pdf)
 
-We compare the number of HTTP calls done to the server per query for TPF+PeN, TPF+VTP and QUaRTz, with both configurations (equivalent and non equivalent servers)
+We compare the number of HTTP calls done to each server per query for TPF+PeN, TPF+VTP and QUaRTz, with both configurations (equivalent and non equivalent servers). We use two servers in each configuration.
 
 ![load balancing](https://raw.githubusercontent.com/Callidon/quartz-tpf/master/scripts/amazon/http_calls.png)
 
@@ -58,21 +58,19 @@ Results from all the Wilcoxon ranking tests[5] performed are available [here](ht
 ## References
 
 1. Verborgh, R., Vander Sande, M., Hartig, O., Van Herwegen, J., De Vocht, L.,
-De Meester, B., Haesendonck, G., Colpaert, P.: [Triple pattern fragments: A low-
-cost knowledge graph interface for the web](https://biblio.ugent.be/publication/8050661/file/8050671.pdf). Web Semantics: Science, Services and
+De Meester, B., Haesendonck, G., Colpaert, P.: [Triple pattern fragments: A low-cost knowledge graph interface for the web](https://biblio.ugent.be/publication/8050661/file/8050671.pdf). Web Semantics: Science, Services and
 Agents on the World Wide Web 37, 184–206 (2016)
 2. Aluc, G., Hartig, O., Ozsu, M.T., Daudjee, K.: [Diversified stress testing of rdf data management systems.](http://olafhartig.de/files/AlucEtAl_ISWC14_Preprint.pdf) In: International Semantic Web Conference. pp. 197–212. Springer (2014)
-3. Aluç, G., Ozsu, M., Daudjee, K., Hartig, O.: [chameleon-db: a workload-aware ro-
-bust rdf data management system](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.636.9612&rep=rep1&type=pdf). University of waterloo. Tech. rep., Tech. Rep.
+3. Aluç, G., Ozsu, M., Daudjee, K., Hartig, O.: [chameleon-db: a workload-aware robust rdf data management system](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.636.9612&rep=rep1&type=pdf). University of waterloo. Tech. rep., Tech. Rep.
 CS-2013-10 (2013)
-4. Minier, T., Montoya, G., Skaf-Molli, H., Molli, P.: PeNeLoop: Parallelizing fed-
-erated SPARQL queries in presence of replicated fragments. In: QuWeDa 2017:
+4. Minier, T., Montoya, G., Skaf-Molli, H., Molli, P.: PeNeLoop: Parallelizing federated SPARQL queries in presence of replicated fragments. In: QuWeDa 2017:
 Querying the Web of Data at ESWC 2017, Portorož, Slovenia, May 28 - June 1,
 2017 (2017)
 5. Wilcoxon, F.: [Individual comparisons by ranking methods](http://hbanaszak.mjr.uw.edu.pl/TempTxt/Wilcoxon_1946_IndividualComparisonByRankingMethods.pdf). In: Breakthroughs in
 Statistics, pp. 196–202. Springer (1992)
 
 # Installation
+
 ```bash
 git clone htpps://github.com/Callidon/virtual-decomposer.git
 cd virtual-decomposer/
