@@ -4,6 +4,8 @@ using RDatasets
 
 include("utils.jl")
 
+Gadfly.push_theme(no_colors_guide)
+
 blacklist = [3, 6, 7, 14, 15, 16, 18, 19, 27, 28, 32, 33, 36, 40, 41, 42, 44, 53, 56, 57, 61, 67, 68, 69, 74, 75, 80, 86, 90, 94]
 
 function clean(df)
