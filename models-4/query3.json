@@ -1,0 +1,16 @@
+{
+  "coefficients": {
+    "http://52.39.116.115/watDiv_100": 1,
+    "http://52.33.245.25/watDiv_100": 1,
+    "http://54.70.48.92/watDiv_100": 1,
+    "http://35.160.40.16/watDiv_100": 1
+  },
+  "sumCoefs": 4,
+  "nbTriples": {
+    "{\"subject\":\"?v0\",\"predicate\":\"http://purl.org/goodrelations/includes\",\"object\":\"?v1\"}": 90000,
+    "{\"subject\":\"?v2\",\"predicate\":\"http://purl.org/goodrelations/offers\",\"object\":\"?v0\"}": 121568,
+    "{\"subject\":\"?v1\",\"predicate\":\"http://schema.org/contentSize\",\"object\":\"?v3\"}": 2502,
+    "{\"subject\":\"?v0\",\"predicate\":\"http://schema.org/eligibleRegion\",\"object\":\"http://db.uwaterloo.ca/~galuc/wsdbm/Country21\"}": 2596
+  },
+  "triplesPerPage": 100
+}
