@@ -38,8 +38,8 @@ calls_all_neq[:approach] = "QUaRTz-NEQ"
 calls_eq = [calls_peneloop_eq;calls_quartz_eq;calls_all_eq]
 calls_neq = [calls_peneloop_neq;calls_quartz_neq;calls_all_neq]
 
-plot_eq = plot(calls_eq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel("Equivalent servers"), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
-plot_neq = plot(calls_neq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel("Non equivalent servers"), Guide.ylabel(""), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_eq = plot(calls_eq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel("Equivalent servers"), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors(), style(major_label_font_size = 9px))
+plot_neq = plot(calls_neq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel("Non equivalent servers"), Guide.ylabel(""), Guide.colorkey(""), Scale.x_discrete, colors(), style(major_label_font_size = 9px))
 
-draw(PDF("amazon/http_calls.pdf", 7inch, 4inch), hstack(plot_eq, plot_neq))
-draw(PNG("amazon/http_calls.png", 7inch, 4inch), hstack(plot_eq, plot_neq))
+draw(PDF("amazon/http_calls.pdf", 7inch, 3.5inch), hstack(plot_eq, plot_neq))
+draw(PNG("amazon/http_calls.png", 7inch, 3.5inch), hstack(plot_eq, plot_neq))
