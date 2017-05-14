@@ -54,9 +54,26 @@ const joinDistribution = bgp => {
       patterns.forEach(p => p.triples.push(tp));
     }
   });
+
+  patterns = patterns.map(p => {
+    const endpoint = _.find(p.triples, obj => 'endpoint' in obj.fragment).fragment.endpoint;
+    return {
+      type: 'bgp',
+      triples: p.triples.map(triple => {
+        if (triple.peneloop === false)
+          return triple;
+        return _.merge({
+        fragment: {
+          simple: true,
+          endpoint
+        }
+      }, triple);
+      })
+    };
+  });
   return {
     type: 'union',
-    patterns,
+    patterns
   };
 };
 
