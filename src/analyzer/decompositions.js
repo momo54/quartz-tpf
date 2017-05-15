@@ -55,22 +55,22 @@ const joinDistribution = bgp => {
     }
   });
 
-  patterns = patterns.map(p => {
-    const endpoint = _.find(p.triples, obj => 'endpoint' in obj.fragment).fragment.endpoint;
-    return {
-      type: 'bgp',
-      triples: p.triples.map(triple => {
-        if (triple.peneloop === false)
-          return triple;
-        return _.merge({
-        fragment: {
-          simple: true,
-          endpoint
-        }
-      }, triple);
-      })
-    };
-  });
+  // patterns = patterns.map(p => {
+  //   const endpoint = _.find(p.triples, obj => 'endpoint' in obj.fragment).fragment.endpoint;
+  //   return {
+  //     type: 'bgp',
+  //     triples: p.triples.map(triple => {
+  //       if (triple.peneloop === false)
+  //         return triple;
+  //       return _.merge({
+  //       fragment: {
+  //         simple: true,
+  //         endpoint
+  //       }
+  //     }, triple);
+  //     })
+  //   };
+  // });
   return {
     type: 'union',
     patterns
