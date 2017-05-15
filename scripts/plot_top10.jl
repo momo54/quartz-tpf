@@ -47,11 +47,12 @@ time_all_4[:qname] = qNumbers(nrow(time_all_4_run1))
 time_all_4[:servers] = 4
 
 # Gather dataframes for plots
-time_all1 = [time_ref[1:5, :];time_all_2[1:5, :];time_all_3[1:5, :];time_all_4[1:5, :]]
-time_all2 = [time_ref[6:10, :];time_all_2[6:10, :];time_all_3[6:10, :];time_all_4[6:10, :]]
+# time_all1 = [time_ref[1:5, :];time_all_2[1:5, :];time_all_3[1:5, :];time_all_4[1:5, :]]
+# time_all2 = [time_ref[6:10, :];time_all_2[6:10, :];time_all_3[6:10, :];time_all_4[6:10, :]]
 
-time_plot_1 = makePlot(time_all1)
-time_plot_2 = makePlot(time_all2)
-
-draw(PDF("amazon/top10_many_servers.pdf", 7inch, 5inch), vstack(time_plot_1, time_plot_2))
-draw(PNG("amazon/top10_many_servers.png", 7inch, 5inch), vstack(time_plot_1, time_plot_2))
+# time_plot_1 = makePlot(time_all1)
+# time_plot_2 = makePlot(time_all2)
+time_plot = makePlot([time_ref;time_all_2;time_all_3;time_all_4])
+draw(PDF("amazon/top10_many_servers.pdf", 7inch, 3inch), time_plot)
+draw(PNG("amazon/top10_many_servers.png", 7inch, 5inch), time_plot)
+# draw(PDF("amazon/top10_many_servers.pdf", 7inch, 5inch), vstack(time_plot_1, time_plot_2))
