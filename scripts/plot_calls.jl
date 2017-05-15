@@ -7,14 +7,14 @@ include("utils.jl")
 Gadfly.push_theme(no_colors_guide)
 
 blacklist = [1, 3, 6, 7, 14, 15, 16, 18, 19, 27, 28, 32, 33, 36, 40, 41, 42, 44, 53, 56, 57, 61, 67, 68, 69, 74, 75, 80, 86, 90, 94]
-
-function clean(df)
-  return where(groupby(df, [:query]), d -> ! (d[1, :query] in blacklist))
-end
-
-function processData(df)
-  return DataFrame(clean(df))
-end
+#
+# function clean(df)
+#   return where(groupby(df, [:query]), d -> ! (d[1, :query] in blacklist))
+# end
+#
+# function processData(df)
+#   return DataFrame(clean(df))
+# end
 
 calls_ref = processData(readtable("amazon/load/http_calls_ref.csv"))
 calls_ref[:approach] = "TPF"

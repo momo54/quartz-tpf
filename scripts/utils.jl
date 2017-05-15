@@ -1,6 +1,6 @@
 # Utilities for plotting
 # Author: Thomas Minier
-
+using DataFramesMeta
 # Themes
 panel_theme = Theme(
   key_position = :top,
@@ -10,6 +10,14 @@ panel_theme = Theme(
 no_colors_guide = Theme(
   key_position = :none
 )
+
+function clean(df, list)
+  return where(groupby(df, [:query]), d -> ! (d[1, :query] in list))
+end
+
+function processData(df, list)
+  return DataFrame(clean(df, list))
+end
 
 # Custom color scale for plots
 function colors()
