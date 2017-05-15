@@ -24,9 +24,9 @@ mkdir -p $OUTPUTALL/run1/ $OUTPUTALL/run2/ $OUTPUTALL/run3/
 # ./scripts/tpf/run_workload_file_ref.sh $FILE $OUTPUTREF/run3/
 
 # run with prototype (peneloop only)
-./scripts/tpf/run_workload_file.sh $FILE $OUTPUTPEN/run1/ peneloop
-./scripts/tpf/run_workload_file.sh $FILE $OUTPUTPEN/run2/ peneloop
-./scripts/tpf/run_workload_file.sh $FILE $OUTPUTPEN/run3/ peneloop
+# ./scripts/tpf/run_workload_file.sh $FILE $OUTPUTPEN/run1/ peneloop
+# ./scripts/tpf/run_workload_file.sh $FILE $OUTPUTPEN/run2/ peneloop
+# ./scripts/tpf/run_workload_file.sh $FILE $OUTPUTPEN/run3/ peneloop
 
 # run with prototype (quartz only)
 # ./scripts/tpf/run_workload_file.sh $FILE $OUTPUTQUA/run1/ quartz
