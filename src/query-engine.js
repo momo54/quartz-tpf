@@ -29,7 +29,7 @@ const ldf = require('../../Client.js/ldf-client.js');
 const Cache = require('lru-cache');
 const UnionStream = require('./union-stream.js');
 const _ = require('lodash');
-ldf.Logger.setLevel('EMERGENCY');
+ldf.Logger.setLevel('DEBUG');
 
 const buildMultiUnion = (plan, ldfConfig) => {
   return plan.where[0].patterns.map(pattern => {
@@ -49,10 +49,11 @@ const buildMultiUnion = (plan, ldfConfig) => {
  */
 const buildIterator = (query, endpoints, model, config = {}) => {
   const queryPlan = processor(query, endpoints, model.nbTriples, config.locLimit, config.usePeneloop, config.prefixes);
+  // console.log(JSON.stringify(queryPlan, false, 2));
   config.sharedCache = new Cache({ max: 5000 });
   const defaultClient = new ldf.FragmentsClient(endpoints[0], config);
   // important: main cache must not be shared with the default client!
-  config.mainCache = new Cache({ max: 100 });
+  config.mainCache = new Cache({ max: 1 });
   const virtualClients = {};
   endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));
   const ldfConfig = {

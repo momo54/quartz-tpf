@@ -9,6 +9,10 @@ Gadfly.push_theme(panel_theme)
 
 blacklist = [3,6,7,8,9,11,14,15,16,18,19,20,22,24,26,27,28,30,32,33,34,36,40,42,44,46,49,51,52,56,57,60,64,65,66,67,68,73,74,76,79,82,85,89,93]
 
+function processData(df, list)
+  return DataFrame(clean(df, list))
+end
+
 function makeTimeplotEQ(df, full = true)
   if full
     return plot(df, x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95]), Guide.yticks(ticks=[0,400,800,1200]))
