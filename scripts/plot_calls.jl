@@ -21,30 +21,28 @@ calls_ref = processData(readtable("amazon/load/http_calls_ref.csv"), blacklist)
 calls_ref[:approach] = "TPF"
 
 calls_quartz_eq = processData(readtable("amazon/load/eq/http_calls_quartz_eq2.csv"), blacklist)
-calls_peneloop_eq = processData(readtable("amazon/load/eq/http_calls_peneloop_eq.csv"), blacklist)
-calls_all_eq = processData(readtable("amazon/load/eq/http_calls_all_eq.csv"), blacklist)
-calls_truc = processData(readtable("amazon/load/eq/http_calls.csv"), blacklist)
+calls_peneloop_eq = processData(readtable("amazon/load/eq/http_calls_pen2_eq.csv"), blacklist)
+calls_all_eq = processData(readtable("amazon/load/eq/http_calls_all2_eq.csv"), blacklist)
 
 calls_quartz_eq[:approach] = "TQ"
 calls_peneloop_eq[:approach] = "TP"
-calls_all_eq[:approach] = "TPQ-EQ"
-calls_truc[:approach] = "truc"
+calls_all_eq[:approach] = "TQP"
 
 calls_quartz_neq = processData(readtable("amazon/load/neq/http_calls_quartz_neq2.csv"), blacklist)
-calls_peneloop_neq = processData(readtable("amazon/load/neq/http_calls_peneloop_neq.csv"), blacklist)
-calls_all_neq = processData(readtable("amazon/load/neq/http_calls_all_neq.csv"), blacklist)
+calls_peneloop_neq = processData(readtable("amazon/load/neq/http_calls_pen2_neq.csv"), blacklist)
+calls_all_neq = processData(readtable("amazon/load/neq/http_calls_all2_neq.csv"), blacklist)
 
 calls_quartz_neq[:approach] = "TQ"
 calls_peneloop_neq[:approach] = "TP"
-calls_all_neq[:approach] = "TPQ-NEQ"
+calls_all_neq[:approach] = "TQP"
 
-calls_eq = [calls_peneloop_eq;calls_quartz_eq;calls_all_eq;calls_truc]
+calls_eq = [calls_peneloop_eq;calls_quartz_eq;calls_all_eq]
 calls_neq = [calls_peneloop_neq;calls_quartz_neq;calls_all_neq]
 
-# plot_eq = plot(calls_eq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
-# plot_neq = plot(calls_neq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel(""), Guide.ylabel(""), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_eq = plot(calls_eq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_neq = plot(calls_neq, xgroup=:approach, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.boxplot), Guide.xlabel(""), Guide.ylabel(""), Guide.colorkey(""), Scale.x_discrete, colors())
 # # draw(PDF("amazon/http_calls.pdf", 7inch, 3.5inch), plot_eq)
-# draw(PDF("amazon/http_calls_eq.pdf", 5inch, 3inch), plot_eq)
-# draw(PDF("amazon/http_calls_neq.pdf", 3.5inch, 3inch), plot_neq)
-# draw(PNG("amazon/http_calls_eq.png", 3.5inch, 3inch), plot_eq)
-# draw(PNG("amazon/http_calls_neq.png", 3.5inch, 3inch), plot_neq)
+draw(PDF("amazon/http_calls_eq.pdf", 3.5inch, 3inch), plot_eq)
+draw(PDF("amazon/http_calls_neq.pdf", 3.5inch, 3inch), plot_neq)
+draw(PNG("amazon/http_calls_eq.png", 3.5inch, 3inch), plot_eq)
+draw(PNG("amazon/http_calls_neq.png", 3.5inch, 3inch), plot_neq)

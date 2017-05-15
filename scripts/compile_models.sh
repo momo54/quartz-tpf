@@ -20,7 +20,7 @@ mkdir -p models/
 while IFS='' read -r line || [[ -n "$line" ]]; do
   QFILE="queries/query$cpt"
   echo $line > $QFILE
-  bin/tpf-client.js model $SERVERS -f $QFILE -o models-test/query$cpt.json
+  bin/tpf-client.js model $SERVERS -f $QFILE -o models-test-neq/query$cpt.json
   rm -f $QFILE
   cpt=$((cpt+1))
 done < "$QUERIES"
