@@ -139,7 +139,7 @@ compl_all_neq[:servers] = "TQP-NEQ"
 
 # Gather dataframes for plots
 time_all = [time_ref;time_peneloop_eq;time_quartz_eq;time_all_eq]
-time_all2 = [time_ref;time_peneloop_neq;time_all_neq]
+time_all2 = [time_ref;time_peneloop_neq;time_quartz_neq;time_all_neq]
 compl_all = [compl_peneloop_eq;compl_quartz_eq;compl_all_eq;compl_peneloop_neq;compl_quartz_neq;compl_all_neq]
 
 # filter data for another plot
