@@ -4,7 +4,12 @@ using RDatasets
 
 include("utils.jl")
 
-Gadfly.push_theme(no_colors_guide)
+no_colors_guide2 = Theme(
+  key_position = :none,
+  bar_spacing = 10px,
+)
+
+Gadfly.push_theme(no_colors_guide2)
 
 # blacklist = [1, 3, 6, 7, 14, 15, 16, 18, 19, 27, 28, 32, 33, 36, 40, 41, 42, 44, 53, 56, 57, 61, 67, 68, 69, 74, 75, 80, 86, 90, 94]
 blacklist = [91, 92]
@@ -53,15 +58,15 @@ sum_all_neq[:labels] = [ string(sum_all_neq[1, :sum]), string(sum_all_neq[2, :su
 # calls_all_neq[:approach] = "TQP"
 #
 # calls_eq = [calls_peneloop_eq;calls_quartz_eq;calls_all_eq]
-calls_eq = [sum_quartz_eq;sum_pen_eq;sum_all_eq]
-calls_neq = [sum_quartz_neq;sum_pen_neq;sum_all_neq]
+calls_eq = [sum_pen_eq;sum_quartz_eq;sum_all_eq]
+calls_neq = [sum_pen_neq;sum_quartz_neq;sum_all_neq]
 
 # calls_neq = [calls_peneloop_neq;calls_quartz_neq;calls_all_neq]
 #
-plot_eq = plot(calls_eq, xgroup=:approach, x=:server, y=:sum, color=:approach, label=:labels, Geom.subplot_grid(Geom.bar, Geom.label), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
-plot_neq = plot(calls_neq, xgroup=:approach, x=:server, y=:sum, color=:approach, label=:labels, Geom.subplot_grid(Geom.bar, Geom.label), Guide.xlabel(""), Guide.ylabel(""), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_eq = plot(calls_eq, xgroup=:approach, x=:server, y=:sum, color=:approach, label=:labels, Geom.subplot_grid(Geom.bar, Geom.label(position=:above)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_neq = plot(calls_neq, xgroup=:approach, x=:server, y=:sum, color=:approach, label=:labels, Geom.subplot_grid(Geom.bar, Geom.label(position=:above)), Guide.xlabel(""), Guide.ylabel(""), Guide.colorkey(""), Scale.x_discrete, colors())
 # # # draw(PDF("amazon/http_calls.pdf", 7inch, 3.5inch), plot_eq)
-draw(PDF("amazon/http_calls_eq.pdf", 3.5inch, 3inch), plot_eq)
-draw(PDF("amazon/http_calls_neq.pdf", 3.5inch, 3inch), plot_neq)
-draw(PNG("amazon/http_calls_eq.png", 3.5inch, 3inch), plot_eq)
-draw(PNG("amazon/http_calls_neq.png", 3.5inch, 3inch), plot_neq)
+draw(PDF("amazon/http_calls_eq.pdf", 4.3inch, 3.5inch), plot_eq)
+draw(PDF("amazon/http_calls_neq.pdf", 4.3inch, 3.5inch), plot_neq)
+draw(PNG("amazon/http_calls_eq.png", 4.3inch, 3.5inch), plot_eq)
+draw(PNG("amazon/http_calls_neq.png", 4.3inch, 3.5inch), plot_neq)
