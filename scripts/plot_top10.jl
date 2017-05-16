@@ -53,6 +53,6 @@ time_all_4[:servers] = 4
 # time_plot_1 = makePlot(time_all1)
 # time_plot_2 = makePlot(time_all2)
 time_plot = makePlot([time_ref;time_all_2;time_all_3;time_all_4])
-draw(PDF("amazon/top10_many_servers.pdf", 7inch, 3inch), time_plot)
+draw(PDF("amazon/top10_many_servers.pdf", 7inch, 2.5inch), time_plot)
 draw(PNG("amazon/top10_many_servers.png", 7inch, 5inch), time_plot)
 # draw(PDF("amazon/top10_many_servers.pdf", 7inch, 5inch), vstack(time_plot_1, time_plot_2))
