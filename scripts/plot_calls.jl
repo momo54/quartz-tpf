@@ -63,5 +63,5 @@ plot_neq = plot(calls_neq, xgroup=:approach, x=:server, y=:sum, color=:approach,
 # # # draw(PDF("amazon/http_calls.pdf", 7inch, 3.5inch), plot_eq)
 draw(PDF("amazon/http_calls_eq.pdf", 3.5inch, 3inch), plot_eq)
 draw(PDF("amazon/http_calls_neq.pdf", 3.5inch, 3inch), plot_neq)
-# draw(PNG("amazon/http_calls_eq.png", 3.5inch, 3inch), plot_eq)
-# draw(PNG("amazon/http_calls_neq.png", 3.5inch, 3inch), plot_neq)
+draw(PNG("amazon/http_calls_eq.png", 3.5inch, 3inch), plot_eq)
+draw(PNG("amazon/http_calls_neq.png", 3.5inch, 3inch), plot_neq)

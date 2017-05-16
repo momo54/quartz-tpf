@@ -25,7 +25,7 @@ SOFTWARE.
 'use strict';
 
 const processor = require('./analyzer/processor.js');
-const ldf = require('../../Client.js/ldf-client.js');
+const ldf = require('../Client.js/ldf-client.js');
 const Cache = require('lru-cache');
 const UnionStream = require('./union-stream.js');
 const _ = require('lodash');
