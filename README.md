@@ -25,11 +25,13 @@ Queries used during the experiments are available [here](https://github.com/Call
 
 ## Execution time
 
-[PDF version](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/execution_time.pdf))
 
 We compare the average execution time with the reference TPF client (TPF), TPF with PeNeLoop operator[5] (TPF+PeN), TPF with query optimization using virtual triple patterns (TPF+VTP) and the QUaRTz client itself.
 
-![execution time](https://raw.githubusercontent.com/Callidon/quartz-tpf/master/scripts/amazon/execution_time.png)
+* **Configuration using equivalent servers** ([PDF version](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/execution_time_eq.pdf)):
+![execution time eq](https://raw.githubusercontent.com/Callidon/quartz-tpf/master/scripts/amazon/execution_time_eq.png)
+* **Configuration using non equivalent servers** ([PDF version](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/execution_time_neq.pdf)):
+![execution time neq](https://raw.githubusercontent.com/Callidon/quartz-tpf/master/scripts/amazon/execution_time_neq.png)
 
 We also run experiments for the ten most expensive queries to evaluate, using 1, 2, 3 and 4 equivalents servers ([PDF version](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/top10_many_servers.pdf))
 ![execution time top10](https://raw.githubusercontent.com/Callidon/quartz-tpf/master/scripts/amazon/top10_many_servers.png)
@@ -40,7 +42,10 @@ We also run experiments for the ten most expensive queries to evaluate, using 1,
 
 We compare the number of HTTP calls done to each server per query for TPF+PeN, TPF+VTP and QUaRTz, with both configurations (equivalent and non equivalent servers). We use two servers in each configuration.
 
-![load balancing](https://raw.githubusercontent.com/Callidon/quartz-tpf/master/scripts/amazon/http_calls.png)
+* **Configuration using equivalent servers** ([PDF version](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/http_calls_eq.pdf)):
+![load balancing eq](https://raw.githubusercontent.com/Callidon/quartz-tpf/master/scripts/amazon/http_calls_eq.png)
+* **Configuration using non equivalent servers** ([PDF version](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/http_calls_neq.pdf)):
+![load balancing neq](https://raw.githubusercontent.com/Callidon/quartz-tpf/master/scripts/amazon/http_calls_neq.png)
 
 ## Answer completeness
 
