@@ -1,16 +1,17 @@
 #  QUaRTz: Parallel SPARQL query processing over Replicated Triple Pattern Fragments
 
-Replicated RDF datasets can be accessed using different Web-based access interfaces, e.g., [Triple Pattern Fragment](http://linkeddatafragments.org/)[1] servers or SPARQL endpoints.
-Exploiting information about data replication during query processing allows for defining query plans where replicas are used to reduce execution time and load balance over the replicas.
+Although Linked Data datasets made available billions of
+triples, data availability is still an issue. While replicating datasets over
+different linked data providers improves data availability, balancing the
+load of query processing across replicas has not been considered yet in
+the context of Linked Data. 
 
-Although existing query processing approaches exploit information about the RDF datasets to reduce query execution time, balancing the load across replicas has not been considered yet.
-
-We tackle the problem of query optimization under presence of replicated RDF data and propose a cost-based query optimizer named **QUaRTz**, which is
-able to generate plans that minimize execution time while maximize load balance.
-
-**QUaRTz** is implemented on top the [Triple Pattern Fragment](http://linkeddatafragments.org/) (TPF) approach
-and is able to exploit meta-data about TPFs to produce parallelized query execution plans against replicated TPFs.
-Moreover, a cost model is utilized by the **QUaRTz** optimizer to estimate the computation capability of replicated TPF servers.
+In the context of the [Triple Pattern Fragment](http://linkeddatafragments.org/) [1] (TPF) approach, we tackle the problem of query optimization under presence of replicated RDF data and propose a cost-based query
+optimizer named **Quartz**, which is able to generate plans that minimize execution time while maximize load balancing. Quartz is able to exploit meta-data about TPFs to produce parallelized query execution
+plans against replicated TPFs servers. Moreover, a cost model is utilized by the **Quartz** optimizer to estimate the computation capability
+of replicated TPF servers. Experimentations demonstrate that **Quartz**
+significantly improves not only execution time of SPARQL queries, but
+also load-balancing between replicated TPF servers.
 
 # Experiments
 
