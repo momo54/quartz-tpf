@@ -26,7 +26,7 @@ SOFTWARE.
 const fs = require('fs');
 const http = require('http');
 const program = require('commander');
-const computeModel = require('../src/analyzer/cost-model.js');
+const computeModel = require('../src/model/cost-model.js');
 const SparqlParser = require('sparqljs').Parser;
 const _ = require('lodash');
 const ldf = require('../Client.js/ldf-client.js');
@@ -128,9 +128,6 @@ Promise.all(program.args.map(measureResponseTime))
   // generate the cost model, and save it in a file
   const nbTriples = _.fromPairs(cardinalities);
   const model = computeModel(program.args, latencies, {nbTriples, triplesPerPage: program.size});
-  model.coefficients['http://localhost:8000/watDiv_100'] = 1;
-  model.coefficients['http://localhost:8001/watDiv_100'] = 2;
-  model.sumCoefs = 3;
   fs.writeFile(program.output, JSON.stringify(model, false, 2), err => {
     if (err) {
       process.stderr.write(err);

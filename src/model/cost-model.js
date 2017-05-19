@@ -40,6 +40,7 @@ const computeModel = (endpoints, times, metadata = {}) => {
   const minWeight = Math.min(...weights);
   const coefs = weights.map(w => Math.floor(w / minWeight));
   return {
+    endpoints,
     coefficients: _.zipObject(endpoints, coefs),
     sumCoefs: coefs.reduce((acc, c) => acc + c, 0),
     nbTriples: metadata.nbTriples || {},
