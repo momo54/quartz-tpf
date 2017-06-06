@@ -57,15 +57,15 @@ const joinDistribution = bgp => {
 
   patterns = patterns.map(p => {
     // do nothing without localization informations
-    if (! ('fragment' in p.triples[0]))
+    if (! ('operator' in p.triples[0]))
       return p;
-    const endpoint = _.find(p.triples, obj => 'endpoint' in obj.fragment).fragment.endpoint;
+    const endpoint = _.find(p.triples, obj => 'endpoint' in obj.operator).operator.endpoint;
     return {
       type: 'bgp',
       triples: p.triples.map(triple => {
-        if (triple.operator === 'classic')
-          triple.operator.endpoint = endpoint;
-        return triple;
+        if (triple.operator.type !== 'classic')
+          return triple;
+        return _.merge({ operator: { endpoint }}, triple);
       })
     };
   });

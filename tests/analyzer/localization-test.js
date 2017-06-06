@@ -43,11 +43,6 @@ describe('Localization', () => {
       subject: 's1',
       predicate: 'p1',
       object: 'o1',
-      fragment: {
-        endpoint: 'e1',
-        virtualIndex: 1,
-        nbVirtuals: endpoints.length
-      },
       operator: {
         endpoint: 'e1',
         nbVirtuals: 1,
@@ -73,11 +68,6 @@ describe('Localization', () => {
           subject: 's1',
           predicate: 'p1',
           object: 'o1',
-          fragment: {
-            endpoint: 'e1',
-            virtualIndex: 1,
-            nbVirtuals: endpoints.length
-          },
           operator: {
             endpoint: 'e1',
             nbVirtuals: endpoints.length,
@@ -89,11 +79,6 @@ describe('Localization', () => {
           subject: 's1',
           predicate: 'p1',
           object: 'o1',
-          fragment: {
-            endpoint: 'e2',
-            virtualIndex: 2,
-            nbVirtuals: endpoints.length
-          },
           operator: {
             endpoint: 'e2',
             nbVirtuals: endpoints.length,
@@ -105,11 +90,6 @@ describe('Localization', () => {
           subject: 's1',
           predicate: 'p1',
           object: 'o1',
-          fragment: {
-            endpoint: 'e3',
-            virtualIndex: 3,
-            nbVirtuals: endpoints.length
-          },
           operator: {
             endpoint: 'e3',
             nbVirtuals: endpoints.length,
@@ -142,11 +122,6 @@ describe('Localization', () => {
               subject: 's1',
               predicate: 'p1',
               object: 'o1',
-              fragment: {
-                endpoint: 'e1',
-                virtualIndex: 1,
-                nbVirtuals: endpoints.length
-              },
               operator: {
                 endpoint: 'e1',
                 nbVirtuals: endpoints.length,
@@ -158,11 +133,6 @@ describe('Localization', () => {
               subject: 's1',
               predicate: 'p1',
               object: 'o1',
-              fragment: {
-                endpoint: 'e2',
-                virtualIndex: 2,
-                nbVirtuals: endpoints.length
-              },
               operator: {
                 endpoint: 'e2',
                 nbVirtuals: endpoints.length,
@@ -179,11 +149,6 @@ describe('Localization', () => {
               subject: 's2',
               predicate: 'p2',
               object: 'o2',
-              fragment: {
-                endpoint: 'e1',
-                virtualIndex: 1,
-                nbVirtuals: endpoints.length
-              },
               operator: {
                 endpoint: 'e1',
                 nbVirtuals: endpoints.length,
@@ -195,11 +160,6 @@ describe('Localization', () => {
               subject: 's2',
               predicate: 'p2',
               object: 'o2',
-              fragment: {
-                endpoint: 'e2',
-                virtualIndex: 2,
-                nbVirtuals: endpoints.length
-              },
               operator: {
                 endpoint: 'e2',
                 nbVirtuals: endpoints.length,
@@ -234,11 +194,6 @@ describe('Localization', () => {
               subject: 's1',
               predicate: 'p1',
               object: 'o1',
-              fragment: {
-                endpoint: 'e1',
-                virtualIndex: 1,
-                nbVirtuals: endpoints.length
-              },
               operator: {
                 endpoint: 'e1',
                 nbVirtuals: endpoints.length,
@@ -250,11 +205,6 @@ describe('Localization', () => {
               subject: 's1',
               predicate: 'p1',
               object: 'o1',
-              fragment: {
-                endpoint: 'e2',
-                virtualIndex: 2,
-                nbVirtuals: endpoints.length
-              },
               operator: {
                 endpoint: 'e2',
                 nbVirtuals: endpoints.length,
@@ -268,10 +218,6 @@ describe('Localization', () => {
           subject: 's2',
           predicate: 'p2',
           object: 'o2',
-          fragment: {
-            endpoints: [ 'e1', 'e2' ],
-            peneloop: true,
-          },
           operator: {
             endpoints: [ 'e1', 'e2' ],
             type: 'peneloop'

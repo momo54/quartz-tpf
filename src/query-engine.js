@@ -29,7 +29,8 @@ const ldf = require('../Client.js/ldf-client.js');
 const Cache = require('lru-cache');
 const UnionStream = require('./union-stream.js');
 const _ = require('lodash');
-ldf.Logger.setLevel('DEBUG');
+// ldf.Logger.setLevel('DEBUG');
+ldf.Logger.setLevel('WARNING');
 
 const buildMultiUnion = (plan, ldfConfig) => {
   return plan.where[0].patterns.map(pattern => {

@@ -66,11 +66,6 @@ const localizeTriple = (triple, endpoints) => {
       endpoint: endpoints[0],
       virtualIndex: 1,
       nbVirtuals: 1
-    },
-    fragment: {
-      endpoint: endpoints[0],
-      virtualIndex: 1,
-      nbVirtuals: 1
     }
   }, triple);
 
@@ -79,11 +74,6 @@ const localizeTriple = (triple, endpoints) => {
     patterns: _.map(endpoints, (endpoint, i) => _.merge({
       operator: {
         type: 'vtp',
-        endpoint,
-        virtualIndex: i + 1,
-        nbVirtuals: endpoints.length
-      },
-      fragment: {
         endpoint,
         virtualIndex: i + 1,
         nbVirtuals: endpoints.length
@@ -126,10 +116,6 @@ const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = -1, usePeneloop
       triples = localized.concat(triples.slice(limit).map(tp => _.merge({
         operator: {
           type: (usePeneloop ? 'peneloop' : 'classic'),
-          endpoints
-        },
-        fragment: {
-          peneloop: usePeneloop,
           endpoints
         }
       }, tp)));
