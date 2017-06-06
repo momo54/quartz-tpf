@@ -39,6 +39,7 @@ program
   .option('-l, --limit <limit>', 'limit the number of triples to localize per BGP in the query (default to 1)', 1)
   .option('-t, --type <mime-type>', 'determines the MIME type of the output (e.g., application/json)', 'application/json')
   .option('-m, --measure <output>', 'measure the query execution time (in seconds) & append it to a file', './execution_times.csv')
+  .option('-s, --silent', 'measure the query execution time (in seconds) & append it to a file', false)
   .parse(process.argv);
 
 // fetch the model
@@ -74,11 +75,12 @@ sparqlIterator.on('error', error => {
   process.stderr.write('ERROR: An error occurred during query execution.\n');
   process.stderr.write(error.stack);
 });
-sparqlIterator.on('end', () => {
-  const endTime = Date.now();
-  const time = endTime - startTime;
-  fs.appendFileSync(program.measure, (time/1000) + '\n');
-});
-
+if (!program.silent) {
+  sparqlIterator.on('end', () => {
+    const endTime = Date.now();
+    const time = endTime - startTime;
+    fs.appendFileSync(program.measure, (time/1000) + '\n');
+  });
+}
 const startTime = Date.now();
 sparqlIterator.on('data', data => process.stdout.write(JSON.stringify(data) + '\n'));

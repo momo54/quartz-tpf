@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run the tpf client with the time in seconds printed in stderr
+# Run the tpf client while measuring the execution time
 
 FILE=$1
 OUTPUT=$2

@@ -37,8 +37,9 @@ class Model {
    * @param  {string[]} endpoints       - Set of TPF servers of the model
    * @param  {number[]} times           - Initial reponse times of each TPF server
    * @param  {Object[]} triplesPerPage  - Triples served per page per endpoint
+   * @param  {boolean}  [preCompute=true] - Wheter the model should be precompiled after creation or not
    */
-  constructor (endpoints, times, triplesPerPage) {
+  constructor (endpoints, times, triplesPerPage, preCompute = true) {
     this._endpoints = endpoints;
     this._times = _.zipObject(endpoints, times);
     this._triplesPerPage = Object.assign({}, triplesPerPage);
@@ -46,7 +47,26 @@ class Model {
     this._minWeight = Infinity;
     this._coefficients = {};
     this._sumCoefs = 0;
-    this.computeModel();
+    if (preCompute) this.computeModel();
+  }
+
+  /**
+   * Creates a new model from a JSON export
+   * @param  {object} json - A JSON representation of a model
+   * @return {Model} A new model created from the JSON export
+   */
+  static fromJSON (json) {
+    let model;
+    // try to deduce model version
+    if ('version' in json && json.version > 1) {
+      model = new Model(json.endpoints, json.times, json.triplesPerPage, true);
+    } else {
+      const endpoints = _.values(json.coefficients);
+      model = new Model(endpoints, _.times(endpoints.length, _.constant(0)), json.triplesPerPage, false);
+      model._coefficients = json.coefficients;
+      model._sumCoefs = json.sumCoefs;
+    }
+    return model;
   }
 
   /**

@@ -37,8 +37,8 @@ program
   .usage('<endpoint>')
   .option('-q, --query <query>', 'evaluates the given SPARQL query')
   .option('-f, --file <file>', 'evaluates the SPARQL query in the given file')
-  .option('-t, --type <mime-type>', 'determines the MIME type of the output (e.g., application/json)', 'application/json')
   .option('-m, --measure <output>', 'measure the query execution time (in seconds) & append it to a file', './execution_times_ref.csv')
+  .option('-s, --silent', 'measure the query execution time (in seconds) & append it to a file', false)
   .parse(process.argv);
 
 // check number of endpoints
@@ -68,10 +68,12 @@ iterator.on('error', error => {
   process.stderr.write('ERROR: An error occurred during query execution.\n');
   process.stderr.write(error.stack);
 });
-iterator.on('end', () => {
-  const endTime = Date.now();
-  const time = endTime - startTime;
-  fs.appendFileSync(program.measure, (time/1000) + '\n');
-});
+if (!program.silent) {
+  iterator.on('end', () => {
+    const endTime = Date.now();
+    const time = endTime - startTime;
+    fs.appendFileSync(program.measure, (time/1000) + '\n');
+  });
+}
 const startTime = Date.now();
 iterator.on('data', data => process.stdout.write(JSON.stringify(data) + '\n'));
