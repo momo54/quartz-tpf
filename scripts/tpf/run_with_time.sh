@@ -22,5 +22,5 @@ if [[ "$MODE" = "peneloop" ]]; then
 elif [[ "$MODE" = "quartz" ]]; then
   bin/tpf-client.js run models-local/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
 else
-  bin/tpf-client.js run models-local/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+  bin/tpf-client.js run models-local/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -p > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
 fi
