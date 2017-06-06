@@ -57,13 +57,12 @@ const buildService = (triple, endpoint, stats) => {
  * Perform localization of a triple pattern, i.e. if the relation is fragmented, creates an union with all fragments
  * @param  {Object} triple    - A triple pattern to localize
  * @param  {Object} endpoints - The endpoints used for localization
- * @param  {boolean} usePeneloop   - Use peneloop to process joins if set to True
  * @return {Object} The localized triple
  */
-const localizeTriple = (triple, endpoints, usePeneloop = true) => {
+const localizeTriple = (triple, endpoints) => {
   if (endpoints.length === 1) return _.merge({
     operator: {
-      type: (usePeneloop ? 'vtp+peneloop' : 'vtp'),
+      type: 'vtp',
       endpoint: endpoints[0],
       virtualIndex: 1,
       nbVirtuals: 1
@@ -79,7 +78,7 @@ const localizeTriple = (triple, endpoints, usePeneloop = true) => {
     type: 'union',
     patterns: _.map(endpoints, (endpoint, i) => _.merge({
       operator: {
-        type: (usePeneloop ? 'vtp+peneloop' : 'vtp'),
+        type: 'vtp',
         endpoint,
         virtualIndex: i + 1,
         nbVirtuals: endpoints.length
@@ -123,7 +122,7 @@ const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = -1, usePeneloop
   let triples = _.flattenDeep(sortPatterns(bgp.triples, cardinalities));
   if (cardinalities[JSON.stringify(triples[0])] > 1) {
     if (limit > 0) {
-      const localized = triples.slice(0, limit).map(tp => localizeTriple(tp, endpoints, usePeneloop));
+      const localized = triples.slice(0, limit).map(tp => localizeTriple(tp, endpoints));
       triples = localized.concat(triples.slice(limit).map(tp => _.merge({
         operator: {
           type: (usePeneloop ? 'peneloop' : 'classic'),
@@ -135,7 +134,7 @@ const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = -1, usePeneloop
         }
       }, tp)));
     } else if (limit === -1) {
-      triples = triples.map(tp => localizeTriple(tp, endpoints, usePeneloop));
+      triples = triples.map(tp => localizeTriple(tp, endpoints));
     }
   }
   return {

@@ -51,7 +51,7 @@ describe('Localization', () => {
       operator: {
         endpoint: 'e1',
         nbVirtuals: 1,
-        type: 'vtp+peneloop',
+        type: 'vtp',
         virtualIndex: 1
       }
     };
@@ -81,7 +81,7 @@ describe('Localization', () => {
           operator: {
             endpoint: 'e1',
             nbVirtuals: endpoints.length,
-            type: 'vtp+peneloop',
+            type: 'vtp',
             virtualIndex: 1
           }
         },
@@ -97,7 +97,7 @@ describe('Localization', () => {
           operator: {
             endpoint: 'e2',
             nbVirtuals: endpoints.length,
-            type: 'vtp+peneloop',
+            type: 'vtp',
             virtualIndex: 2
           }
         },
@@ -113,7 +113,7 @@ describe('Localization', () => {
           operator: {
             endpoint: 'e3',
             nbVirtuals: endpoints.length,
-            type: 'vtp+peneloop',
+            type: 'vtp',
             virtualIndex: 3
           }
         }
@@ -150,7 +150,7 @@ describe('Localization', () => {
               operator: {
                 endpoint: 'e1',
                 nbVirtuals: endpoints.length,
-                type: 'vtp+peneloop',
+                type: 'vtp',
                 virtualIndex: 1
               }
             },
@@ -166,7 +166,7 @@ describe('Localization', () => {
               operator: {
                 endpoint: 'e2',
                 nbVirtuals: endpoints.length,
-                type: 'vtp+peneloop',
+                type: 'vtp',
                 virtualIndex: 2
               }
             }
@@ -187,7 +187,7 @@ describe('Localization', () => {
               operator: {
                 endpoint: 'e1',
                 nbVirtuals: endpoints.length,
-                type: 'vtp+peneloop',
+                type: 'vtp',
                 virtualIndex: 1
               }
             },
@@ -203,7 +203,7 @@ describe('Localization', () => {
               operator: {
                 endpoint: 'e2',
                 nbVirtuals: endpoints.length,
-                type: 'vtp+peneloop',
+                type: 'vtp',
                 virtualIndex: 2
               }
             }
@@ -242,7 +242,7 @@ describe('Localization', () => {
               operator: {
                 endpoint: 'e1',
                 nbVirtuals: endpoints.length,
-                type: 'vtp+peneloop',
+                type: 'vtp',
                 virtualIndex: 1
               }
             },
@@ -258,7 +258,7 @@ describe('Localization', () => {
               operator: {
                 endpoint: 'e2',
                 nbVirtuals: endpoints.length,
-                type: 'vtp+peneloop',
+                type: 'vtp',
                 virtualIndex: 2
               }
             }
