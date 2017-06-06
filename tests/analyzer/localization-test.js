@@ -27,6 +27,10 @@ SOFTWARE.
 require('chai').should();
 const localization = require('../../src/analyzer/localization.js');
 
+const cardinalities = {};
+cardinalities[JSON.stringify({ subject: 's1', predicate: 'p1', object: 'o1'})] = 10;
+cardinalities[JSON.stringify({ subject: 's2', predicate: 'p2', object: 'o2'})] = 10;
+
 describe('Localization', () => {
   it('should localize a triple pattern with only one endpoint', () => {
     const endpoints = [ 'e1' ];
@@ -43,6 +47,12 @@ describe('Localization', () => {
         endpoint: 'e1',
         virtualIndex: 1,
         nbVirtuals: endpoints.length
+      },
+      operator: {
+        endpoint: 'e1',
+        nbVirtuals: 1,
+        type: 'vtp+peneloop',
+        virtualIndex: 1
       }
     };
 
@@ -67,6 +77,12 @@ describe('Localization', () => {
             endpoint: 'e1',
             virtualIndex: 1,
             nbVirtuals: endpoints.length
+          },
+          operator: {
+            endpoint: 'e1',
+            nbVirtuals: endpoints.length,
+            type: 'vtp+peneloop',
+            virtualIndex: 1
           }
         },
         {
@@ -77,6 +93,12 @@ describe('Localization', () => {
             endpoint: 'e2',
             virtualIndex: 2,
             nbVirtuals: endpoints.length
+          },
+          operator: {
+            endpoint: 'e2',
+            nbVirtuals: endpoints.length,
+            type: 'vtp+peneloop',
+            virtualIndex: 2
           }
         },
         {
@@ -87,6 +109,12 @@ describe('Localization', () => {
             endpoint: 'e3',
             virtualIndex: 3,
             nbVirtuals: endpoints.length
+          },
+          operator: {
+            endpoint: 'e3',
+            nbVirtuals: endpoints.length,
+            type: 'vtp+peneloop',
+            virtualIndex: 3
           }
         }
       ]
@@ -118,6 +146,12 @@ describe('Localization', () => {
                 endpoint: 'e1',
                 virtualIndex: 1,
                 nbVirtuals: endpoints.length
+              },
+              operator: {
+                endpoint: 'e1',
+                nbVirtuals: endpoints.length,
+                type: 'vtp+peneloop',
+                virtualIndex: 1
               }
             },
             {
@@ -128,6 +162,12 @@ describe('Localization', () => {
                 endpoint: 'e2',
                 virtualIndex: 2,
                 nbVirtuals: endpoints.length
+              },
+              operator: {
+                endpoint: 'e2',
+                nbVirtuals: endpoints.length,
+                type: 'vtp+peneloop',
+                virtualIndex: 2
               }
             }
           ]
@@ -143,6 +183,12 @@ describe('Localization', () => {
                 endpoint: 'e1',
                 virtualIndex: 1,
                 nbVirtuals: endpoints.length
+              },
+              operator: {
+                endpoint: 'e1',
+                nbVirtuals: endpoints.length,
+                type: 'vtp+peneloop',
+                virtualIndex: 1
               }
             },
             {
@@ -153,13 +199,19 @@ describe('Localization', () => {
                 endpoint: 'e2',
                 virtualIndex: 2,
                 nbVirtuals: endpoints.length
+              },
+              operator: {
+                endpoint: 'e2',
+                nbVirtuals: endpoints.length,
+                type: 'vtp+peneloop',
+                virtualIndex: 2
               }
             }
           ]
         }
       ]
     };
-    localization.localizeBGP(bgp, endpoints).should.deep.equal(expected);
+    localization.localizeBGP(bgp, endpoints, cardinalities).should.deep.equal(expected);
   });
 
   it('should localize a BGP with a limit', () => {
@@ -186,6 +238,12 @@ describe('Localization', () => {
                 endpoint: 'e1',
                 virtualIndex: 1,
                 nbVirtuals: endpoints.length
+              },
+              operator: {
+                endpoint: 'e1',
+                nbVirtuals: endpoints.length,
+                type: 'vtp+peneloop',
+                virtualIndex: 1
               }
             },
             {
@@ -196,6 +254,12 @@ describe('Localization', () => {
                 endpoint: 'e2',
                 virtualIndex: 2,
                 nbVirtuals: endpoints.length
+              },
+              operator: {
+                endpoint: 'e2',
+                nbVirtuals: endpoints.length,
+                type: 'vtp+peneloop',
+                virtualIndex: 2
               }
             }
           ]
@@ -204,10 +268,17 @@ describe('Localization', () => {
           subject: 's2',
           predicate: 'p2',
           object: 'o2',
-          unlocalized: true
+          fragment: {
+            endpoints: [ 'e1', 'e2' ],
+            peneloop: true,
+          },
+          operator: {
+            endpoints: [ 'e1', 'e2' ],
+            type: 'peneloop'
+          }
         }
       ]
     };
-    localization.localizeBGP(bgp, endpoints, {}, 1).should.deep.equal(expected);
+    localization.localizeBGP(bgp, endpoints, cardinalities, 1).should.deep.equal(expected);
   });
 });

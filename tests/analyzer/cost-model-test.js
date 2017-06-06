@@ -25,13 +25,14 @@ SOFTWARE.
 'use strict';
 
 require('chai').should();
-const computeModel = require('../../src/analyzer/cost-model.js');
+const computeModel = require('../../src/model/cost-model.js');
 
 describe('Cost Model', () => {
   it('should compute the cost model given endpoints and their reponse times', () => {
     const endpoints = [ 'a', 'b', 'c' ];
     const times = [ 10, 5, 1 ];
     const expected = {
+      endpoints,
       coefficients: {
         a: 1,
         b: 2,
