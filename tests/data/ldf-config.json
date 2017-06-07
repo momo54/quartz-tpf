@@ -1,0 +1,11 @@
+{
+  "title": "My Linked Data Fragments server",
+  "datasources": {
+    "books": {
+      "title": "Some Books",
+      "type": "HdtDatasource",
+      "description": "Some books for science (& Harry Potter too)",
+      "settings": { "file": "./books.hdt" }
+    }
+  }
+}

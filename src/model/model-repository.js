@@ -25,8 +25,10 @@ SOFTWARE.
 'use strict';
 
 const http = require('http');
-const computeModel = require('./cost-model.js');
+// const computeModel = require('./cost-model.js');
+const Model = require('./model.js');
 const Cache = require('lru-cache');
+const SparqlParser = require('sparqljs').Parser;
 const _ = require('lodash');
 
 /**
@@ -59,11 +61,12 @@ class ModelRepository {
    * @param  {FragmentsClient} fragmentClient - Fragment client used to measure cardinalities
    * @param  {Object} options - Options used to build the repository
    */
-  constructor (fragmentClient, options) {
+  constructor (fragmentClient, options = {}) {
     this._fClient = fragmentClient;
     this._modelCache = options.modelCache || new Cache({ max: 500 });
     this._metadataCache = options.metaCache || new Cache({ max: 500 });
     this._bias = new Map();
+    this._parser = new SparqlParser();
   }
 
   /**
@@ -71,7 +74,7 @@ class ModelRepository {
    * @return {Boolean} True if the models have bias
    */
   get hasBias () {
-    return this._bias.size() > 0;
+    return this._bias.size > 0;
   }
 
   /**
@@ -117,27 +120,27 @@ class ModelRepository {
 
   /**
    * Compute a model for a query and a set of TPF servers
-   * @param  {Object} query       - A query, normalized in the format of sparql.js
-   * @param  {string[]} endpoints - A set of TPF servers
-   * @param  {int} triplesPerPage - The number of triple patterns per page (default to 100)
+   * @param  {Object} query             - A query, normalized in the format of sparql.js
+   * @param  {string[]} endpoints       - A set of TPF servers
+   * @param  {Object[]} triplesPerPage  - The number of triple patterns per page (default to 100) per server
    * @return {Promise} A promise fullfilled with the computed {@link Model}
    */
-  getModel (query, endpoints, triplesPerPage = 100) {
-    const cacheKey = `q=${JSON.stringify(query)}&${endpoints.sort().join('&')}`;
+  getModel (query, endpoints, triplesPerPage = {}) {
+    const cacheKey = Model.genID(query, endpoints);
     const cachedModel = this._modelCache.get(cacheKey);
     if (cachedModel !== undefined) {
       return Promise.resolve(cachedModel);
     }
     let latencies = [];
-    return Promise.all(endpoints.map(this.measureResponseTime))
+    return Promise.all(endpoints.map(e => this.measureResponseTime(e)))
     .then(times => {
       latencies = times.slice(0);
-      return Promise.all(extractTriples(query).map(this.measureCardinality));
+      return Promise.all(extractTriples(this._parser.parse(query)).map(t => this.measureCardinality(t)));
     })
     .then(cardinalities => {
       const nbTriples = _.fromPairs(cardinalities);
-      let model = computeModel(endpoints, latencies, {nbTriples, triplesPerPage: triplesPerPage});
-      model.id = cacheKey;
+      // let model = computeModel(endpoints, latencies, {nbTriples, triplesPerPage: 100});
+      let model = new Model(query, endpoints, latencies, nbTriples, triplesPerPage);
       if (this.hasBias) {
         model = this._applyBias(model);
         model.sumCoefs = _.keys(model.coefficients).reduce((acc, c) => acc + c, 0);

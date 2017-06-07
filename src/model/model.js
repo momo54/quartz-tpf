@@ -24,6 +24,7 @@ SOFTWARE.
 
 'use strict';
 
+const formulas = require('./formulas.js');
 const _ = require('lodash');
 
 const VERSION_ID = 2;
@@ -44,7 +45,7 @@ class Model {
    * @param  {boolean}  [preCompute=true] - Wheter the model should be precompiled after creation or not
    */
   constructor (query, endpoints, times, cardinalities, triplesPerPage, preCompute = true) {
-    this.id = `q=${JSON.stringify(query)}&${endpoints.sort().join('&')}`;
+    this.id = Model.genID(query, endpoints);
     this._query = query;
     this._endpoints = endpoints;
     this._times = _.zipObject(endpoints, times);
@@ -58,6 +59,16 @@ class Model {
   }
 
   /**
+   * Generate an unique model ID
+   * @param  {string}   query      - The query related to this model
+   * @param  {string[]} endpoints  - Set of TPF servers of the model
+   * @return {string} The unique model ID
+   */
+  static genID (query, endpoints) {
+    return `https://callidon.github.io/quartz-tpf/model&q=${JSON.stringify(query)}&e={${endpoints.sort().join(';')}}`;
+  }
+
+  /**
    * Creates a new model from a JSON export
    * @param  {object} json - A JSON representation of a model
    * @return {Model} A new model created from the JSON export
@@ -65,8 +76,9 @@ class Model {
   static fromJSON (json) {
     let model;
     // try to deduce model version
-    if ('version' in json && json.version > 1) {
-      model = new Model(json.query, json.endpoints, json.times, json.cardinalities, json.triplesPerPage, true);
+    if ('version' in json && json.version === VERSION_ID) {
+      model = new Model(json['qtz:query'], json['qtz:endpoints'], json['qtz:times'], json['qtz:cardinalities'], json['hydra:itemsPerPage'], true);
+      model.id = json['@id'];
     } else {
       const endpoints = _.values(json.coefficients);
       model = new Model(json.query, endpoints, _.times(endpoints.length, _.constant(0)), json.cardinalities, json.triplesPerPage, false);
@@ -77,23 +89,26 @@ class Model {
   }
 
   /**
-   * Export the model to JSON format.
-   * Use a pseudo JSON-LD format to semantify the exported model.
-   * @return {Object} The model in JSON format
+   * Export the model to a pseudo JSON-LD format.
+   * @return {Object} The model in JSON-LD format
    */
   toJSON () {
     return {
-      prefixes: {
+      '@context': {
+        qtz: 'http://purl.org/quartz/terms/',
         dc: 'http://purl.org/dc/terms/',
-        prov: 'http://www.w3.org/ns/prov#'
+        prov: 'http://www.w3.org/ns/prov#',
+        hydra: 'http://www.w3.org/ns/hydra/core#',
+        void: 'http://rdfs.org/ns/void#'
       },
-      'dc:identifier': this.id,
+      '@id': this.id,
+      '@type': 'qtz:Model',
       'dc:hasVersion': VERSION_ID,
-      query: this._query,
-      endpoints: this._endpoints,
-      times: this._times,
-      cardinalities: this._cardinalities,
-      triplesPerPage: this._triplesPerPage,
+      'qtz:query': this._query,
+      'qtz:endpoints': this._endpoints,
+      'qtz:times': this._times,
+      'qtz:cardinalities': this._cardinalities,
+      'hydra:itemsPerPage': this._triplesPerPage,
       'prov:generatedAtTime': new Date().toISOString()
     };
   }
@@ -139,6 +154,17 @@ class Model {
     this._sumCoefs = _.values(this._coefficients).reduce((acc, x) => acc + x, 0);
   }
 
+  /**
+   * Compute offset, limit and first page values for a given virtual triple pattern
+   * @param  {int} totalTriples   - The cardinality of this triple pattern
+   * @param  {int} triplesPerPage - Triples served per page
+   * @param  {int} virtualIndex   - The index of the virtual fragment
+   * @param  {int} sumCoefs       - The sum of all coefficients of the cost model
+   * @return {Object} The corresponding virtual triple pattern
+   */
+  computeVTP (totalTriples, triplesPerPage, virtualIndex) {
+    return formulas.computeVTP(totalTriples, triplesPerPage, virtualIndex, this._endpoints.length, _.values(this._coefficients), this._sumCoefs);
+  }
 }
 
 module.exports = Model;

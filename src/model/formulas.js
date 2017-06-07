@@ -53,16 +53,16 @@ const computeOffset = (totalTriples, index, nbVirtuals, coef, sumCoefs) => {
 };
 
 /**
- * Compute offset, limit and first page values ofr a given virtual triple pattern fragment
- * @param  {int} totalTriples - The cardinality of this triple pattern
- * @param  {[type]} triplesPerPage [description]
- * @param  {[type]} virtualIndex   [description]
- * @param  {[type]} nbVirtuals     [description]
- * @param  {[type]} coef           [description]
- * @param  {[type]} sumCoefs       [description]
- * @return {Object}                [description]
+ * Compute offset, limit and first page values for a given virtual triple pattern
+ * @param  {int} totalTriples   - The cardinality of this triple pattern
+ * @param  {int} triplesPerPage - Triples served per page
+ * @param  {int} virtualIndex   - The index of the virtual fragment
+ * @param  {int} nbVirtuals     - The total number of virtual fragments
+ * @param  {int} coef           - The coefficient form the cost model associated with this fragment
+ * @param  {int} sumCoefs       - The sum of all coefficients of the cost model
+ * @return {Object} The corresponding virtual triple pattern
  */
-const computeVTPF = (totalTriples, triplesPerPage, virtualIndex, nbVirtuals, coef, sumCoefs) => {
+const computeVTP = (totalTriples, triplesPerPage, virtualIndex, nbVirtuals, coef, sumCoefs) => {
   const o = computeOffset(totalTriples, virtualIndex, nbVirtuals, coef, sumCoefs);
   const firstPage = Math.trunc(o / triplesPerPage) + 1;
   let offset = 0;
@@ -81,5 +81,5 @@ const computeVTPF = (totalTriples, triplesPerPage, virtualIndex, nbVirtuals, coe
 module.exports = {
   computeLimit,
   computeOffset,
-  computeVTPF
+  computeVTP
 };

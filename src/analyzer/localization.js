@@ -24,7 +24,7 @@ SOFTWARE.
 
 'use strict';
 
-const formulas = require('./formulas.js');
+const formulas = require('../model/formulas.js');
 const sortPatterns = require('./join-ordering.js');
 const _ = require('lodash');
 

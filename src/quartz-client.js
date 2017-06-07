@@ -1,4 +1,4 @@
-/* file : query-engine.js
+/* file : quartz-client.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
