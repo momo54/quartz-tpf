@@ -30,6 +30,7 @@ const ldf = require('../Client.js/ldf-client.js');
 const UnionStream = require('./union-stream.js');
 const Cache = require('lru-cache');
 const _ = require('lodash');
+const prefixes = require('./prefixes.json'); // some very common prefixes
 // ldf.Logger.setLevel('DEBUG');
 ldf.Logger.setLevel('WARNING');
 
@@ -63,7 +64,7 @@ class QuartzClient {
   buildPlan (query, endpoints, options) {
     return this._modelRepo.getModel(query, endpoints, options.triplesPerPage)
     .then(model => {
-      const plan = processor(query, endpoints, model.nbTriples, options.locLimit || 1, options.usePeneloop || true, options.prefixes || {});
+      const plan = processor(query, endpoints, model.nbTriples, options.locLimit || 1, options.usePeneloop || true, _.merge(options.prefixes, prefixes));
       return Promise.resolve(_.merge({ modelID: model.id }, plan));
     });
   }
@@ -72,16 +73,18 @@ class QuartzClient {
    * Execute a query execution plan
    * @param  {Object}  queryPlan        - The query execution plan
    * @param  {Boolean} [asPromise=true] - True to return a Promise, False to return a classic LDF SparqlIterator
-   * @param  {Object}  [config={}]      - Optional base configuration to build FragmentsClients
+   * @param  {Object}  config           - Optional base configuration to build FragmentsClients
    * @return {Promise|SparqlIterator} A Promise fullfilled with the complete results or a LDF SparqlIterator for on-demand results
    */
-  executePlan (queryPlan, asPromise = true, config = {}) {
+  executePlan (queryPlan, asPromise = true, config = { prefixes }) {
     let iterator;
     const model = this._modelRepo.getCachedModel(queryPlan.modelId);
+    if (model === undefined) throw new Error('Cannot find the compiled model associated with the query.');
+    
     config.sharedCache = new Cache({ max: 5000 });
     const defaultClient = new ldf.FragmentsClient(model._endpoints[0], config);
     // important: main cache must not be shared with the default client!
-    config.mainCache = new Cache({ max: 1 });
+    config.mainCache = new Cache({ max: 100 });
     const virtualClients = {};
     model._endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));
     const ldfConfig = {
@@ -107,10 +110,10 @@ class QuartzClient {
    * Execute a query
    * @param  {string} query             - The query to execute
    * @param  {string[]} endpoints       - Set of TPF servers used to execute the query
-   * @param  {Object}  [config={}]      - Optional base configuration to build FragmentsClients
+   * @param  {Object}  config           - Optional base configuration to build FragmentsClients
    * @return {Promise} A Promise fullfilled with the complete results
    */
-  execute (query, endpoints, config = {}) {
+  execute (query, endpoints, config = { prefixes }) {
     return this.buildPlan(query, endpoints).then(plan => this.executePlan(plan, true, config));
   }
 }

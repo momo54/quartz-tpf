@@ -99,6 +99,7 @@ class ModelRepository {
 
   /**
    * Apply biais on a model
+   * @private
    * @param  {Object} model - The model on which bias must be applied
    * @return {Object} The modified model
    */

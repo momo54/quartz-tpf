@@ -26,6 +26,7 @@ SOFTWARE.
 
 require('chai').should();
 const ldf = require('../../Client.js/ldf-client.js');
+const Model = require('../../src/model/model.js');
 const ModelRepository = require('../../src/model/model-repository.js');
 ldf.Logger.setLevel('WARNING');
 
@@ -38,6 +39,7 @@ describe('ModelRepository', () => {
     const endpoints = [ 'http://localhost:5000/books', 'http://localhost:5000/books' ];
     repo.getModel(query, endpoints, triplesPerPage)
     .then(model => {
+      model.id.should.equal(Model.genID(query, endpoints));
       model._query.should.equals(query);
       model._endpoints.should.equals(endpoints);
       model._cardinalities.should.deep.equals({
