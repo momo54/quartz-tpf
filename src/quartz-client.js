@@ -61,10 +61,11 @@ class QuartzClient {
    * @return {Object} The query execution plan for the given query and endpoints
    */
   buildPlan (query, endpoints, options) {
-    const model = options.model || this._modelRepo.getModel(query, endpoints, options.triplesPerPage);
-    const plan = processor(query, endpoints, model.nbTriples, options.locLimit || 1, options.usePeneloop || true, options.prefixes || {});
-    plan.modelId = model.id;
-    return plan;
+    return this._modelRepo.getModel(query, endpoints, options.triplesPerPage)
+    .then(model => {
+      const plan = processor(query, endpoints, model.nbTriples, options.locLimit || 1, options.usePeneloop || true, options.prefixes || {});
+      return Promise.resolve(_.merge({ modelID: model.id }, plan));
+    });
   }
 
   /**
@@ -72,7 +73,7 @@ class QuartzClient {
    * @param  {Object}  queryPlan        - The query execution plan
    * @param  {Boolean} [asPromise=true] - True to return a Promise, False to return a classic LDF SparqlIterator
    * @param  {Object}  [config={}]      - Optional base configuration to build FragmentsClients
-   * @return {Promise|SparqlIterator}   - A Promise fullfilled with the complete results or a LDF SparqlIterator for on-demand results
+   * @return {Promise|SparqlIterator} A Promise fullfilled with the complete results or a LDF SparqlIterator for on-demand results
    */
   executePlan (queryPlan, asPromise = true, config = {}) {
     let iterator;
@@ -106,12 +107,11 @@ class QuartzClient {
    * Execute a query
    * @param  {string} query             - The query to execute
    * @param  {string[]} endpoints       - Set of TPF servers used to execute the query
-   * @param  {Boolean} [asPromise=true] - True to return a Promise, False to return a classic LDF SparqlIterator
    * @param  {Object}  [config={}]      - Optional base configuration to build FragmentsClients
-   * @return {Promise|SparqlIterator}   - A Promise fullfilled with the complete results or a LDF SparqlIterator for on-demand results
+   * @return {Promise} A Promise fullfilled with the complete results
    */
-  execute (query, endpoints, asPromise = true, config = {}) {
-    return this.executePlan(this.buildPlan(query, endpoints), asPromise, config);
+  execute (query, endpoints, config = {}) {
+    return this.buildPlan(query, endpoints).then(plan => this.executePlan(plan, true, config));
   }
 }
 
