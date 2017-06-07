@@ -12,9 +12,10 @@ if [ "$#" -ne 3 ]; then
 fi
 
 RESULTS=`basename $FILE`
-# SERVER="http://localhost:8000/watDiv_100"
-SERVER="http://52.39.116.115/watDiv_100"
+SERVER="http://localhost:8000/watDiv_100"
+# SERVER="http://52.39.116.115/watDiv_100"
 pids=()
+echo -n "$NBCLIENTS," >> $OUTPUT/execution_times.csv
 
 # tell eventual proxies to move to the next query
 # GET http://localhost:8000/move-to-query?name=$RESULTS
@@ -27,7 +28,7 @@ do
   pids+=($!)
 done
 
-./scripts/tpf/run_with_time_ref.sh $FILE $OUTPUT
+bin/reference.js $SERVER -f $FILE -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS-$NBCLIENTS 2> $OUTPUT/errors/$RESULTS-$NBCLIENTS
 
 # kill remainings pids
 kill -9 ${pids[@]} > /dev/null 2> /dev/null

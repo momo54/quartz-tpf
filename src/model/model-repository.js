@@ -107,6 +107,15 @@ class ModelRepository {
   }
 
   /**
+   * Fetch a cached model from the repository
+   * @param  {string} key - The model key
+   * @return {Model|undefined} The model from the cache, or undefined if not found
+   */
+  getCachedModel (key) {
+    return this._modelCache.get(key);
+  }
+
+  /**
    * Compute a model for a query and a set of TPF servers
    * @param  {Object} query       - A query, normalized in the format of sparql.js
    * @param  {string[]} endpoints - A set of TPF servers
@@ -123,11 +132,12 @@ class ModelRepository {
     return Promise.all(endpoints.map(this.measureResponseTime))
     .then(times => {
       latencies = times.slice(0);
-      return Promise.all(extractTriples(query).map(this.findCardinality));
+      return Promise.all(extractTriples(query).map(this.measureCardinality));
     })
     .then(cardinalities => {
       const nbTriples = _.fromPairs(cardinalities);
       let model = computeModel(endpoints, latencies, {nbTriples, triplesPerPage: triplesPerPage});
+      model.id = cacheKey;
       if (this.hasBias) {
         model = this._applyBias(model);
         model.sumCoefs = _.keys(model.coefficients).reduce((acc, c) => acc + c, 0);

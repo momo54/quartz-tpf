@@ -26,6 +26,8 @@ SOFTWARE.
 
 const _ = require('lodash');
 
+const VERSION_ID = 2;
+
 /**
  * Model represents an instance produced by the cost model.
  * It can be accessed, updated and recomputed during execution.
@@ -34,14 +36,19 @@ const _ = require('lodash');
 class Model {
   /**
    * Constructor
+   * @param  {string}   query           - The query related to this model
    * @param  {string[]} endpoints       - Set of TPF servers of the model
    * @param  {number[]} times           - Initial reponse times of each TPF server
+   * @param  {Object[]} cardinalities   - The cardinalities of each triple pattern in the query
    * @param  {Object[]} triplesPerPage  - Triples served per page per endpoint
    * @param  {boolean}  [preCompute=true] - Wheter the model should be precompiled after creation or not
    */
-  constructor (endpoints, times, triplesPerPage, preCompute = true) {
+  constructor (query, endpoints, times, cardinalities, triplesPerPage, preCompute = true) {
+    this.id = `q=${JSON.stringify(query)}&${endpoints.sort().join('&')}`;
+    this._query = query;
     this._endpoints = endpoints;
     this._times = _.zipObject(endpoints, times);
+    this._cardinalities = cardinalities;
     this._triplesPerPage = Object.assign({}, triplesPerPage);
     this._weights = {};
     this._minWeight = Infinity;
@@ -59,14 +66,36 @@ class Model {
     let model;
     // try to deduce model version
     if ('version' in json && json.version > 1) {
-      model = new Model(json.endpoints, json.times, json.triplesPerPage, true);
+      model = new Model(json.query, json.endpoints, json.times, json.cardinalities, json.triplesPerPage, true);
     } else {
       const endpoints = _.values(json.coefficients);
-      model = new Model(endpoints, _.times(endpoints.length, _.constant(0)), json.triplesPerPage, false);
+      model = new Model(json.query, endpoints, _.times(endpoints.length, _.constant(0)), json.cardinalities, json.triplesPerPage, false);
       model._coefficients = json.coefficients;
       model._sumCoefs = json.sumCoefs;
     }
     return model;
+  }
+
+  /**
+   * Export the model to JSON format.
+   * Use a pseudo JSON-LD format to semantify the exported model.
+   * @return {Object} The model in JSON format
+   */
+  toJSON () {
+    return {
+      prefixes: {
+        dc: 'http://purl.org/dc/terms/',
+        prov: 'http://www.w3.org/ns/prov#'
+      },
+      'dc:identifier': this.id,
+      'dc:hasVersion': VERSION_ID,
+      query: this._query,
+      endpoints: this._endpoints,
+      times: this._times,
+      cardinalities: this._cardinalities,
+      triplesPerPage: this._triplesPerPage,
+      'prov:generatedAtTime': new Date().toISOString()
+    };
   }
 
   /**

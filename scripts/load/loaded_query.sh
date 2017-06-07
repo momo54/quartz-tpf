@@ -15,6 +15,8 @@ fi
 RESULTS=`basename $FILE`
 pids=()
 
+echo -n "$NBCLIENTS," >> $OUTPUT/execution_times.csv
+
 # tell eventual proxies to move to the next query
 # GET http://localhost:8000/move-to-query?name=$RESULTS
 # GET http://localhost:8001/move-to-query?name=$RESULTS
@@ -32,7 +34,14 @@ do
   pids+=($!)
 done
 
-./scripts/tpf/run_with_time.sh $FILE $OUTPUT $MODE
+# ./scripts/tpf/run_with_time.sh $FILE $OUTPUT $MODE
+if [[ "$MODE" = "peneloop" ]]; then
+  bin/tpf-client.js run models-local/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -l 0 -p > $OUTPUT/results/$RESULTS-$NBCLIENTS 2> $OUTPUT/errors/$RESULTS-$NBCLIENTS
+elif [[ "$MODE" = "quartz" ]]; then
+  bin/tpf-client.js run models-local/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS-$NBCLIENTS 2> $OUTPUT/errors/$RESULTS-$NBCLIENTS
+else
+  bin/tpf-client.js run models-local/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -p > $OUTPUT/results/$RESULTS-$NBCLIENTS 2> $OUTPUT/errors/$RESULTS
+fi
 
 # kill remainings pids
 kill -9 ${pids[@]} > /dev/null 2> /dev/null
