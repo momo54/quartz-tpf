@@ -32,12 +32,11 @@ ldf.Logger.setLevel('WARNING');
 
 describe('ModelRepository', () => {
   const client = new ldf.FragmentsClient('http://localhost:5000/books');
-  const triplesPerPage = { 'http://localhost:5000/books': 100 };
   it('should compute a model for a query and a set of TPF servers', done => {
     const repo = new ModelRepository(client);
     const query = 'select * where { ?s ?p ?o .}';
     const endpoints = [ 'http://localhost:5000/books', 'http://localhost:5000/books' ];
-    repo.getModel(query, endpoints, triplesPerPage)
+    repo.getModel(query, endpoints)
     .then(model => {
       model.id.should.equal(Model.genID(query, endpoints));
       model._query.should.equals(query);
@@ -45,9 +44,7 @@ describe('ModelRepository', () => {
       model._cardinalities.should.deep.equals({
         '{"subject":"?s","predicate":"?p","object":"?o"}': 17
       });
-      model._coefficients.should.deep.equal({
-        'http://localhost:5000/books': 1
-      });
+      model.getCoefficient('http://localhost:5000/books').should.equal(1);
       model._sumCoefs.should.equals(1);
       done();
     })

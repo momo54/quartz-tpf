@@ -29,6 +29,7 @@ const http = require('http');
 const Model = require('./model.js');
 const Cache = require('lru-cache');
 const SparqlParser = require('sparqljs').Parser;
+const URL = require('url').URL;
 const _ = require('lodash');
 
 /**
@@ -123,20 +124,21 @@ class ModelRepository {
    * Compute a model for a query and a set of TPF servers
    * @param  {Object} query             - A query, normalized in the format of sparql.js
    * @param  {string[]} endpoints       - A set of TPF servers
-   * @param  {Object[]} triplesPerPage  - The number of triple patterns per page (default to 100) per server
    * @return {Promise} A promise fullfilled with the computed {@link Model}
    */
-  getModel (query, endpoints, triplesPerPage = {}) {
+  getModel (query, endpoints) {
     const cacheKey = Model.genID(query, endpoints);
     const cachedModel = this._modelCache.get(cacheKey);
     if (cachedModel !== undefined) {
       return Promise.resolve(cachedModel);
     }
     let latencies = [];
-    return Promise.all(endpoints.map(e => this.measureResponseTime(e)))
-    .then(times => {
-      latencies = times.slice(0);
-      return Promise.all(extractTriples(this._parser.parse(query)).map(t => this.measureCardinality(t)));
+    let triplesPerPage = {};
+    return Promise.all(endpoints.map(e => this._measureResponseTime(e)))
+    .then(timesAndTriples => {
+      latencies = timesAndTriples.map(v => v[0]);
+      triplesPerPage = _.zipObject(endpoints, timesAndTriples.map(v => v[1]));
+      return Promise.all(extractTriples(this._parser.parse(query)).map(t => this._measureCardinality(t)));
     })
     .then(cardinalities => {
       const nbTriples = _.fromPairs(cardinalities);
@@ -152,20 +154,32 @@ class ModelRepository {
   }
 
   /**
-   * Measure the reponse time of a TPF server
+   * Measure the reponse time and the number of triples served per page of a TPF server
    * @param  {string} url - The url of the TPF server
-   * @return {Promise} A Promise fullfilled with the reponse time of the TPF server (in milliseconds)
+   * @return {Promise} A Promise fullfilled with a tuple (reponse time, triples per page) of the TPF server (time in milliseconds)
    */
-  measureResponseTime (url) {
+  _measureResponseTime (url) {
     return new Promise((resolve, reject) => {
       const startTime = Date.now();
-      http.get(url, res => {
+      let triplesPerPage = 100; // default value for most TPF server
+      const newUrl = new URL(url);
+      const httpOptions = {
+        hostname: newUrl.hostname,
+        port: newUrl.port,
+        path: newUrl.path,
+        headers: {
+          accept: 'text/turtle'
+        }
+      };
+      http.get(httpOptions, res => {
         res.once('error', err => reject(err));
         res.once('end', () => {
           const endTime = Date.now();
-          resolve(endTime - startTime);
+          resolve([ endTime - startTime, triplesPerPage ]);
         });
-        res.resume();
+        res.on('data', x => {
+          triplesPerPage = x.toString('utf-8').search(/hydra:itemsPerPage ".*"\^\^xsd:integer;/);
+        });
       });
     });
   }
@@ -175,7 +189,7 @@ class ModelRepository {
    * @param  {Object} triple  - The triple pattern
    * @return {Promise} A Promise fullfilled with a tuple (triple pattern, cardinality)
    */
-  measureCardinality (triple) {
+  _measureCardinality (triple) {
     const tripleKey = JSON.stringify(triple);
     const cachedMeta = this._metadataCache.get(tripleKey);
     if(cachedMeta !== undefined) {
