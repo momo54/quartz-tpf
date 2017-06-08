@@ -1,17 +1,19 @@
 Study of parallelized query and repartition law of dataset
 ===============
 
-Here we study load balancing of our SPARQL queries by looking the repartition law of each triple pattern in the graph.
+Here we study load balancing, in terms of number of HTTP calls per server, of our SPARQL queries by looking to the repartition law of each triple pattern in the graph.
 We only consider load balancing of TPF with Quartz (**TQ**).
 
 Queries with unbalanced load are likely to contains joins with triple patterns distributed using a non-uniform law.
-However, if this triple pattern is a *virtual triple pattern*, i.e. the first triple pattern evaluated, this does not matter as Quartz will divide the set of matching triples in *semi-equal* partitions.
+However, if this triple pattern is a *virtual triple pattern*, i.e. the first triple pattern evaluated, this does not matter as Quartz will divide the set of matching triples in *equal* partitions.
 
-**Note**: Keep in mind that partitions designed by Quartz are not of the same size, i.e. the last partition can be smaller or larger than the others, to easily maintain answer completeness.
+**Note**: Keep in mind that partitions designed by Quartz are not of the same size: the last partition can be smaller or larger than the others, to easily maintain answer completeness.
 This has an impact on the number of http calls to the last servers.
 
 # Query 2
-calls: 112@E1 39@E2
+execution time: 9.325s with TPF / 7.226s with TQ / 7.113s with TQP
+
+calls: 112@E1 39@E2 with TQ
 
 query:
 ```
@@ -24,7 +26,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v4 WHERE {
 ```
 
 # Query 5
-calls: 63@E1 31@E2
+execution time: 5.889s with TPF / 3.859s with TQ / 3.834s with TQP
+
+calls: 63@E1 31@E2 with TQ
 
 query:
 ```
@@ -36,7 +40,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 WHERE {
 ```
 
 # Query 10
-calls: 1069@E1 1094@E2
+execution time: 224.102s with TPF / 112.699s with TQ / 111.81s with TQP
+
+calls: 1069@E1 1094@E2 with TQ
 
 query:
 ```
@@ -49,7 +55,9 @@ SELECT DISTINCT ?v0 ?v2 ?v3 WHERE {
 
 
 # Query 12
-calls: 1657@E1 1657@E2
+execution time: 435.626s with TPF / 142.99s with TQ / 147.433s with TQP
+
+calls: 1657@E1 1657@E2 with TQ
 
 query:
 ```
@@ -57,14 +65,16 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v4 WHERE {
   ?v0 <http://ogp.me/ns#title> ?v1 . DEFAULT
   ?v0 <http://ogp.me/ns#title> ?v2 . DEFAULT
   ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/ProductCategory4> . (vtp) UNIFORM
-  ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> ?v4 . NORMAL
+  ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> ?v4 . NORMAL/UNIFORM
 }
 ```
 
 # Query 17
 **load balancing deteriorated by a non uniform law**
 
-calls: 3601@E1 5099@E2
+execution time: 525.132s with TPF / 425.283s with TQ / 423.906s with TQP
+
+calls: 3601@E1 5099@E2 with TQ
 
 query:
 ```
@@ -82,7 +92,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v3 ?v4 ?v5 ?v7 ?v8 WHERE {
 ```
 
 # Query 21
-calls: 5175@E1 3162@E2
+execution time: 244.207s with TPF / 188.188 with TQ / 186.872s with TQP
+
+calls: 5175@E1 3162@E2 with TQ
 
 query:
 ```
@@ -97,7 +109,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v4 ?v5 ?v6 WHERE {
 ```
 
 # Query 23
-calls: 1687@E1 1685@E2
+execution time: 432.274s with TPF / 150.928s with TQ / 147.182s with TQP
+
+calls: 1687@E1 1685@E2 with TQ
 
 query:
 ```
@@ -112,7 +126,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v4 WHERE {
 # Query 43
 **load balancing deteriorated by a non uniform law**
 
-calls: 485@E1 220@E2
+execution time: 49.046s with TPF / 26.519s with TQ / 26.062s with TQP
+
+calls: 485@E1 220@E2 with TQ
 
 query:
 ```
@@ -131,7 +147,9 @@ SELECT DISTINCT ?v0 ?v1 ?v3 ?v4 ?v5 ?v6 ?v7 ?v8 ?v9 WHERE {
 ```
 
 # Query 45
-calls: 746@E1 737@E2
+execution time: 97.931s with TPF / 74.122s with TQ / 76.288s with TQP
+
+calls: 746@E1 737@E2 with TQ
 
 query:
 ```
@@ -145,7 +163,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 WHERE {
 # Query 54
 **load balancing deteriorated by a non uniform law**
 
-calls: 3805@E1 4637@E2
+execution time: 530.254s with TPF / 407.896s with TQ / 412.75s with TQP
+
+calls: 3805@E1 4637@E2 with TQ
 
 query:
 ```
@@ -165,7 +185,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v3 ?v4 ?v5 ?v7 ?v8 WHERE {
 # Query 55
 **load balancing deteriorated by a non uniform law**
 
-calls: 4245@E1 2183@E2
+execution time: 326.946s with TPF / 212.816s with TQ / 214.365s with TQP
+
+calls: 4245@E1 2183@E2 with TQ
 
 query:
 ```
@@ -183,7 +205,9 @@ SELECT DISTINCT ?v0 ?v1 ?v3 ?v4 ?v5 ?v6 WHERE {
 # Query 58
 **load balancing deteriorated by a non uniform law**
 
-calls: 76@E1 39@E2
+execution time: 8.578s with TPF / 5.28s with TQ / 5.278s with TQP
+
+calls: 76@E1 39@E2 with TQ
 
 query:
 ```
@@ -195,7 +219,9 @@ SELECT DISTINCT ?v0 ?v2 ?v3 WHERE {
 ```
 
 # Query 59
-calls: 1051@E1 1051@E2
+execution time: 214.716s with TPF / 108.155s with TQ / 108.583s with TQP
+
+calls: 1051@E1 1051@E2 with TQ
 
 query:
 ```
@@ -207,7 +233,9 @@ SELECT DISTINCT ?v0 ?v2 ?v3 WHERE {
 ```
 
 # Query 60
-calls: 11@E1 6@E2
+execution time: 2.027s with TPF / 1.728s with TQ / 1.774s with TQP
+
+calls: 11@E1 6@E2 with TQ
 
 query:
 ```
@@ -221,7 +249,9 @@ SELECT DISTINCT ?v1 ?v2 ?v3 WHERE {
 # Query 63
 **load balancing deteriorated by a non uniform law**
 
-calls: 357@E1 32@E2
+execution time: 104.003s with TPF / 101.139s with TQ / 102.453s with TQP
+
+calls: 357@E1 32@E2 with TQ
 
 query:
 ```
@@ -241,7 +271,9 @@ SELECT DISTINCT ?v0 ?v2 ?v3 ?v4 ?v5 ?v6 ?v7 ?v8 WHERE {
 # Query 65
 **load balancing deteriorated by a non uniform law**
 
-calls: 10@E1 2@E2
+execution time: 2.411s with TPF / 2.383s with TQ / 2.42s with TQP
+
+calls: 10@E1 2@E2 with TQ
 
 query:
 ```
@@ -257,7 +289,9 @@ SELECT DISTINCT ?v0 ?v2 ?v3 ?v4 ?v5 WHERE {
 # Query 69
 **load balancing deteriorated by a non uniform law**
 
-calls: 82@E1 27@E2
+execution time: 7.143s with TPF / 7.173s with TQ / 6.216s with TQP
+
+calls: 82@E1 27@E2 with TQ
 
 query:
 ```
@@ -272,7 +306,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v4 WHERE {
 # Query 70
 **load balancing deteriorated by a non uniform law**
 
-calls: 798@E1 1372@E2
+execution time: 161.259 with TPF / 155.693 with TQ / 128.463s with TQP
+
+calls: 798@E1 1372@E2 with TQ
 
 query:
 ```
@@ -295,7 +331,9 @@ SELECT DISTINCT ?v0 ?v1 ?v10 ?v11 ?v2 ?v4 ?v5 ?v6 ?v7 ?v8 ?v9 WHERE {
 # Query 77
 **load balancing deteriorated by a non uniform law**
 
-calls: 3971@E1 1986@E2
+execution time: 172.29s with TPF / 170.173s with TQ / 164.95s with TQP
+
+calls: 3971@E1 1986@E2 with TQ
 
 query:
 ```
@@ -310,7 +348,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v4 ?v5 ?v6 WHERE {
 ```
 
 # Query 78
-calls: 2010@E1 2044@E2
+execution time: 419.188s with TPF / 468.265s with TQ / 232.645s with TQP
+
+calls: 2010@E1 2044@E2 with TQ
 
 query:
 ```
@@ -326,7 +366,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v3 ?v5 WHERE {
 # Query 80
 **load balancing deteriorated by a non uniform law**
 
-calls: 623@E1 872@E2
+execution time: 138.384s with TPF / 127.702s with TQ / 96.636s with TQP
+
+calls: 623@E1 872@E2 with TQ
 
 query:
 ```
@@ -343,7 +385,9 @@ SELECT DISTINCT ?v0 ?v2 ?v3 ?v4 ?v5 ?v6 WHERE {
 # Query 83
 **load balancing deteriorated by a non uniform law**
 
-calls: 199@E1 136@E2
+execution time: 45.785s with TPF / 48.917s with TQ / 44.696s with TQP
+
+calls: 199@E1 136@E2 with TQ
 
 query:
 ```
@@ -363,7 +407,9 @@ SELECT DISTINCT ?v0 ?v2 ?v3 ?v4 ?v5 ?v6 ?v7 ?v8 WHERE {
 # Query 87
 **load balancing deteriorated by a non uniform law**
 
-calls: 70@E1 35@E2
+execution time: 8.193s with TPF / 7.612s with TQ / 5.373s with TQP
+
+calls: 70@E1 35@E2 with TQ
 
 query:
 ```
@@ -382,7 +428,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v3 ?v4 ?v6 WHERE {
 # Query 90
 **load balancing deteriorated by a non uniform law**
 
-calls: 7058@E1 5837@E2
+execution time: 594.608s with TPF / 625.957s with TQ / 417.236s with TQP
+
+calls: 7058@E1 5837@E2 with TQ
 
 query:
 ```
@@ -397,7 +445,9 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v3 WHERE {
 # Query 91
 **load balancing deteriorated by a non uniform law**
 
-calls: 1150@E1 952@E2
+execution time: 551.971s with TPF / 550.136s with TQ / 293.518s with TQP
+
+calls: 1150@E1 952@E2 with TQ
 
 query:
 ```
@@ -417,7 +467,9 @@ SELECT DISTINCT ?v0 ?v2 ?v3 ?v4 ?v5 ?v6 ?v7 ?v8 WHERE {
 # Query 92
 **load balancing deteriorated by a non uniform law**
 
-calls: 613@E1 888@E2
+execution time: 148.103s with TPF / 131.544s with TQ / 106.757s with TQP
+
+calls: 613@E1 888@E2 with TQ
 
 query:
 ```
