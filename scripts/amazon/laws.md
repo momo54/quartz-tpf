@@ -11,6 +11,8 @@ However, if this triple pattern is a *virtual triple pattern*, i.e. the first tr
 This has an impact on the number of http calls to the last servers.
 
 # Query 2
+**load balancing deteriorated by a non uniform law**
+
 execution time: 9.325s with TPF / 7.226s with TQ / 7.113s with TQP
 
 calls: 112@E1 39@E2 with TQ
@@ -21,7 +23,7 @@ SELECT DISTINCT ?v0 ?v1 ?v2 ?v4 WHERE {
   ?v0 <http://ogp.me/ns#title> ?v1 . DEFAULT
   ?v0 <http://schema.org/caption> ?v2 . DEFAULT
   ?v0 <http://schema.org/language> <http://db.uwaterloo.ca/~galuc/wsdbm/Language19> . (vtp) ZIPFIAN
-  ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> ?v4 . UNIFORM
+  ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> ?v4 . UNIFORM/NORMAL
 }
 ```
 
