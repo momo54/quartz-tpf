@@ -7,7 +7,7 @@ Quartz is [Triple Pattern Fragment](https://github.com/LinkedDataFragments/Clien
 * [Abstract](#abstract)
 * [Installation](#installation)
 * [Experiments](#experiments)
-* [Command line interface](#command-line-interface)
+* [Command line usage](#command-line-usage)
 * [Library usage](#library-usage)
 * [Documentation](#documentation)
 * [References](#references)
