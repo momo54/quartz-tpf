@@ -39,7 +39,7 @@ program
   .option('-l, --limit <limit>', 'limit the number of triples to localize per BGP in the query (default to 1)', 1)
   .option('-t, --type <mime-type>', 'determines the MIME type of the output (e.g., application/json)', 'application/json')
   .option('-m, --measure <output>', 'measure the query execution time (in seconds) & append it to a file', './execution_times.csv')
-  .option('-s, --silent', 'measure the query execution time (in seconds) & append it to a file', false)
+  .option('-s, --silent', 'do not perform any measurement (silent mode)', false)
   .parse(process.argv);
 
 // get endpoints

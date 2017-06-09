@@ -11,8 +11,8 @@ no_colors_guide2 = Theme(
 
 Gadfly.push_theme(no_colors_guide2)
 
-# blacklist = [1, 3, 6, 7, 14, 15, 16, 18, 19, 27, 28, 32, 33, 36, 40, 41, 42, 44, 53, 56, 57, 61, 67, 68, 69, 74, 75, 80, 86, 90, 94]
-blacklist = [91, 92]
+blacklist = [1, 3, 6, 7, 14, 15, 16, 18, 19, 27, 28, 32, 33, 36, 40, 41, 42, 44, 53, 56, 57, 61, 67, 68, 69, 74, 75, 80, 86, 90, 94]
+# blacklist = [91, 92]
 #
 # function clean(df)
 #   return where(groupby(df, [:query]), d -> ! (d[1, :query] in blacklist))
@@ -65,8 +65,24 @@ calls_neq = [sum_pen_neq;sum_quartz_neq;sum_all_neq]
 #
 plot_eq = plot(calls_eq, xgroup=:approach, x=:server, y=:sum, color=:approach, label=:labels, Geom.subplot_grid(Geom.bar, Geom.label(position=:above)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
 plot_neq = plot(calls_neq, xgroup=:approach, x=:server, y=:sum, color=:approach, label=:labels, Geom.subplot_grid(Geom.bar, Geom.label(position=:above)), Guide.xlabel(""), Guide.ylabel(""), Guide.colorkey(""), Scale.x_discrete, colors())
+
+Gadfly.pop_theme()
+
+# Calls per query
+calls_quartz_eq[:approach] = "TQ"
+calls_peneloop_eq[:approach] = "TP"
+calls_all_eq[:approach] = "TQP"
+all = [calls_quartz_eq[1:20,:];calls_peneloop_eq[1:20,:];calls_all_eq[1:20,:]]
+plot_calls_query_eq1 = plot([calls_quartz_eq[1:20,:];calls_peneloop_eq[1:20,:];calls_all_eq[1:20,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_calls_query_eq2 = plot([calls_quartz_eq[21:40,:];calls_peneloop_eq[21:40,:];calls_all_eq[21:40,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_calls_query_eq3 = plot([calls_quartz_eq[41:60,:];calls_peneloop_eq[41:60,:];calls_all_eq[41:60,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_calls_query_eq4 = plot([calls_quartz_eq[61:80,:];calls_peneloop_eq[61:80,:];calls_all_eq[41:80,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_calls_query_eq5 = plot([calls_quartz_eq[81:100,:];calls_peneloop_eq[81:100,:];calls_all_eq[81:100,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
+
 # # # draw(PDF("amazon/http_calls.pdf", 7inch, 3.5inch), plot_eq)
 draw(PDF("amazon/http_calls_eq.pdf", 4.3inch, 3.5inch), plot_eq)
 draw(PDF("amazon/http_calls_neq.pdf", 4.3inch, 3.5inch), plot_neq)
 draw(PNG("amazon/http_calls_eq.png", 4.3inch, 3.5inch), plot_eq)
 draw(PNG("amazon/http_calls_neq.png", 4.3inch, 3.5inch), plot_neq)
+
+draw(PDF("amazon/http_calls_query_eq.pdf", 7inch, 15inch), vstack(plot_calls_query_eq1,plot_calls_query_eq2,plot_calls_query_eq3, plot_calls_query_eq4,plot_calls_query_eq5))

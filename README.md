@@ -1,17 +1,47 @@
-#  QUaRTz: Parallel SPARQL query processing over Replicated Triple Pattern Fragments
+#  Quartz
+[![Build Status](https://travis-ci.org/Callidon/quartz-tpf.svg?branch=master)](https://travis-ci.org/Callidon/quartz-tpf)
+
+Quartz is [Triple Pattern Fragment](https://github.com/LinkedDataFragments/Client.js) client that enables parallel SPARQL query processing over replicated Triple Pattern Fragments.
+
+# Table of contents
+* [Abstract](#abstract)
+* [Installation](#installation)
+* [Experiments](#experiments)
+* [Command line interface](#command-line-interface)
+* [Library usage](#library-usage)
+* [Documentation](#documentation)
+* [References](#references)
+
+# Abstract
 
 Although Linked Data datasets made available billions of
 triples, data availability is still an issue. While replicating datasets over
 different linked data providers improves data availability, balancing the
 load of query processing across replicas has not been considered yet in
-the context of Linked Data. 
+the context of Linked Data.
 
-In the context of the [Triple Pattern Fragment](http://linkeddatafragments.org/) [1] (TPF) approach, we tackle the problem of query optimization under presence of replicated RDF data and propose a cost-based query
+In the context of the Triple Pattern Fragment [1] (TPF) approach, we tackle the problem of query optimization under presence of replicated RDF data and propose a cost-based query
 optimizer named **Quartz**, which is able to generate plans that minimize execution time while maximize load balancing. Quartz is able to exploit meta-data about TPFs to produce parallelized query execution
 plans against replicated TPFs servers. Moreover, a cost model is utilized by the **Quartz** optimizer to estimate the computation capability
 of replicated TPF servers. Experimentations demonstrate that **Quartz**
 significantly improves not only execution time of SPARQL queries, but
 also load-balancing between replicated TPF servers.
+
+# Installation
+
+**Requirements**: [Node.js](https://nodejs.org/en/) v6.x or higher
+
+using npm
+```bash
+npm i --save quartz-tpf
+```
+
+using git
+```bash
+git clone htpps://github.com/Callidon/virtual-decomposer.git
+cd virtual-decomposer/
+npm i --production
+```
 
 # Experiments
 
@@ -60,7 +90,64 @@ We compare the answer completeness with TPF, TPF+PeN, TPF+VTP and QUaRTz, with b
 
 Results from all the Wilcoxon ranking tests[6] performed are available [here](https://github.com/Callidon/quartz-tpf/blob/master/scripts/amazon/wilcoxon.md).
 
-## References
+# Command line usage
+
+Quartz can be used through command line if installed globally with `npm i -g quartz-tpf`:
+```
+Usage: quartz <servers...> [options]
+
+  execute a SPARQL query against several endpoints
+
+  Options:
+
+    -h, --help              output usage information
+    -p, --peneloop          use peneloop to process joins
+    -q, --query <query>     evaluates the given SPARQL query
+    -f, --file <file>       evaluates the SPARQL query in the given file
+    -l, --limit <limit>     limit the number of triples to localize per BGP in the query (default to 1)
+    -t, --type <mime-type>  determines the MIME type of the output (e.g., application/json)
+    -m, --measure <output>  measure the query execution time (in seconds) & append it to a file
+    -s, --silent            do not perform any measurement (silent mode)
+```
+
+# Library usage
+
+Quartz can also be used as a library
+```javascript
+'use strict';
+const QuartzClient = require('quartz-tpf');
+
+const query = `
+  PREFIX dbo: <http://dbpedia.org/ontology/>
+  SELECT ?actor ?city
+  WHERE {
+    ?actor a dbo:Actor.                      
+    ?actor dbo:birthPlace ?city.
+    ?city dbo:country dbpedia:United_States.
+  } LIMIT 3000
+`
+
+// all the TPF servers must replicate the same version of the same dataset !
+const servers = [
+  'http://exampleA.fragments.org/dbpedia',
+  'http://exampleB.fragments.org/dbpedia'
+]
+
+// provide any TPF servers to calibrate the cost model
+const client = new QuartzClient(servers[0]);
+
+client.execute(query, servers)
+.then(mappings => console.log(mappings))
+.catch(error => console.error(error));
+```
+
+See more details by generating the [documentation](#documentation).
+
+# Documentation
+
+Generate the documentation by running `npm run doc`.
+
+# References
 
 1. Verborgh, R., Vander Sande, M., Hartig, O., Van Herwegen, J., De Vocht, L.,
 De Meester, B., Haesendonck, G., Colpaert, P.: [Triple pattern fragments: A low-cost knowledge graph interface for the web](https://biblio.ugent.be/publication/8050661/file/8050671.pdf). Web Semantics: Science, Services and Agents on the World Wide Web 37, 184–206 (2016)
@@ -70,70 +157,3 @@ CS-2013-10 (2013)
 4. Fernández, J.D., Martínez-Prieto, M.A., Gutiérrez, C., Polleres, A., Arias, M.: [Binary rdf representation for publication and exchange (hdt)](http://www.imap.websemanticsjournal.org/preprints/index.php/ps/article/viewFile/328/333). Web Semantics: Science, Services and Agents on the World Wide Web 19, 22–41 (2013)
 5. Minier, T., Montoya, G., Skaf-Molli, H., Molli, P.: PeNeLoop: Parallelizing federated SPARQL queries in presence of replicated fragments. In: QuWeDa 2017: Querying the Web of Data at ESWC 2017, Portorož, Slovenia, May 28 - June 1, 2017 (2017)
 6. Wilcoxon, F.: [Individual comparisons by ranking methods](http://hbanaszak.mjr.uw.edu.pl/TempTxt/Wilcoxon_1946_IndividualComparisonByRankingMethods.pdf). In: Breakthroughs in Statistics, pp. 196–202. Springer (1992)
-
-# Installation
-
-```bash
-git clone htpps://github.com/Callidon/virtual-decomposer.git
-cd virtual-decomposer/
-npm i --production
-```
-
-# Usage
-
-Execute the script `tpf-client.js` located in `bin/` for top-level usage.
-```
-Usage: tpf-client [options] [command]
-
-
-  Commands:
-
-    model [endpoints...]                  generate the cost model & save it in json format
-    run [model] [endpoints...] [options]  execute a SPARQL query against several endpoints
-    help [cmd]                            display help for [cmd]
-
-  virtual-decomposer
-
-  Options:
-
-    -h, --help     output usage information
-    -V, --version  output the version number
-```
-
-## Generate a cost-model
-
-```
-Usage: tpf-client model [endpoints...] [options]
-
-  generate the cost model & save it in json format
-
-  Options:
-
-    -h, --help             output usage information
-    -o, --output <output>  save the model in the given file (default: model.json)
-```
-Example:
-```bash
-bin/tpf-client.js model http://fragments.server1/dbpedia_3.9 http://fragments.server2/dbpedia_3.9 -o model.json
-```
-
-## Run a query
-
-```
-Usage: tpf-client run [endpoints...] [options]
-
-  execute a SPARQL query against several endpoints
-
-  Options:
-
-    -h, --help              output usage information
-    -q, --query <query>     evaluates the given SPARQL query
-    -f, --file <file>       evaluates the SPARQL query in the given file
-    -l, --limit <limit>     limit the number of triples to localize per BGP in the query (default to 1)
-    -t, --type <mime-type>  determines the MIME type of the output (e.g., application/json)
-```
-
-Example:
-```bash
-bin/tpf-client.js run ./model.json http://fragments.server1/dbpedia_3.9 http://fragments.server2/dbpedia_3.9 -q 'SELECT * WHERE { ?s ?p ?o . }'
-```
