@@ -29,7 +29,7 @@ const http = require('http');
 const Model = require('./model.js');
 const Cache = require('lru-cache');
 const SparqlParser = require('sparqljs').Parser;
-const URL = require('url').URL;
+const URL = require('url');
 const _ = require('lodash');
 
 /**
@@ -162,7 +162,7 @@ class ModelRepository {
     return new Promise((resolve, reject) => {
       const startTime = Date.now();
       let triplesPerPage = 100; // default value for most TPF server
-      const newUrl = new URL(url);
+      const newUrl = URL.parse(url);
       const httpOptions = {
         hostname: newUrl.hostname,
         port: newUrl.port,
