@@ -60,7 +60,7 @@ const buildSubquery = (triple, stats) => {
   };
 };
 
-const localizeService = (bgp, endpoints, model) => {
+const localizeService = (bgp, servers, model) => {
   const triples = _.flatten(sortPatterns(bgp.triples, model.nbTriples));
   const stats = {
     totalTriples: model.nbTriples[JSON.stringify(triples[0])],
@@ -82,7 +82,7 @@ const localizeService = (bgp, endpoints, model) => {
           patterns: [
             {
               type: 'service',
-              name: endpoints[1] + '/query',
+              name: servers[1] + '/query',
               silent: false,
               patterns: [ buildSubquery(triples[0], _.merge({index: 1}, stats)) ]
             },
@@ -106,7 +106,7 @@ const localizeService = (bgp, endpoints, model) => {
         patterns: [
           {
             type: 'service',
-            name: endpoints[1] + '/query',
+            name: servers[1] + '/query',
             silent: false,
             patterns: [ buildSubquery(triples[0], _.merge({index: 1}, stats)) ]
           },
@@ -130,14 +130,14 @@ const localizeService = (bgp, endpoints, model) => {
   };
 };
 
-const generateService = (node, endpoints, model) => {
+const generateService = (node, servers, model) => {
   const type = node.type.toLowerCase();
   switch (type) {
     case 'bgp':
-      return localizeService(node, endpoints, model);
+      return localizeService(node, servers, model);
     case 'query': {
       const query = _.merge({}, node);
-      query.where = _.flatten(query.where.map(p => generateService(p, endpoints, model)));
+      query.where = _.flatten(query.where.map(p => generateService(p, servers, model)));
       return query;
     }
     case 'union':
@@ -145,7 +145,7 @@ const generateService = (node, endpoints, model) => {
     case 'optional':
       return {
         type,
-        patterns: node.patterns.map(p => generateService(p, endpoints, model))
+        patterns: node.patterns.map(p => generateService(p, servers, model))
       };
     case 'filter':
       return node;

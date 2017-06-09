@@ -31,7 +31,7 @@ const QuartzClient = require('../src/quartz-client.js');
 
 // Command line interface to execute queries
 program
-  .description('execute a SPARQL query against several endpoints')
+  .description('execute a SPARQL query against several servers')
   .usage('<servers...> [options]')
   .option('-p, --peneloop', 'use peneloop to process joins', true)
   .option('-q, --query <query>', 'evaluates the given SPARQL query')
@@ -42,12 +42,12 @@ program
   .option('-s, --silent', 'do not perform any measurement (silent mode)', false)
   .parse(process.argv);
 
-// get endpoints
+// get servers
 if (program.args.length <= 0) {
   process.stderr.write('Error: you must specify at least one TPF server to use.\nSee quartz --help for more details.\n');
   process.exit(1);
 }
-const endpoints = program.args;
+const servers = program.args;
 
 // fetch SPARQL query to execute
 let query = null;
@@ -66,8 +66,8 @@ const config = {
   locLimit: program.limit
 };
 
-const client = new QuartzClient(endpoints[0], config);
-client.buildPlan(query, endpoints)
+const client = new QuartzClient(servers[0], config);
+client.buildPlan(query, servers)
 .then(plan => {
   const sparqlIterator = client.executePlan(plan, false);
   sparqlIterator.on('error', error => {

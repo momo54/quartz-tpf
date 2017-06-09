@@ -41,22 +41,22 @@ const buildMultiUnion = (plan, ldfConfig) => {
 };
 
 /**
- * Build the physical query execution plan for a query, a set of endpoints and a cost model
+ * Build the physical query execution plan for a query, a set of servers and a cost model
  * @param {string} query            - The SPARQL query to process
- * @param {Object} endpoints        - The endpoints used for localization
+ * @param {Object} servers        - The servers used for localization
  * @param {Object} model            - The cost model used for this execution
  * @param {Object|undefined} config - (optional) Additional configuration options for LDF FragmentsClients & SparqlIterator
  * @return {AsyncIterator} The root operator of the physical query execution plan
  */
-const buildIterator = (query, endpoints, model, config = {}) => {
-  const queryPlan = processor(query, endpoints, model.nbTriples, config.locLimit, config.usePeneloop, config.prefixes);
+const buildIterator = (query, servers, model, config = {}) => {
+  const queryPlan = processor(query, servers, model.nbTriples, config.locLimit, config.usePeneloop, config.prefixes);
   // console.log(JSON.stringify(queryPlan, false, 2));
   config.sharedCache = new Cache({ max: 5000 });
-  const defaultClient = new ldf.FragmentsClient(endpoints[0], config);
+  const defaultClient = new ldf.FragmentsClient(servers[0], config);
   // important: main cache must not be shared with the default client!
   config.mainCache = new Cache({ max: 1 });
   const virtualClients = {};
-  endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));
+  servers.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));
   const ldfConfig = {
     fragmentsClient: defaultClient,
     virtualClients,

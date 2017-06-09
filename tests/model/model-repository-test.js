@@ -35,12 +35,12 @@ describe('ModelRepository', () => {
   it('should compute a model for a query and a set of TPF servers', done => {
     const repo = new ModelRepository(client);
     const query = 'select * where { ?s ?p ?o .}';
-    const endpoints = [ 'http://localhost:5000/books', 'http://localhost:5000/books' ];
-    repo.getModel(query, endpoints)
+    const servers = [ 'http://localhost:5000/books', 'http://localhost:5000/books' ];
+    repo.getModel(query, servers)
     .then(model => {
-      model.id.should.equal(Model.genID(query, endpoints));
+      model.id.should.equal(Model.genID(query, servers));
       model._query.should.equals(query);
-      model._endpoints.should.equals(endpoints);
+      model._servers.should.equals(servers);
       model._cardinalities.should.deep.equals({
         '{"subject":"?s","predicate":"?p","object":"?o"}': 17
       });

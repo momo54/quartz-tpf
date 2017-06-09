@@ -123,27 +123,26 @@ class ModelRepository {
   /**
    * Compute a model for a query and a set of TPF servers
    * @param  {Object} query             - A query, normalized in the format of sparql.js
-   * @param  {string[]} endpoints       - A set of TPF servers
+   * @param  {string[]} servers       - A set of TPF servers
    * @return {Promise} A promise fullfilled with the computed {@link Model}
    */
-  getModel (query, endpoints) {
-    const cacheKey = Model.genID(query, endpoints);
+  getModel (query, servers) {
+    const cacheKey = Model.genID(query, servers);
     const cachedModel = this._modelCache.get(cacheKey);
     if (cachedModel !== undefined) {
       return Promise.resolve(cachedModel);
     }
     let latencies = [];
     let triplesPerPage = {};
-    return Promise.all(endpoints.map(e => this._measureResponseTime(e)))
+    return Promise.all(servers.map(e => this._measureResponseTime(e)))
     .then(timesAndTriples => {
       latencies = timesAndTriples.map(v => v[0]);
-      triplesPerPage = _.zipObject(endpoints, timesAndTriples.map(v => v[1]));
+      triplesPerPage = _.zipObject(servers, timesAndTriples.map(v => v[1]));
       return Promise.all(extractTriples(this._parser.parse(query)).map(t => this._measureCardinality(t)));
     })
     .then(cardinalities => {
       const nbTriples = _.fromPairs(cardinalities);
-      // let model = computeModel(endpoints, latencies, {nbTriples, triplesPerPage: 100});
-      let model = new Model(query, endpoints, latencies, nbTriples, triplesPerPage);
+      let model = new Model(query, servers, latencies, nbTriples, triplesPerPage);
       if (this.hasBias) {
         model = this._applyBias(model);
         model.sumCoefs = _.keys(model.coefficients).reduce((acc, c) => acc + c, 0);

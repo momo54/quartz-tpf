@@ -27,21 +27,21 @@ SOFTWARE.
 const _ = require('lodash');
 
 /**
- * Compute the cost model using a list of endpoints and their respective reponse times
- * @param  {string[]} endpoints - The endpoints of the model
+ * Compute the cost model using a list of servers and their respective reponse times
+ * @param  {string[]} servers - The servers of the model
  * @param  {number[]} times     - The reponse time of each endpoint
  * @param  {Object} metadata    - The metadata about the query associated with this cost model
  * @param  {Object} metadata.nbTriples   - The number of triples per pattern of the query
  * @param  {int} metadata.triplesPerPage - The number of triples per page
  * @return {Object} The coefficient of the cost model for each endpoint and the sum of all coefficients
  */
-const computeModel = (endpoints, times, metadata = {}) => {
+const computeModel = (servers, times, metadata = {}) => {
   const weights = times.map(t => 1 / t);
   const minWeight = Math.min(...weights);
   const coefs = weights.map(w => Math.floor(w / minWeight));
   return {
-    endpoints,
-    coefficients: _.zipObject(endpoints, coefs),
+    servers,
+    coefficients: _.zipObject(servers, coefs),
     sumCoefs: coefs.reduce((acc, c) => acc + c, 0),
     nbTriples: metadata.nbTriples || {},
     triplesPerPage: metadata.triplesPerPage || -1

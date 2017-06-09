@@ -38,17 +38,17 @@ class Model {
   /**
    * Constructor
    * @param  {string}   query           - The query related to this model
-   * @param  {string[]} endpoints       - Set of TPF servers of the model
+   * @param  {string[]} servers       - Set of TPF servers of the model
    * @param  {number[]} times           - Initial reponse times of each TPF server
    * @param  {Object[]} cardinalities   - The cardinalities of each triple pattern in the query
    * @param  {Object[]} triplesPerPage  - Triples served per page per endpoint
    * @param  {boolean}  [preCompute=true] - Wheter the model should be precompiled after creation or not
    */
-  constructor (query, endpoints, times, cardinalities, triplesPerPage, preCompute = true) {
-    this.id = Model.genID(query, endpoints);
+  constructor (query, servers, times, cardinalities, triplesPerPage, preCompute = true) {
+    this.id = Model.genID(query, servers);
     this._query = query;
-    this._endpoints = endpoints;
-    this._times = _.zipObject(endpoints, times);
+    this._servers = servers;
+    this._times = _.zipObject(servers, times);
     this._cardinalities = cardinalities;
     this._triplesPerPage = Object.assign({}, triplesPerPage);
     this._weights = {};
@@ -61,11 +61,11 @@ class Model {
   /**
    * Generate an unique model ID
    * @param  {string}   query      - The query related to this model
-   * @param  {string[]} endpoints  - Set of TPF servers of the model
+   * @param  {string[]} servers  - Set of TPF servers of the model
    * @return {string} The unique model ID
    */
-  static genID (query, endpoints) {
-    return `https://callidon.github.io/quartz-tpf/model&q=${JSON.stringify(query)}&e={${endpoints.sort().join(';')}}`;
+  static genID (query, servers) {
+    return `https://callidon.github.io/quartz-tpf/model&q=${JSON.stringify(query)}&e={${servers.sort().join(';')}}`;
   }
 
   /**
@@ -77,11 +77,11 @@ class Model {
     let model;
     // try to deduce model version
     if ('version' in json && json.version === VERSION_ID) {
-      model = new Model(json['qtz:query'], json['qtz:endpoints'], json['qtz:times'], json['qtz:cardinalities'], json['hydra:itemsPerPage'], true);
+      model = new Model(json['qtz:query'], json['qtz:servers'], json['qtz:times'], json['qtz:cardinalities'], json['hydra:itemsPerPage'], true);
       model.id = json['@id'];
     } else {
-      const endpoints = _.values(json.coefficients);
-      model = new Model(json.query, endpoints, _.times(endpoints.length, _.constant(0)), json.cardinalities, json.triplesPerPage, false);
+      const servers = _.values(json.coefficients);
+      model = new Model(json.query, servers, _.times(servers.length, _.constant(0)), json.cardinalities, json.triplesPerPage, false);
       model._coefficients = json.coefficients;
       model._sumCoefs = json.sumCoefs;
     }
@@ -105,7 +105,7 @@ class Model {
       '@type': 'qtz:Model',
       'dc:hasVersion': VERSION_ID,
       'qtz:query': this._query,
-      'qtz:endpoints': this._endpoints,
+      'qtz:servers': this._servers,
       'qtz:times': this._times,
       'qtz:cardinalities': this._cardinalities,
       'hydra:itemsPerPage': this._triplesPerPage,
@@ -163,16 +163,16 @@ class Model {
    * @return {Object} The corresponding virtual triple pattern
    */
   computeVTP (totalTriples, triplesPerPage, virtualIndex) {
-    return formulas.computeVTP(totalTriples, triplesPerPage, virtualIndex, this._endpoints.length, _.values(this._coefficients), this._sumCoefs);
+    return formulas.computeVTP(totalTriples, triplesPerPage, virtualIndex, this._servers.length, _.values(this._coefficients), this._sumCoefs);
   }
 
   /**
    * Get the randomized vector used by the probabilistic implementation of PeNeLoop
-   * @return {string[]} A randmoized vector of endpoints URI
+   * @return {string[]} A randmoized vector of servers URI
    */
   getRNGVector () {
     const vector = _.values(this._coefficients).map(x => x / this._sumCoefs);
-    return _.flatten(vector.map((p, ind) => _.times(p * 100, _.constant(this._endpoints[ind]))));
+    return _.flatten(vector.map((p, ind) => _.times(p * 100, _.constant(this._servers[ind]))));
   }
 }
 

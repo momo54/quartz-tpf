@@ -59,13 +59,13 @@ class QuartzClient {
   /**
    * Build a query execution plan
    * @param  {string} query       - The query to execute
-   * @param  {string[]} endpoints - Set of TPF servers used to execute the query
-   * @return {Object} The query execution plan for the given query and endpoints
+   * @param  {string[]} servers - Set of TPF servers used to execute the query
+   * @return {Object} The query execution plan for the given query and servers
    */
-  buildPlan (query, endpoints) {
-    return this._modelRepo.getModel(query, endpoints)
+  buildPlan (query, servers) {
+    return this._modelRepo.getModel(query, servers)
     .then(model => {
-      const plan = processor(query, endpoints, model._cardinalities, this._options.locLimit, this._options.usePeneloop, this._options.prefixes);
+      const plan = processor(query, servers, model._cardinalities, this._options.locLimit, this._options.usePeneloop, this._options.prefixes);
       return Promise.resolve(_.merge({ modelID: model.id }, plan));
     });
   }
@@ -83,11 +83,11 @@ class QuartzClient {
     if (model === undefined) throw new Error('Cannot find the compiled model associated with the query.');
 
     config.sharedCache = new Cache({ max: 5000 });
-    const defaultClient = new ldf.FragmentsClient(model._endpoints[0], config);
+    const defaultClient = new ldf.FragmentsClient(model._servers[0], config);
     // important: main cache must not be shared with the default client!
     config.mainCache = new Cache({ max: 100 });
     const virtualClients = {};
-    model._endpoints.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));
+    model._servers.forEach(e => virtualClients[e] = new ldf.FragmentsClient(e, config));
     const ldfConfig = {
       fragmentsClient: defaultClient,
       virtualClients,
@@ -107,12 +107,12 @@ class QuartzClient {
   /**
    * Execute a query
    * @param  {string} query       - The query to execute
-   * @param  {string[]} endpoints - Set of TPF servers used to execute the query
+   * @param  {string[]} servers - Set of TPF servers used to execute the query
    * @param  {Object}  config     - Optional base configuration to build FragmentsClients
    * @return {Promise} A Promise fullfilled with the complete results
    */
-  execute (query, endpoints, config = { prefixes }) {
-    return this.buildPlan(query, endpoints).then(plan => this.executePlan(plan, true, config));
+  execute (query, servers, config = { prefixes }) {
+    return this.buildPlan(query, servers).then(plan => this.executePlan(plan, true, config));
   }
 }
 
