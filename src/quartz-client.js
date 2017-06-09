@@ -27,20 +27,11 @@ SOFTWARE.
 const ModelRepository = require('./model/model-repository.js');
 const processor = require('./analyzer/processor.js');
 const ldf = require('../Client.js/ldf-client.js');
-// const UnionStream = require('./union-stream.js');
 const Cache = require('lru-cache');
 const _ = require('lodash');
 const prefixes = require('./prefixes.json'); // some very common prefixes
 // ldf.Logger.setLevel('DEBUG');
 ldf.Logger.setLevel('WARNING');
-
-// const buildMultiUnion = (plan, ldfConfig) => {
-//   return plan.where[0].patterns.map(pattern => {
-//     const newPlan = _.pickBy(plan, key => key !== 'where');
-//     newPlan.where = [ pattern ];
-//     return new ldf.SparqlIterator(newPlan, ldfConfig);
-//   });
-// };
 
 /**
  * A Quartz client is a TPF client modified to use Quartz parallel query processing techniques
@@ -49,8 +40,11 @@ ldf.Logger.setLevel('WARNING');
 class QuartzClient {
   /**
    * Constructor
-   * @param {string} baseServerURL - The URL of a TPF server which can be used to calibrate the cost model
-   * @param {Object} options       - OPtions used to customize the behaviour of the QUartz client
+   * @param {string} baseServerURL               - The URL of a TPF server which can be used to calibrate the cost model
+   * @param {Object} options                     - Options used to customize the behaviour of the Quartz client
+   * @param {int} [options.locLimit=1]           - Maximum number of triples pattern to localized per BGP (default to 1)
+   * @param {boolean} [options.usePeneloop=true] - Whether to use PeNeLoop to process joins or use classic TPF join operator
+   * @param {Object} options.prefixes            - Additionnal prefixes used when parsing SPARQL queries & RDF data
    */
   constructor (baseServerURL, options) {
     this._options = _.merge({
@@ -85,7 +79,7 @@ class QuartzClient {
    */
   executePlan (queryPlan, asPromise = true, config = { prefixes }) {
     let iterator;
-    const model = this._modelRepo.getCachedModel(queryPlan.modelId);
+    const model = this._modelRepo.getCachedModel(queryPlan.modelID);
     if (model === undefined) throw new Error('Cannot find the compiled model associated with the query.');
 
     config.sharedCache = new Cache({ max: 5000 });
@@ -99,10 +93,6 @@ class QuartzClient {
       virtualClients,
       model
     };
-    // performance hack: transform a top level union into an union of SparqlIterors
-    // NOTE: is this really needed ?? execution time is really improved with this "opti" ??
-    // if (queryPlan.where.length === 1 && queryPlan.where[0].type === 'union')
-    //   iterator = new UnionStream(buildMultiUnion(queryPlan, ldfConfig));
     iterator = new ldf.SparqlIterator(queryPlan, ldfConfig);
 
     if (!asPromise) return iterator;
@@ -116,9 +106,9 @@ class QuartzClient {
 
   /**
    * Execute a query
-   * @param  {string} query             - The query to execute
-   * @param  {string[]} endpoints       - Set of TPF servers used to execute the query
-   * @param  {Object}  config           - Optional base configuration to build FragmentsClients
+   * @param  {string} query       - The query to execute
+   * @param  {string[]} endpoints - Set of TPF servers used to execute the query
+   * @param  {Object}  config     - Optional base configuration to build FragmentsClients
    * @return {Promise} A Promise fullfilled with the complete results
    */
   execute (query, endpoints, config = { prefixes }) {

@@ -165,6 +165,15 @@ class Model {
   computeVTP (totalTriples, triplesPerPage, virtualIndex) {
     return formulas.computeVTP(totalTriples, triplesPerPage, virtualIndex, this._endpoints.length, _.values(this._coefficients), this._sumCoefs);
   }
+
+  /**
+   * Get the randomized vector used by the probabilistic implementation of PeNeLoop
+   * @return {string[]} A randmoized vector of endpoints URI
+   */
+  getRNGVector () {
+    const vector = _.values(this._coefficients).map(x => x / this._sumCoefs);
+    return _.flatten(vector.map((p, ind) => _.times(p * 100, _.constant(this._endpoints[ind]))));
+  }
 }
 
 module.exports = Model;

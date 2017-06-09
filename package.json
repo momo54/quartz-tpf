@@ -4,7 +4,7 @@
   "description": "QUaRTz",
   "main": "./src/query-engine.js",
   "bin": {
-    "tpf-client": "./bin/tpf-client.js"
+    "quartz": "./bin/quartz.js"
   },
   "scripts": {
     "postinstall": "git submodule update --init Client.js/ && cd Client.js && npm i --production",
@@ -25,12 +25,12 @@
   "homepage": "https://github.com/Callidon/quartz-tpf#readme",
   "dependencies": {
     "commander": "^2.9.0",
-    "http-proxy": "^1.16.2",
     "lodash": "^4.17.4",
     "lru-cache": "^4.0.2",
     "sparqljs": "^1.3.0"
   },
   "devDependencies": {
+    "http-proxy": "^1.16.2",
     "chai": "^3.5.0",
     "eslint": "^3.17.1",
     "jsdoc": "^3.4.3",
