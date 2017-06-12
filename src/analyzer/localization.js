@@ -119,6 +119,13 @@ const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = -1, usePeneloop
       }, tp)));
     } else if (limit === -1) {
       triples = triples.map(tp => localizeTriple(tp, endpoints));
+    } else if (usePeneloop) {
+      triples = triples.map(tp => _.merge({
+        operator: {
+          type: 'peneloop',
+          endpoints
+        }
+      }, tp));
     }
   }
   return {
