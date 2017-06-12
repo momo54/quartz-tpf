@@ -76,8 +76,9 @@ all = [calls_quartz_eq[1:20,:];calls_peneloop_eq[1:20,:];calls_all_eq[1:20,:]]
 plot_calls_query_eq1 = plot([calls_quartz_eq[1:20,:];calls_peneloop_eq[1:20,:];calls_all_eq[1:20,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
 plot_calls_query_eq2 = plot([calls_quartz_eq[21:40,:];calls_peneloop_eq[21:40,:];calls_all_eq[21:40,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
 plot_calls_query_eq3 = plot([calls_quartz_eq[41:60,:];calls_peneloop_eq[41:60,:];calls_all_eq[41:60,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
-plot_calls_query_eq4 = plot([calls_quartz_eq[61:80,:];calls_peneloop_eq[61:80,:];calls_all_eq[41:80,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_calls_query_eq4 = plot([calls_quartz_eq[61:80,:];calls_peneloop_eq[61:80,:];calls_all_eq[61:80,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
 plot_calls_query_eq5 = plot([calls_quartz_eq[81:100,:];calls_peneloop_eq[81:100,:];calls_all_eq[81:100,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
+plot_calls_query_eq6 = plot([calls_quartz_eq[101:126,:];calls_peneloop_eq[101:126,:];calls_all_eq[101:126,:]], xgroup=:query, x=:server, y=:calls, color=:approach, Geom.subplot_grid(Geom.bar(position=:dodge)), Guide.xlabel(""), Guide.ylabel("Number of HTTP calls", orientation=:vertical), Guide.colorkey(""), Scale.x_discrete, colors())
 
 # # # draw(PDF("amazon/http_calls.pdf", 7inch, 3.5inch), plot_eq)
 draw(PDF("amazon/http_calls_eq.pdf", 4.3inch, 3.5inch), plot_eq)
@@ -85,4 +86,4 @@ draw(PDF("amazon/http_calls_neq.pdf", 4.3inch, 3.5inch), plot_neq)
 draw(PNG("amazon/http_calls_eq.png", 4.3inch, 3.5inch), plot_eq)
 draw(PNG("amazon/http_calls_neq.png", 4.3inch, 3.5inch), plot_neq)
 
-draw(PDF("amazon/http_calls_query_eq.pdf", 7inch, 15inch), vstack(plot_calls_query_eq1,plot_calls_query_eq2,plot_calls_query_eq3, plot_calls_query_eq4,plot_calls_query_eq5))
+draw(PDF("amazon/http_calls_query_eq.pdf", 7inch, 15inch), vstack(plot_calls_query_eq1,plot_calls_query_eq2,plot_calls_query_eq3, plot_calls_query_eq4,plot_calls_query_eq5, plot_calls_query_eq6))

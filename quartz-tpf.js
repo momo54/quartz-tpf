@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-/* file : tpf-client.js
+/* file : quartz-tpf.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
@@ -25,12 +24,6 @@ SOFTWARE.
 
 'use strict';
 
-const program = require('commander');
-const packageInfos = require('../package.json');
+const QuartzClient = require('./src/quartz-client.js');
 
-program
-  .version(packageInfos.version)
-  .description(packageInfos.description)
-  .command('model [endpoints...]', 'generate the cost model & save it in json format').alias('m')
-  .command('run [model] [options]', 'execute a SPARQL query against several endpoints').alias('r')
-  .parse(process.argv);
+module.exports = QuartzClient;

@@ -39,5 +39,12 @@ jspm_packages
 # JSDoc
 docs/
 
-# Build material
-*.bundle.js
+# Experiments materials
+scripts/
+queries/
+models/
+models-3/
+models-4/
+
+# Jekyll files
+_config.yml

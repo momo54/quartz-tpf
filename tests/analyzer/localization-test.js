@@ -44,10 +44,8 @@ describe('Localization', () => {
       predicate: 'p1',
       object: 'o1',
       operator: {
-        endpoint: 'e1',
-        nbVirtuals: 1,
-        type: 'vtp',
-        virtualIndex: 1
+        type: 'classic',
+        endpoint: 'e1'
       }
     };
 

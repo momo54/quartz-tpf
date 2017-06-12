@@ -62,10 +62,8 @@ const buildService = (triple, endpoint, stats) => {
 const localizeTriple = (triple, endpoints) => {
   if (endpoints.length === 1) return _.merge({
     operator: {
-      type: 'vtp',
-      endpoint: endpoints[0],
-      virtualIndex: 1,
-      nbVirtuals: 1
+      type: 'classic',
+      endpoint: endpoints[0]
     }
   }, triple);
 

@@ -37,11 +37,11 @@ const VERSION_ID = 2;
 class Model {
   /**
    * Constructor
-   * @param  {string}   query           - The query related to this model
-   * @param  {string[]} servers       - Set of TPF servers of the model
-   * @param  {number[]} times           - Initial reponse times of each TPF server
-   * @param  {Object[]} cardinalities   - The cardinalities of each triple pattern in the query
-   * @param  {Object[]} triplesPerPage  - Triples served per page per endpoint
+   * @param  {string}   query             - The query related to this model
+   * @param  {string[]} servers           - Set of TPF servers used to process the query
+   * @param  {number[]} times             - Initial reponse times of each TPF server
+   * @param  {Object[]} cardinalities     - The cardinalities of each triple pattern in the query
+   * @param  {Object[]} triplesPerPage    - Triples served per page per endpoint
    * @param  {boolean}  [preCompute=true] - Wheter the model should be precompiled after creation or not
    */
   constructor (query, servers, times, cardinalities, triplesPerPage, preCompute = true) {
@@ -61,7 +61,7 @@ class Model {
   /**
    * Generate an unique model ID
    * @param  {string}   query      - The query related to this model
-   * @param  {string[]} servers  - Set of TPF servers of the model
+   * @param  {string[]} servers    - Set of TPF servers of the model
    * @return {string} The unique model ID
    */
   static genID (query, servers) {
@@ -75,11 +75,11 @@ class Model {
    */
   static fromJSON (json) {
     let model;
-    // try to deduce model version
     if ('version' in json && json.version === VERSION_ID) {
       model = new Model(json['qtz:query'], json['qtz:servers'], json['qtz:times'], json['qtz:cardinalities'], json['hydra:itemsPerPage'], true);
       model.id = json['@id'];
     } else {
+      // load legacy models
       const servers = _.values(json.coefficients);
       model = new Model(json.query, servers, _.times(servers.length, _.constant(0)), json.cardinalities, json.triplesPerPage, false);
       model._coefficients = json.coefficients;

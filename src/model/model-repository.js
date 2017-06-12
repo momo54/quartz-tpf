@@ -25,7 +25,6 @@ SOFTWARE.
 'use strict';
 
 const http = require('http');
-// const computeModel = require('./cost-model.js');
 const Model = require('./model.js');
 const Cache = require('lru-cache');
 const SparqlParser = require('sparqljs').Parser;
@@ -177,7 +176,7 @@ class ModelRepository {
           resolve([ endTime - startTime, triplesPerPage ]);
         });
         res.on('data', x => {
-          triplesPerPage = x.toString('utf-8').search(/hydra:itemsPerPage ".*"\^\^xsd:integer;/);
+          triplesPerPage = x.toString('utf-8').search(/hydra:itemsPerPage ".*"\^\^xsd:integer/);
         });
       });
     });

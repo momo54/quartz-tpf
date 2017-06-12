@@ -19,8 +19,10 @@ script:
 - npm run lint
 - npm test
 after_script: kill -9 $(ps aux | grep node | awk '{print $2}')
+before_deploy: npm run build
 deploy:
   provider: npm
+  skip_cleanup: true
   email: thomas.minier@protonmail.com
   api_key:
     secure: Ahg3XsqV5b2rjxy17aqCRXZrCzALc8jefC6gp7fcjeCQQGkSbhKSX5RVVlkFlU1GMf2UTCaWD3HMqRTX1xzGaMoOxsPpC+zSmwxuubO57/l34SHEyv94APajHDj6vBDvetQBxLk6WmpqpAdWpH9DlJjhKKZCLV2qa0Jad37DI7fclsBK/iYzVx417IXl3l0R65KENviQpZl9XCwU0O5DmL1VmUZlW98mgI3JRDl5P7bk96WjW3CW1PkBCvMVxU5hk4/t2rLTL/knaAMFdHdyktvesol7JY9QyO336DMi2hu1v2oLrboXlJR9CnKCuSbN+Lk4bU/i7/Ilyt3W57ja93S2MMpblStSFUaZpyYFqobChSJuYleP4M+NhkTiJ+E2lnG6wsIFgQuZlgK0iJ3iroJ6P9dAZUZ2RngxNrvPvstMbaws4oilhrgN/JXfb6GJje/zrkhf0y5IjGvXDh3NsYhH7Y56kmhgTy8fV9UuYKKV/UvmMgXGrpI6RQCWndDgp78uZEUku83UHTP5v+/Pbp6AAF1tyxwR49J18QzHPft/1O48cx0IufmyUfQLeC21emvww59fdL1F535mL6nNAv1MiYhWFPBEiX0kfPeaJNe7EsiEsjploSRRisosCxUjICxSZkwRYlSqjF09OivRlSY/gPhP1uOqpMaKUBu5Qws=
