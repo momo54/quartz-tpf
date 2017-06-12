@@ -1,6 +1,6 @@
 {
   "name": "quartz-tpf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "QUaRTz",
   "main": "./src/query-engine.js",
   "bin": {
