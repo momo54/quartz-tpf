@@ -27,8 +27,8 @@ SOFTWARE.
 
 const fs = require('fs');
 const program = require('commander');
-const ldf = require('../../Client-fix.js/ldf-client.js');
-const prefixes = require('../Client.js/config-default.json').prefixes;
+const ldf = require('ldf-client');
+const prefixes = require('ldf-client/config-default.json').prefixes;
 ldf.Logger.setLevel('EMERGENCY');
 
 // Command line interface to execute queries

@@ -26,7 +26,7 @@ SOFTWARE.
 
 const ModelRepository = require('./model/model-repository.js');
 const processor = require('./analyzer/processor.js');
-const ldf = require('../Client.js/ldf-client.js');
+const ldf = require('ldf-client');
 const Cache = require('lru-cache');
 const _ = require('lodash');
 const prefixes = require('./prefixes.json'); // some very common prefixes

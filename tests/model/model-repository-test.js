@@ -25,7 +25,7 @@ SOFTWARE.
 'use strict';
 
 require('chai').should();
-const ldf = require('../../Client.js/ldf-client.js');
+const ldf = require('ldf-client');
 const Model = require('../../src/model/model.js');
 const ModelRepository = require('../../src/model/model-repository.js');
 ldf.Logger.setLevel('WARNING');

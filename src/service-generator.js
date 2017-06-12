@@ -25,7 +25,7 @@ SOFTWARE.
 'use strict';
 
 const formulas = require('./analyzer/formulas.js');
-const rdf = require('../Client.js/lib/util/RdfUtil.js');
+const rdf = require('ldf-clientlib/util/RdfUtil.js');
 const _ = require('lodash');
 
 // sort patterns with the same algorithm used by TPF + sort triple by number of variables
