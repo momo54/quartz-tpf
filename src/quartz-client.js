@@ -57,6 +57,25 @@ class QuartzClient {
   }
 
   /**
+   * Set an option of the client
+   * @param {string} key   - The name of the option (currently supported: locLimit, usePeneloop, prefixes)
+   * @param {*} value      - The new value for the option
+   * @return {void}
+   */
+  setOption (key, value) {
+    switch (key) {
+      case 'locLimit':
+        this._options.locLimit = value;
+        break;
+      case 'usePeneloop':
+        this._options.usePeneloop = value;
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
    * Build a query execution plan
    * @param  {string} query       - The query to execute
    * @param  {string[]} servers - Set of TPF servers used to execute the query

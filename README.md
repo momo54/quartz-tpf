@@ -43,6 +43,11 @@ cd virtual-decomposer/
 npm i --production
 ```
 
+in the browser
+```html
+<script src="node_modules/quartz-tpf/quartz-tpf.bundle.js" type="text/javascript" />
+```
+
 # Experiments
 
 ## Datasets and [queries](https://github.com/Callidon/quartz-tpf/blob/master/scripts/queriesWatDiv100)

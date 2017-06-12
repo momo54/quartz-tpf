@@ -12,8 +12,8 @@ if [ "$#" -ne 3 ]; then
 fi
 
 RESULTS=`basename $FILE`
-# SERVER="http://localhost:8000/watDiv_100"
 SERVER="http://52.39.116.115/watDiv_100"
+# SERVER="http://localhost:8000/watDiv_100"
 pids=()
 echo -n "$NBCLIENTS," >> $OUTPUT/execution_times.csv
 

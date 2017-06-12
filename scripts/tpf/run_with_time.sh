@@ -11,6 +11,8 @@ if [ "$#" -ne 3 ]; then
   exit
 fi
 
+SERVERS="http://52.39.116.115/watDiv_100 http://52.33.245.25/watDiv_100"
+# SERVERS="http://localhost:8000/watDiv_100 http://localhost:8001/watDiv_100"
 RESULTS=`basename $FILE`
 
 # tell eventual proxies to move to the next query
@@ -18,9 +20,12 @@ RESULTS=`basename $FILE`
 # GET http://localhost:8001/move-to-query?name=$RESULTS
 
 if [[ "$MODE" = "peneloop" ]]; then
-  bin/tpf-client.js run models/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -l 0 -p > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+  # bin/tpf-client.js run models/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -l 0 -p > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+  bin/quartz.js $SERVERS -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -l 0 -p > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
 elif [[ "$MODE" = "quartz" ]]; then
-  bin/tpf-client.js run models/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+  # bin/tpf-client.js run models/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+  bin/quartz.js $SERVERS -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
 else
-  bin/tpf-client.js run models-local/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -p > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+  # bin/tpf-client.js run models-local/$RESULTS.json -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -p > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
+  bin/quartz.js $SERVERS -f $FILE -t application/sparql-results+xml -m $OUTPUT/execution_times.csv -p > $OUTPUT/results/$RESULTS 2> $OUTPUT/errors/$RESULTS
 fi
