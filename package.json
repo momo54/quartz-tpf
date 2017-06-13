@@ -1,6 +1,6 @@
 {
   "name": "quartz-tpf",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Quartz: Parallel SPARQL query processing over replicated Triple Pattern Fragments",
   "main": "./quartz-tpf.js",
   "bin": {
