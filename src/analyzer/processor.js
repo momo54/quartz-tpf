@@ -33,14 +33,15 @@ const normalize = require('./normalizer.js');
  * @param  {string} query     - The SPARQL query to process
  * @param  {Object} endpoints - The endpoints used for localization
  * @param  {Object} cardinalities  - The cardinality associated with each triple pattern of the BGP
+ * @param  {Object} sourceSelection - The source selection for this query
  * @param  {int}    locLimit  - The maximum number of triples to localize per BGP (default to 1)
  * @param  {boolean} usePeneloop   - Use peneloop to process joins if set to True
  * @param  {Object} prefixes  - Additional prefixes to be used by the normalizer (default to nothing)
  * @return {Object} The root of the logical query execution plan
  */
-const processQuery = (query, endpoints, cardinalities, locLimit = 1, usePeneloop = false, prefixes = {}) => {
+const processQuery = (query, endpoints, cardinalities, sourceSelection = {}, locLimit = 1, usePeneloop = false, prefixes = {}) => {
   let q = normalize(query, prefixes);
-  q = localization.localizeQuery(q, endpoints, cardinalities, locLimit, usePeneloop);
+  q = localization.localizeQuery(q, endpoints, cardinalities, sourceSelection, locLimit, usePeneloop);
   return decompositions.decomposeQuery(q);
 };
 

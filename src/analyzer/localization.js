@@ -29,6 +29,20 @@ const sortPatterns = require('./join-ordering.js');
 const _ = require('lodash');
 
 /**
+ * Find the relevant sources for a triple pattern in a source selection
+ * @param  {Object} triple                - A triple pattern
+ * @param  {Object} sourceSelection       - The corresponding source selection
+ * @param  {string|string[]} defaultValue - Default value if no source selection is found
+ * @return {string|string[]} the relevant sources for the triple pattern in the source selection
+ */
+const relevantSources = (triple, sourceSelection, defaultValue) => {
+  const key = JSON.stringify(triple);
+  if (key in sourceSelection)
+    return sourceSelection[key];
+  return defaultValue;
+};
+
+/**
  * Build a SPARQL service subquery
  * @param  {Object} triple    - The unique triple pattern of the subquery
  * @param  {string} endpoint  - The endpoint of the service query
@@ -103,27 +117,28 @@ const localizeService = (triple, endpoints) => {
  * @param  {Object} cardinalities  - The cardinality associated with each triple pattern of the BGP
  * @param  {int} limit             - The maximum number of triples to localize in the BGP (default to all triples)
  * @param  {boolean} usePeneloop   - Use peneloop to process joins if set to True
+ * @param  {Object} sourceSelection - The source selection for this query
  * @return {Object} The localized BGP
  */
-const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = -1, usePeneloop = true) => {
+const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = -1, usePeneloop = true, sourceSelection = {}) => {
   // sort triples like TPF does, to ensure the order of the localized triples match the order in which TPF execute triples
   let triples = _.flattenDeep(sortPatterns(bgp.triples, cardinalities));
   if (cardinalities[JSON.stringify(triples[0])] > 1) {
     if (limit > 0) {
-      const localized = triples.slice(0, limit).map(tp => localizeTriple(tp, endpoints));
+      const localized = triples.slice(0, limit).map(tp => localizeTriple(tp, relevantSources(tp, sourceSelection, endpoints)));
       triples = localized.concat(triples.slice(limit).map(tp => _.merge({
         operator: {
           type: (usePeneloop ? 'peneloop' : 'classic'),
-          endpoints
+          endpoints: relevantSources(tp, sourceSelection, endpoints)
         }
       }, tp)));
     } else if (limit === -1) {
-      triples = triples.map(tp => localizeTriple(tp, endpoints));
+      triples = triples.map(tp => localizeTriple(tp, relevantSources(tp, sourceSelection, endpoints)));
     } else if (usePeneloop) {
       triples = triples.map(tp => _.merge({
         operator: {
           type: 'peneloop',
-          endpoints
+          endpoints: relevantSources(tp, sourceSelection, endpoints)
         }
       }, tp));
     }
@@ -139,18 +154,19 @@ const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = -1, usePeneloop
  * @param  {Object} node      - A SPARQL node to localize
  * @param  {Object} endpoints - The endpoints used for localization
  * @param  {Object} cardinalities  - The cardinality associated with each triple pattern of the BGP
+ * @param  {Object} sourceSelection - The source selection for this query
  * @param  {int} limit        - The maximum number of triples to localize in each BGP (default to all triples)
  * @param  {boolean} usePeneloop   - Use peneloop to process joins if set to True
  * @return {Object} The localized query
  */
-const localizeQuery = (node, endpoints, cardinalities = {}, limit = 0, usePeneloop = true) => {
+const localizeQuery = (node, endpoints, cardinalities = {}, sourceSelection = {}, limit = 0, usePeneloop = true) => {
   const type = node.type.toLowerCase();
   switch (type) {
     case 'bgp':
-      return localizeBGP(node, endpoints, cardinalities, limit, usePeneloop);
+      return localizeBGP(node, endpoints, cardinalities, limit, usePeneloop, sourceSelection);
     case 'query': {
       const query = _.merge({}, node);
-      query.where = query.where.map(p => localizeQuery(p, endpoints, cardinalities, limit, usePeneloop));
+      query.where = query.where.map(p => localizeQuery(p, endpoints, cardinalities, sourceSelection, limit, usePeneloop));
       return query;
     }
     case 'union':
@@ -158,7 +174,7 @@ const localizeQuery = (node, endpoints, cardinalities = {}, limit = 0, usePenelo
     case 'optional':
       return {
         type,
-        patterns: node.patterns.map(p => localizeQuery(p, endpoints, cardinalities, limit, usePeneloop))
+        patterns: node.patterns.map(p => localizeQuery(p, endpoints, cardinalities, sourceSelection, limit, usePeneloop))
       };
     case 'filter':
       return node;

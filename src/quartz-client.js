@@ -24,6 +24,7 @@ SOFTWARE.
 
 'use strict';
 
+const SourceSelection = require('./source-selection/source-selection.js');
 const ModelRepository = require('./model/model-repository.js');
 const processor = require('./analyzer/processor.js');
 const ldf = require('ldf-client');
@@ -40,16 +41,18 @@ ldf.Logger.setLevel('WARNING');
 class QuartzClient {
   /**
    * Constructor
-   * @param {string} baseServerURL               - The URL of a TPF server which can be used to calibrate the cost model
-   * @param {Object} options                     - Options used to customize the behaviour of the Quartz client
-   * @param {int} [options.locLimit=1]           - Maximum number of triples pattern to localized per BGP (default to 1)
-   * @param {boolean} [options.usePeneloop=true] - Whether to use PeNeLoop to process joins or use classic TPF join operator
-   * @param {Object} options.prefixes            - Additionnal prefixes used when parsing SPARQL queries & RDF data
+   * @param {string} baseServerURL                      - The URL of a TPF server which can be used to calibrate the cost model
+   * @param {Object} options                            - Options used to customize the behaviour of the Quartz client
+   * @param {int} [options.locLimit=1]                  - Maximum number of triples pattern to localized per BGP (default to 1)
+   * @param {boolean} [options.usePeneloop=true]        - Whether to use PeNeLoop to process joins or use classic TPF join operator
+   * @param {SourceSelection} options.sourceSelection   - An optional algorithm used to perform the source selection (by default, {@link SourceSelection})
+   * @param {Object} options.prefixes                   - Additionnal prefixes used when parsing SPARQL queries & RDF data
    */
   constructor (baseServerURL, options) {
     this._options = _.merge({
       locLimit: 1,
       usePeneloop: true,
+      sourceSelection: new SourceSelection(),
       prefixes
     }, options);
     this._defaultClient = new ldf.FragmentsClient(baseServerURL);
@@ -84,7 +87,7 @@ class QuartzClient {
   buildPlan (query, servers) {
     return this._modelRepo.getModel(query, servers)
     .then(model => {
-      const plan = processor(query, servers, model._cardinalities, this._options.locLimit, this._options.usePeneloop, this._options.prefixes);
+      const plan = processor(query, servers, model._cardinalities, this._options.sourceSelection, this._options.locLimit, this._options.usePeneloop, this._options.prefixes);
       return Promise.resolve(_.merge({ modelID: model.id }, plan));
     });
   }

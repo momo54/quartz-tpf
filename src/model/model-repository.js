@@ -133,11 +133,12 @@ class ModelRepository {
     }
     let latencies = [];
     let triplesPerPage = {};
+    const triples = extractTriples(this._parser.parse(query));
     return Promise.all(servers.map(e => this._measureResponseTime(e)))
     .then(timesAndTriples => {
       latencies = timesAndTriples.map(v => v[0]);
       triplesPerPage = _.zipObject(servers, timesAndTriples.map(v => v[1]));
-      return Promise.all(extractTriples(this._parser.parse(query)).map(t => this._measureCardinality(t)));
+      return Promise.all(triples.map(t => this._measureCardinality(t)));
     })
     .then(cardinalities => {
       const nbTriples = _.fromPairs(cardinalities);
@@ -176,7 +177,7 @@ class ModelRepository {
           resolve([ endTime - startTime, triplesPerPage ]);
         });
         res.on('data', x => {
-          triplesPerPage = x.toString('utf-8').search(/hydra:itemsPerPage ".*"\^\^xsd:integer/);
+          triplesPerPage = parseInt(x.toString('utf-8').match(/hydra:itemsPerPage "(.*)"\^\^xsd:integer/)[1] || '-1');
         });
       });
     });

@@ -1,4 +1,4 @@
-/* file : model-repository-test.js
+/* file : source-selection-test.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
@@ -25,32 +25,27 @@ SOFTWARE.
 'use strict';
 
 require('chai').should();
-const ldf = require('ldf-client');
-const Model = require('../../src/model/model.js');
-const ModelRepository = require('../../src/model/model-repository.js');
-ldf.Logger.setLevel('WARNING');
+const AskSourceSelection = require('../../src/source-selection/ask-source-selection.js');
 
-describe('ModelRepository', () => {
-  const client = new ldf.FragmentsClient('http://localhost:5000/books');
-  it('should compute a model for a query and a set of TPF servers', done => {
-    const repo = new ModelRepository(client);
-    const query = 'select * where { ?s ?p ?o .}';
-    const servers = [ 'http://localhost:5000/books', 'http://localhost:5000/books' ];
-    repo.getModel(query, servers)
-    .then(model => {
-      model.id.should.equal(Model.genID(query, servers));
-      model._query.should.equals(query);
-      model._servers.should.equals(servers);
-      model._cardinalities.should.deep.equals({
-        '{"subject":"?s","predicate":"?p","object":"?o"}': 17
-      });
-      model._triplesPerPage.should.deep.equal({
-        'http://localhost:5000/books': 100
-      });
-      model.getCoefficient('http://localhost:5000/books').should.equal(1);
-      model._sumCoefs.should.equals(1);
+describe('AskSourceSelection', () => {
+  it('should perform a simple ASK based source selection', done => {
+    const ss = new AskSourceSelection();
+    const triples = [
+      { subject: '?s', predicate: 'http://dbpedia.org/property/title', object: '?o' },
+      { subject: '?s', predicate: 'http://purl.org/dc/elements/1.1/creator', object: '"J.K. Rowling"' },
+      { subject: '?s', predicate: '?p', object: '?o' }
+    ];
+    const servers = [ 'http://fragments.dbpedia.org/2016-04/en', 'http://localhost:5000/books' ];
+    const expected = {};
+    expected[JSON.stringify(triples[0])] = [ 'http://fragments.dbpedia.org/2016-04/en' ];
+    expected[JSON.stringify(triples[1])] = [ 'http://localhost:5000/books' ];
+    expected[JSON.stringify(triples[2])] = servers;
+
+    ss.perform(triples, servers)
+    .then(selection => {
+      selection.should.deep.equal(expected);
       done();
     })
     .catch(err => done(err));
-  });
+  }).timeout(500);
 });
