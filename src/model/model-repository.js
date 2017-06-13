@@ -177,7 +177,9 @@ class ModelRepository {
           resolve([ endTime - startTime, triplesPerPage ]);
         });
         res.on('data', x => {
-          triplesPerPage = parseInt(x.toString('utf-8').match(/hydra:itemsPerPage "(.*)"\^\^xsd:integer/)[1] || '-1');
+          const itemsPerPage = x.toString('utf-8').match(/hydra:itemsPerPage "(.*)"\^\^xsd:integer/);
+          if (itemsPerPage !== null)
+            triplesPerPage = parseInt(itemsPerPage[1]);
         });
       });
     });
