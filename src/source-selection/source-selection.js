@@ -40,7 +40,7 @@ class SourceSelection {
    * @return {Promise} A Promise fullfilled with an object ythat associate triples patterns with their relevant sources
    */
   perform (triples, servers) {
-    return Promise.resolve(_.zipObject(triples, servers));
+    return Promise.resolve(_.zipObject(triples.map(t => JSON.stringify(t)), _.times(triples.length, () => servers)));
   }
 }
 

@@ -24,12 +24,18 @@ SOFTWARE.
 
 'use strict';
 
-const http = require('http');
+// const http = require('http');
+const request = require('request');
 const Model = require('./model.js');
 const Cache = require('lru-cache');
 const SparqlParser = require('sparqljs').Parser;
-const URL = require('url');
+// const URL = require('url');
 const _ = require('lodash');
+
+const HTTP_HEADERS = {
+  accept: 'text/turtle',
+  'User-Agent': 'Quartz TPF client'
+};
 
 /**
  * Extract all triples from a query
@@ -67,6 +73,9 @@ class ModelRepository {
     this._metadataCache = options.metaCache || new Cache({ max: 500 });
     this._bias = new Map();
     this._parser = new SparqlParser();
+    this._http = request.forever({
+      maxSockets: 5
+    });
   }
 
   /**
@@ -166,26 +175,20 @@ class ModelRepository {
     return new Promise((resolve, reject) => {
       const startTime = Date.now();
       let triplesPerPage = 100; // default value for most TPF server
-      const newUrl = URL.parse(url);
-      const httpOptions = {
-        hostname: newUrl.hostname,
-        port: newUrl.port,
-        path: newUrl.path,
-        headers: {
-          accept: 'text/turtle'
-        }
+      const options = {
+        url,
+        headers: HTTP_HEADERS
       };
-      http.get(httpOptions, res => {
-        res.once('error', err => reject(err));
-        res.once('end', () => {
-          const endTime = Date.now();
-          resolve([ endTime - startTime, triplesPerPage ]);
-        });
-        res.on('data', x => {
-          const itemsPerPage = x.toString('utf-8').match(/hydra:itemsPerPage "(.*)"\^\^xsd:integer/);
+      this._http.get(options, (err, res, body) => {
+        const endTime = Date.now();
+        if (err) {
+          reject(err);
+        } else {
+          const itemsPerPage = body.toString('utf-8').match(/hydra:itemsPerPage "(.*)"\^\^xsd:integer/);
           if (itemsPerPage !== null)
             triplesPerPage = parseInt(itemsPerPage[1]);
-        });
+          resolve([ endTime - startTime, triplesPerPage ]);
+        }
       });
     });
   }
