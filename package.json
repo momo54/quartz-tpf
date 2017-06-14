@@ -10,7 +10,6 @@
     "lint": "eslint src/",
     "test": "mocha tests/**/*.js --trace-deprecation",
     "doc": "jsdoc -c jsdoc.json README.md src/",
-    "start-ldf": "cd tests/data/ && ldf-server ./ldf-config.json 5000 4",
     "build": "browserify -r ./quartz-tpf.js:quartz-tpf  -t [ babelify --presets [ es2015 ] ]   > ./quartz-tpf.bundle.js"
   },
   "repository": {
@@ -40,7 +39,6 @@
     "eslint": "^3.17.1",
     "http-proxy": "^1.16.2",
     "jsdoc": "^3.4.3",
-    "ldf-server": "^2.2.2",
     "mocha": "^3.2.0"
   }
 }

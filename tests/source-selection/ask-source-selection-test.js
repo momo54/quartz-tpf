@@ -32,13 +32,13 @@ describe('AskSourceSelection', () => {
     const ss = new AskSourceSelection();
     const triples = [
       { subject: '?s', predicate: 'http://dbpedia.org/property/title', object: '?o' },
-      { subject: '?s', predicate: 'http://purl.org/dc/elements/1.1/creator', object: '"J.K. Rowling"' },
+      { subject: '?s', predicate: 'https://w3id.org/scholarlydata/ontology/conference-ontology.owl#isAffiliationOf', object: '?o' },
       { subject: '?s', predicate: '?p', object: '?o' }
     ];
-    const servers = [ 'http://fragments.dbpedia.org/2016-04/en', 'http://localhost:5000/books' ];
+    const servers = [ 'http://fragments.dbpedia.org/2016-04/en', 'http://data.linkeddatafragments.org/scholarlydata' ];
     const expected = {};
     expected[JSON.stringify(triples[0])] = [ 'http://fragments.dbpedia.org/2016-04/en' ];
-    expected[JSON.stringify(triples[1])] = [ 'http://localhost:5000/books' ];
+    expected[JSON.stringify(triples[1])] = [ 'http://data.linkeddatafragments.org/scholarlydata' ];
     expected[JSON.stringify(triples[2])] = servers;
 
     ss.perform(triples, servers)

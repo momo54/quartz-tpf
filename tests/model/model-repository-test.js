@@ -31,26 +31,26 @@ const ModelRepository = require('../../src/model/model-repository.js');
 ldf.Logger.setLevel('WARNING');
 
 describe('ModelRepository', () => {
-  const client = new ldf.FragmentsClient('http://localhost:5000/books');
+  const client = new ldf.FragmentsClient('http://fragments.dbpedia.org/2016-04/en');
   it('should compute a model for a query and a set of TPF servers', done => {
     const repo = new ModelRepository(client);
-    const query = 'select * where { ?s ?p ?o .}';
-    const servers = [ 'http://localhost:5000/books', 'http://localhost:5000/books' ];
+    const query = 'select * where { ?s <http://dbpedia.org/property/page> ?o .}';
+    const servers = [ 'http://fragments.dbpedia.org/2016-04/en', 'http://fragments.dbpedia.org/2016-04/en' ];
     repo.getModel(query, servers)
     .then(model => {
       model.id.should.equal(Model.genID(query, servers));
       model._query.should.equals(query);
       model._servers.should.equals(servers);
       model._cardinalities.should.deep.equals({
-        '{"subject":"?s","predicate":"?p","object":"?o"}': 17
+        '{"subject":"?s","predicate":"http://dbpedia.org/property/page","object":"?o"}': 856994
       });
       model._triplesPerPage.should.deep.equal({
-        'http://localhost:5000/books': 100
+        'http://fragments.dbpedia.org/2016-04/en': 100
       });
-      model.getCoefficient('http://localhost:5000/books').should.equal(1);
+      model.getCoefficient('http://fragments.dbpedia.org/2016-04/en').should.equal(1);
       model._sumCoefs.should.equals(1);
       done();
     })
     .catch(err => done(err));
-  });
+  }).timeout(500);
 });
