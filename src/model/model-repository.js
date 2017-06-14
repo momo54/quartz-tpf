@@ -105,7 +105,7 @@ class ModelRepository {
    */
   _applyBias (model) {
     this._bias.forEach((coef, endpoint) => {
-      if (endpoint in model.coefficients) model.coefficients[endpoint] = coef;
+      if (endpoint in model._coefficients) model._coefficients[endpoint] = coef;
     });
     return model;
   }
@@ -123,16 +123,17 @@ class ModelRepository {
    * Compute a model for a query and a set of TPF servers
    * @param  {Object} query             - A query, normalized in the format of sparql.js
    * @param  {string[]} servers       - A set of TPF servers
+   * @param  {SourceSelection} sourceSelection - The source selection algorithm used
    * @return {Promise} A promise fullfilled with the computed {@link Model}
    */
-  getModel (query, servers) {
+  getModel (query, servers, sourceSelection) {
     const cacheKey = Model.genID(query, servers);
     const cachedModel = this._modelCache.get(cacheKey);
     if (cachedModel !== undefined) {
       return Promise.resolve(cachedModel);
     }
     let latencies = [];
-    let triplesPerPage = {};
+    let triplesPerPage = {}, nbTriples = {};
     const triples = extractTriples(this._parser.parse(query));
     return Promise.all(servers.map(e => this._measureResponseTime(e)))
     .then(timesAndTriples => {
@@ -141,11 +142,15 @@ class ModelRepository {
       return Promise.all(triples.map(t => this._measureCardinality(t)));
     })
     .then(cardinalities => {
-      const nbTriples = _.fromPairs(cardinalities);
-      let model = new Model(query, servers, latencies, nbTriples, triplesPerPage);
+      nbTriples = _.fromPairs(cardinalities);
+      if (sourceSelection !== undefined)
+        return sourceSelection.perform(triples, servers);
+      return Promise.resolve({});
+    }).then(selection => {
+      let model = new Model(query, servers, latencies, nbTriples, triplesPerPage, selection);
       if (this.hasBias) {
         model = this._applyBias(model);
-        model.sumCoefs = _.keys(model.coefficients).reduce((acc, c) => acc + c, 0);
+        model._sumCoefs = _.values(model._coefficients).reduce((acc, c) => acc + c, 0);
       }
       this._modelCache.set(cacheKey, model);
       return Promise.resolve(model);

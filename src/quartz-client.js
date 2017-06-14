@@ -85,9 +85,9 @@ class QuartzClient {
    * @return {Object} The query execution plan for the given query and servers
    */
   buildPlan (query, servers) {
-    return this._modelRepo.getModel(query, servers)
+    return this._modelRepo.getModel(query, servers, this._options.sourceSelection)
     .then(model => {
-      const plan = processor(query, servers, model._cardinalities, this._options.sourceSelection, this._options.locLimit, this._options.usePeneloop, this._options.prefixes);
+      const plan = processor(query, servers, model._cardinalities, model._selection, this._options.locLimit, this._options.usePeneloop, this._options.prefixes);
       return Promise.resolve(_.merge({ modelID: model.id }, plan));
     });
   }

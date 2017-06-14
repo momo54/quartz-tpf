@@ -42,15 +42,17 @@ class Model {
    * @param  {number[]} times             - Initial reponse times of each TPF server
    * @param  {Object[]} cardinalities     - The cardinalities of each triple pattern in the query
    * @param  {Object[]} triplesPerPage    - Triples served per page per endpoint
+   * @param  {Object} selection           - The source selection for this qUERY AND SET OF SERVERS
    * @param  {boolean}  [preCompute=true] - Wheter the model should be precompiled after creation or not
    */
-  constructor (query, servers, times, cardinalities, triplesPerPage, preCompute = true) {
+  constructor (query, servers, times, cardinalities, triplesPerPage, selection = {}, preCompute = true) {
     this.id = Model.genID(query, servers);
     this._query = query;
     this._servers = servers;
     this._times = _.zipObject(servers, times);
     this._cardinalities = cardinalities;
     this._triplesPerPage = Object.assign({}, triplesPerPage);
+    this._selection = selection;
     this._weights = {};
     this._minWeight = Infinity;
     this._coefficients = {};
@@ -65,7 +67,7 @@ class Model {
    * @return {string} The unique model ID
    */
   static genID (query, servers) {
-    return `https://callidon.github.io/quartz-tpf/model&q=${JSON.stringify(query)}&e={${servers.sort().join(';')}}`;
+    return `https://callidon.github.io/quartz-tpf/model?v=${VERSION_ID}&q=${encodeURIComponent(JSON.stringify(query))}&e=${servers.map(encodeURIComponent).sort().join('&e=')}`;
   }
 
   /**
@@ -76,12 +78,12 @@ class Model {
   static fromJSON (json) {
     let model;
     if ('version' in json && json.version === VERSION_ID) {
-      model = new Model(json['qtz:query'], json['qtz:servers'], json['qtz:times'], json['qtz:cardinalities'], json['hydra:itemsPerPage'], true);
+      model = new Model(json['qtz:query'], json['qtz:servers'], json['qtz:times'], json['qtz:cardinalities'], json['hydra:itemsPerPage'], json['hydra:selection'], true);
       model.id = json['@id'];
     } else {
       // load legacy models
       const servers = _.values(json.coefficients);
-      model = new Model(json.query, servers, _.times(servers.length, _.constant(0)), json.cardinalities, json.triplesPerPage, false);
+      model = new Model(json.query, servers, _.times(servers.length, _.constant(0)), json.cardinalities, json.triplesPerPage, {}, false);
       model._coefficients = json.coefficients;
       model._sumCoefs = json.sumCoefs;
     }
@@ -109,6 +111,7 @@ class Model {
       'qtz:times': this._times,
       'qtz:cardinalities': this._cardinalities,
       'hydra:itemsPerPage': this._triplesPerPage,
+      'qtz:selection': this._selection,
       'prov:generatedAtTime': new Date().toISOString()
     };
   }

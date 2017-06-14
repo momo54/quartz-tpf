@@ -123,7 +123,8 @@ const localizeService = (triple, endpoints) => {
 const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = -1, usePeneloop = true, sourceSelection = {}) => {
   // sort triples like TPF does, to ensure the order of the localized triples match the order in which TPF execute triples
   let triples = _.flattenDeep(sortPatterns(bgp.triples, cardinalities));
-  if (cardinalities[JSON.stringify(triples[0])] > 1) {
+  const cardFirstTriple = cardinalities[JSON.stringify(triples[0])];
+  if (cardFirstTriple > 1) {
     if (limit > 0) {
       const localized = triples.slice(0, limit).map(tp => localizeTriple(tp, relevantSources(tp, sourceSelection, endpoints)));
       triples = localized.concat(triples.slice(limit).map(tp => _.merge({
@@ -134,14 +135,16 @@ const localizeBGP = (bgp, endpoints, cardinalities = {}, limit = -1, usePeneloop
       }, tp)));
     } else if (limit === -1) {
       triples = triples.map(tp => localizeTriple(tp, relevantSources(tp, sourceSelection, endpoints)));
-    } else if (usePeneloop) {
-      triples = triples.map(tp => _.merge({
-        operator: {
-          type: 'peneloop',
-          endpoints: relevantSources(tp, sourceSelection, endpoints)
-        }
-      }, tp));
     }
+  }
+
+  if ((limit === 0 || cardFirstTriple === 1) && usePeneloop) {
+    triples = triples.map(tp => _.merge({
+      operator: {
+        type: 'peneloop',
+        endpoints: relevantSources(tp, sourceSelection, endpoints)
+      }
+    }, tp));
   }
   return {
     type: 'bgp',

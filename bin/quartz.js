@@ -59,14 +59,14 @@ if (program.query) {
   process.stderr.write('Error: you must specify a SPARQL query to execute.\nSee ./tpf-client --help for more details.\n');
   process.exit(1);
 }
-
 // build configuration for the query analyzer
 const config = {
-  usePeneloop: program.peneloop || true,
-  locLimit: program.limit
+  usePeneloop: program.peneloop !== undefined,
+  locLimit: (program.limit !== undefined) ? parseInt(program.limit) : 1
 };
 
 const client = new QuartzClient(servers[0], config);
+client._modelRepo.setBias('http://localhost:8001/watDiv_100', 2);
 client.buildPlan(query, servers)
 .then(plan => {
   const sparqlIterator = client.executePlan(plan, false);
