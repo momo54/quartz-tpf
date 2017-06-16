@@ -44,7 +44,6 @@ const proxyConfig = {
 };
 
 const delay = parseInt(program.args[1]) || 30;
-console.log(delay);
 
 const proxy = HttpProxy.createProxyServer();
 const proxyServer = http.createServer((req, res) => {
