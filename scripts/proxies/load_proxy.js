@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* file : proxy.js
+/* file : load_proxy.js
 MIT License
 
 Copyright (c) 2017 Thomas Minier
