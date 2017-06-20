@@ -28,27 +28,38 @@ require('chai').should();
 const ldf = require('ldf-client');
 const Model = require('../../src/model/model.js');
 const ModelRepository = require('../../src/model/model-repository.js');
+const mockPages = require('../nock-utils.js').mockPages;
 ldf.Logger.setLevel('WARNING');
 
 describe('ModelRepository', () => {
-  const client = new ldf.FragmentsClient('http://fragments.dbpedia.org/2016-04/en');
+  mockPages({}, 'http://example.first.org', 'en', { nbPages: 10 });
+  const client = new ldf.FragmentsClient('http://example.first.org/en');
   it('should compute a model for a query and a set of TPF servers', done => {
     const repo = new ModelRepository(client);
     const query = 'select * where { ?s <http://dbpedia.org/property/page> ?o .}';
-    const servers = [ 'http://fragments.dbpedia.org/2016-04/en', 'http://fragments.dbpedia.org/2016-04/en' ];
+    const servers = [ 'http://example.first.org/en', 'http://example.second.org/en' ];
+
+    // setup mocks
+    const triple = { predicate: 'http://dbpedia.org/property/page' };
+    mockPages({}, 'http://example.first.org', 'en', { delay: 10, pageSize: 100});
+    mockPages({}, 'http://example.second.org', 'en', { delay: 10, pageSize: 200 });
+    mockPages(triple, 'http://example.first.org', 'en', { cardinality: 1420, pageSize: 100 });
+    mockPages(triple, 'http://example.second.org', 'en', { cardinality: 1420, pageSize: 200 });
+
     repo.getModel(query, servers)
     .then(model => {
       model.id.should.equal(Model.genID(query, servers));
       model._query.should.equals(query);
       model._servers.should.equals(servers);
       model._cardinalities.should.deep.equals({
-        '{"subject":"?s","predicate":"http://dbpedia.org/property/page","object":"?o"}': 856994
+        '{"subject":"?s","predicate":"http://dbpedia.org/property/page","object":"?o"}': 1420
       });
       model._triplesPerPage.should.deep.equal({
-        'http://fragments.dbpedia.org/2016-04/en': 100
+        'http://example.first.org/en': 100,
+        'http://example.second.org/en': 200
       });
-      model.getCoefficient('http://fragments.dbpedia.org/2016-04/en').should.equal(1);
-      model._sumCoefs.should.equals(1);
+      model.getCoefficient('http://example.first.org/en').should.equal(1);
+      model._sumCoefs.should.equals(2);
       done();
     })
     .catch(err => done(err));

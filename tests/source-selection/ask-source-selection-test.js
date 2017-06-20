@@ -26,6 +26,7 @@ SOFTWARE.
 
 require('chai').should();
 const AskSourceSelection = require('../../src/source-selection/ask-source-selection.js');
+const mockPages = require('../nock-utils.js').mockPages;
 
 describe('AskSourceSelection', () => {
   it('should perform a simple ASK based source selection', done => {
@@ -35,10 +36,19 @@ describe('AskSourceSelection', () => {
       { subject: '?s', predicate: 'https://w3id.org/scholarlydata/ontology/conference-ontology.owl#isAffiliationOf', object: '?o' },
       { subject: '?s', predicate: '?p', object: '?o' }
     ];
-    const servers = [ 'http://fragments.dbpedia.org/2016-04/en', 'http://data.linkeddatafragments.org/scholarlydata' ];
+    const servers = [ 'http://example.first.org/en', 'http://example.second.org/scholarlydata' ];
+
+    // setup HTTP mocks
+    mockPages(triples[0], 'http://example.first.org', 'en', { headers: { accept: 'text/turtle' } });
+    mockPages(triples[1], 'http://example.first.org', 'en', { cardinality: 0, headers: { accept: 'text/turtle' } });
+    mockPages(triples[2], 'http://example.first.org', 'en', { headers: { accept: 'text/turtle' } });
+    mockPages(triples[0], 'http://example.second.org', 'scholarlydata', { cardinality: 0, headers: { accept: 'text/turtle' } });
+    mockPages(triples[1], 'http://example.second.org', 'scholarlydata', { headers: { accept: 'text/turtle' } });
+    mockPages(triples[2], 'http://example.second.org', 'scholarlydata', { headers: { accept: 'text/turtle' } });
+
     const expected = {};
-    expected[JSON.stringify(triples[0])] = [ 'http://fragments.dbpedia.org/2016-04/en' ];
-    expected[JSON.stringify(triples[1])] = [ 'http://data.linkeddatafragments.org/scholarlydata' ];
+    expected[JSON.stringify(triples[0])] = [ 'http://example.first.org/en' ];
+    expected[JSON.stringify(triples[1])] = [ 'http://example.second.org/scholarlydata' ];
     expected[JSON.stringify(triples[2])] = servers;
 
     ss.perform(triples, servers)
