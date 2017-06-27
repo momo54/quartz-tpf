@@ -1,5 +1,4 @@
 #  Quartz
-[![Build Status](https://travis-ci.org/Callidon/quartz-tpf.svg?branch=master)](https://travis-ci.org/Callidon/quartz-tpf)
 
 Quartz is [Triple Pattern Fragment](https://github.com/LinkedDataFragments/Client.js) client that enables parallel SPARQL query processing over replicated Triple Pattern Fragments.
 
@@ -52,7 +51,7 @@ in the browser
 
 ## Datasets and [queries](https://github.com/Callidon/quartz-tpf/blob/master/scripts/queriesWatDiv100)
 
-We use one instance of the Waterloo SPARQL Diversity Test Suite (WatDiv) synthetic dataset[2,3] with 10^5 triples, encoded in the HDT[4] format.
+We use one instance of the Waterloo SPARQL Diversity Test Suite (WatDiv) synthetic dataset[2,3] with 10^7 triples, encoded in the HDT[4] format.
 We generate 50,000 queries from 500 templates.
 
 Next, we eliminate all duplicated queries and then pick 100 random queries to be executed against our dataset. Generated queries are STAR, PATH and SNOWFLAKE shaped queries, all using the DISTINCT modifier.
