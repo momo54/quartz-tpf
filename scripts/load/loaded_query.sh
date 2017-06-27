@@ -28,16 +28,18 @@ for (( c=1; c<=$NBCLIENTS; c++ ))
 do
   if [[ "$MODE" = "peneloop" ]]; then
     # bin/tpf-client.js run models/$RESULTS.json -f $FILE -t application/sparql-results+xml -l 0 -p -s > /dev/null 2> /dev/null &
-    bin/quartz.js $SERVERS -f $FILE -t application/sparql-results+xml -l 0 -p -s > /dev/null 2> /dev/null &
+    bin/quartz-forever.js $SERVERS -f $FILE -t application/sparql-results+xml -l 0 -p > /dev/null 2> /dev/null &
   elif [[ "$MODE" = "quartz" ]]; then
     # bin/tpf-client.js run models/$RESULTS.json -f $FILE -t application/sparql-results+xml -s > /dev/null 2> /dev/null &
-    bin/quartz.js $SERVERS -f $FILE -t application/sparql-results+xml -s > /dev/null 2> /dev/null &
+    bin/quartz-forever.js $SERVERS -f $FILE -t application/sparql-results+xml > /dev/null 2> /dev/null &
   else
     # bin/tpf-client.js run models/$RESULTS.json -f $FILE -t application/sparql-results+xml -p -s > /dev/null 2> /dev/null &
-    bin/quartz.js $SERVERS -f $FILE -t application/sparql-results+xml -p -s > /dev/null 2> /dev/null &
+    bin/quartz-forever.js $SERVERS -f $FILE -t application/sparql-results+xml -p > /dev/null 2> /dev/null &
   fi
   pids+=($!)
 done
+
+sleep 5
 
 # ./scripts/tpf/run_with_time.sh $FILE $OUTPUT $MODE
 if [[ "$MODE" = "peneloop" ]]; then

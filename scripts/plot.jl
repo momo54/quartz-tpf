@@ -5,7 +5,12 @@ using RDatasets
 
 include("utils.jl")
 
-Gadfly.push_theme(panel_theme)
+custom_theme = Theme(
+  key_position = :none,
+  bar_spacing = 0.2px
+)
+
+Gadfly.push_theme(custom_theme)
 
 blacklist = [3,6,7,8,9,11,14,15,16,18,19,20,22,24,26,27,28,30,32,33,34,36,40,42,44,46,49,51,52,56,57,60,64,65,66,67,68,73,74,76,79,82,85,89,93]
 
@@ -13,11 +18,22 @@ function processData(df, list)
   return DataFrame(clean(df, list))
 end
 
+function getBlacklist(ref)
+  res = []
+  groups = groupby(ref, [:query])
+  for group in groups
+    if group[1, :calls] == 0 || group[2, :calls] == 0
+      push!(res, group[1, :query])
+    end
+  end
+  return res
+end
+
 function makeTimeplotEQ(df, full = true)
   if full
-    return plot(df, x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95]), Guide.yticks(ticks=[0,400,800,1200]))
+    return plot(df, x=:servers, y=:mean_value, color=:servers, Geom.boxplot, Guide.xlabel("Approach"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), colors(), Guide.yticks(ticks=[0,400,800,1200]), Guide.title("Execution time using equivalent servers, for queries with execution time > 3s"))
   else
-    return plot(df, x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[0,5,10,15,20,25,30,35,40,45,50]), Guide.yticks(ticks=[0,400,800,1200]))
+    return plot(df, x=:servers, y=:mean_value, color=:servers, Geom.boxplot, Guide.xlabel("Approach"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), colors(), Guide.yticks(ticks=[0,400,800,1200]), Guide.title("Execution time using equivalent servers, for queries with execution time > 3s"))
   end
 end
 
