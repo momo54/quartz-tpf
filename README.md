@@ -3,6 +3,7 @@
 Quartz is [Triple Pattern Fragment](https://github.com/LinkedDataFragments/Client.js) client that enables parallel SPARQL query processing over replicated Triple Pattern Fragments.
 
 # Table of contents
+
 * [Abstract](#abstract)
 * [Installation](#installation)
 * [Experiments](#experiments)
