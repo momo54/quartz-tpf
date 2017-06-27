@@ -13,9 +13,14 @@ custom_theme = Theme(
 Gadfly.push_theme(custom_theme)
 
 blacklist = [3,6,7,8,9,11,14,15,16,18,19,20,22,24,26,27,28,30,32,33,34,36,40,42,44,46,49,51,52,56,57,60,64,65,66,67,68,73,74,76,79,82,85,89,93]
+whitelist = [47, 48, 52, 78, 12]
 
 function processData(df, list)
   return DataFrame(clean(df, list))
+end
+
+function processDataBis(df, list)
+  return DataFrame(cleanBis(df, list))
 end
 
 function getBlacklist(ref)
@@ -31,9 +36,9 @@ end
 
 function makeTimeplotEQ(df, full = true)
   if full
-    return plot(df, x=:servers, y=:mean_value, color=:servers, Geom.boxplot, Guide.xlabel("Approach"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), colors(), Guide.yticks(ticks=[0,400,800,1200]), Guide.title("Execution time using equivalent servers, for queries with execution time > 3s"))
+    return plot(df, xgroup=:query, x=:servers, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar(position=:dodge,orientation=:vertical), free_y_axis=true), Guide.xlabel("Approach"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), colors())
   else
-    return plot(df, x=:servers, y=:mean_value, color=:servers, Geom.boxplot, Guide.xlabel("Approach"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), colors(), Guide.yticks(ticks=[0,400,800,1200]), Guide.title("Execution time using equivalent servers, for queries with execution time > 3s"))
+    return plot(df, xgroup=:query, x=:servers, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar(position=:dodge,orientation=:vertical), free_y_axis=true), Guide.xlabel("Approach"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), colors())
   end
 end
 
@@ -159,21 +164,21 @@ time_all2 = [time_ref;time_peneloop_neq;time_quartz_neq;time_all_neq]
 compl_all = [compl_peneloop_eq;compl_quartz_eq;compl_all_eq;compl_peneloop_neq;compl_quartz_neq;compl_all_neq]
 
 # filter data for another plot
-filter_ref = processData(time_ref, blacklist)
+filter_ref = processDataBis(time_ref, whitelist)
 filter_ref[:query] = 1:nrow(filter_ref)
 
-filter_pen_eq = processData(time_peneloop_eq, blacklist)
+filter_pen_eq = processDataBis(time_peneloop_eq, whitelist)
 filter_pen_eq[:query] = 1:nrow(filter_pen_eq)
-filter_quartz_eq = processData(time_quartz_eq, blacklist)
+filter_quartz_eq = processDataBis(time_quartz_eq, whitelist)
 filter_quartz_eq[:query] = 1:nrow(filter_quartz_eq)
-filter_all_eq = processData(time_all_eq, blacklist)
+filter_all_eq = processDataBis(time_all_eq, whitelist)
 filter_all_eq[:query] = 1:nrow(filter_all_eq)
 
-filter_pen_neq = processData(time_peneloop_neq, blacklist)
+filter_pen_neq = processDataBis(time_peneloop_neq, whitelist)
 filter_pen_neq[:query] = 1:nrow(filter_pen_neq)
-filter_quartz_neq = processData(time_quartz_neq, blacklist)
+filter_quartz_neq = processDataBis(time_quartz_neq, whitelist)
 filter_quartz_neq[:query] = 1:nrow(filter_quartz_neq)
-filter_all_neq = processData(time_all_neq, blacklist)
+filter_all_neq = processDataBis(time_all_neq, whitelist)
 filter_all_neq[:query] = 1:nrow(filter_all_neq)
 
 filtered_all_eq = [filter_ref;filter_pen_eq;filter_quartz_eq;filter_all_eq]
@@ -185,21 +190,21 @@ filtered_all_neq = [filter_ref;filter_pen_neq;filter_quartz_neq;filter_all_neq]
 # time_plot_12 = plot(time_all2[time_all2[:query] .<= 50, :], x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[0,5,10,15,20,25,30,35,40,45,50]), Guide.yticks(ticks=[0,400,800,1200]))
 # time_plot_22 = plot(time_all2[time_all2[:query] .> 50, :], x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[50,55,60,65,70,75,80,85,90,95]), Guide.yticks(ticks=[0,400,800,1200]))
 
-time_plot_1 = makeTimeplotEQ(time_all)
-time_plot_2 = makeTimeplotNEQ(time_all2)
-
+# time_plot_1 = makeTimeplotEQ(time_all)
+# time_plot_2 = makeTimeplotNEQ(time_all2)
+#
 filtered_plot_1 = makeTimeplotEQ(filtered_all_eq, false)
-filtered_plot_2 = makeTimeplotNEQ(filtered_all_neq, false)
-
-compl_plot = plot(compl_all, xgroup=:servers, x=:query, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar), Guide.xlabel("Queries"), Guide.ylabel("Answer completeness"), Scale.y_continuous, colors(), no_colors_guide)
-
-draw(PDF("amazon/execution_time_eq.pdf", 7inch, 2.5inch), time_plot_1)
-draw(PDF("amazon/execution_time_neq.pdf", 7inch, 2.5inch), time_plot_2)
+# filtered_plot_2 = makeTimeplotNEQ(filtered_all_neq, false)
+#
+# compl_plot = plot(compl_all, xgroup=:servers, x=:query, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar), Guide.xlabel("Queries"), Guide.ylabel("Answer completeness"), Scale.y_continuous, colors(), no_colors_guide)
+#
+# draw(PDF("amazon/execution_time_eq.pdf", 7inch, 2.5inch), time_plot_1)
+# draw(PDF("amazon/execution_time_neq.pdf", 7inch, 2.5inch), time_plot_2)
 draw(PDF("amazon/execution_time_filter_eq.pdf", 7inch, 2.5inch), filtered_plot_1)
-draw(PDF("amazon/execution_time_filter_neq.pdf", 7inch, 2.5inch), filtered_plot_2)
-draw(PNG("amazon/execution_time_eq.png", 7inch, 2.5inch), time_plot_1)
-draw(PNG("amazon/execution_time_neq.png", 7inch, 2.5inch), time_plot_2)
-draw(PNG("amazon/execution_time_filter_eq.png", 7inch, 2.5inch), filtered_plot_1)
-draw(PNG("amazon/execution_time_filter_neq.png", 7inch, 2.5inch), filtered_plot_2)
-draw(PDF("amazon/completeness.pdf", 8inch, 4inch), compl_plot)
-draw(PNG("amazon/completeness.png", 8inch, 4inch), compl_plot)
+# draw(PDF("amazon/execution_time_filter_neq.pdf", 7inch, 2.5inch), filtered_plot_2)
+# draw(PNG("amazon/execution_time_eq.png", 7inch, 2.5inch), time_plot_1)
+# draw(PNG("amazon/execution_time_neq.png", 7inch, 2.5inch), time_plot_2)
+# draw(PNG("amazon/execution_time_filter_eq.png", 7inch, 2.5inch), filtered_plot_1)
+# draw(PNG("amazon/execution_time_filter_neq.png", 7inch, 2.5inch), filtered_plot_2)
+# draw(PDF("amazon/completeness.pdf", 8inch, 4inch), compl_plot)
+# draw(PNG("amazon/completeness.png", 8inch, 4inch), compl_plot)

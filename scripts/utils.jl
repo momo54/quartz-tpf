@@ -15,6 +15,10 @@ function clean(df, list)
   return where(groupby(df, [:query]), d -> ! (d[1, :query] in list))
 end
 
+function cleanBis(df, list)
+  return where(groupby(df, [:query]), d -> (d[1, :query] in list))
+end
+
 # Custom color scale for plots
 function colors()
  return Scale.color_discrete_manual(colorant"#990000", colorant"#ff4000", colorant"#ffbf00")
