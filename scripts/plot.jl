@@ -200,7 +200,7 @@ filtered_plot_1 = makeTimeplotEQ(filtered_all_eq, false)
 #
 # draw(PDF("amazon/execution_time_eq.pdf", 7inch, 2.5inch), time_plot_1)
 # draw(PDF("amazon/execution_time_neq.pdf", 7inch, 2.5inch), time_plot_2)
-draw(PDF("amazon/execution_time_filter_eq.pdf", 5inch, 2.5inch), filtered_plot_1)
+draw(PDF("amazon/execution_time_filter_eq.pdf", 4inch, 2.5inch), filtered_plot_1)
 # draw(PDF("amazon/execution_time_filter_neq.pdf", 7inch, 2.5inch), filtered_plot_2)
 # draw(PNG("amazon/execution_time_eq.png", 7inch, 2.5inch), time_plot_1)
 # draw(PNG("amazon/execution_time_neq.png", 7inch, 2.5inch), time_plot_2)
