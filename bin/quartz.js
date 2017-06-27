@@ -66,7 +66,6 @@ const config = {
 };
 
 const client = new QuartzClient(servers[0], config);
-// client._modelRepo.setBias('http://localhost:8001/watDiv_100', 2);
 client.buildPlan(query, servers)
 .then(plan => {
   const sparqlIterator = client.executePlan(plan, false);
