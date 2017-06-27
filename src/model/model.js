@@ -155,6 +155,7 @@ class Model {
     this._minWeight = Math.min(..._.values(this._weights));
     this._coefficients = _.mapValues(this._weights, w => Math.floor(w / this._minWeight));
     this._sumCoefs = _.values(this._coefficients).reduce((acc, x) => acc + x, 0);
+    // this._sumCoefs = 2;
   }
 
   /**

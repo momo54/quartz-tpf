@@ -37,9 +37,6 @@ program
   .option('-q, --query <query>', 'evaluates the given SPARQL query')
   .option('-f, --file <file>', 'evaluates the SPARQL query in the given file')
   .option('-l, --limit <limit>', 'limit the number of triples to localize per BGP in the query (default to 1)', 1)
-  .option('-t, --type <mime-type>', 'determines the MIME type of the output (e.g., application/json)', 'application/json')
-  .option('-m, --measure <output>', 'measure the query execution time (in seconds) & append it to a file', './execution_times.csv')
-  .option('-s, --silent', 'do not perform any measurement (silent mode)', false)
   .parse(process.argv);
 
 // get servers
@@ -67,21 +64,21 @@ const config = {
 
 const client = new QuartzClient(servers[0], config);
 // client._modelRepo.setBias('http://localhost:8001/watDiv_100', 2);
-client.buildPlan(query, servers)
-.then(plan => {
+const forever = (plan) => {
+  let cpt = 0;
   const sparqlIterator = client.executePlan(plan, false);
   sparqlIterator.on('error', error => {
     process.stderr.write('ERROR: An error occurred during query execution.\n');
     process.stderr.write(error.stack);
   });
-  if (!program.silent) {
-    sparqlIterator.on('end', () => {
-      const endTime = Date.now();
-      const time = endTime - startTime;
-      fs.appendFileSync(program.measure, (time/1000) + '\n');
-    });
-  }
-  const startTime = Date.now();
-  sparqlIterator.on('data', data => process.stdout.write(JSON.stringify(data) + '\n'));
+  sparqlIterator.on('end', () => {
+    console.log('done one cycle');
+    forever(plan);
+  });
+  sparqlIterator.on('data', () => cpt++);
+};
+client.buildPlan(query, servers)
+.then(plan => {
+  forever(plan);
 })
 .catch(error => process.stderr.write(`${error.stack}\n`));
