@@ -6,7 +6,7 @@ using RDatasets
 include("utils.jl")
 
 custom_theme = Theme(
-  key_position = :none,
+  key_position = :top,
   bar_spacing = 0.2px
 )
 
@@ -36,9 +36,9 @@ end
 
 function makeTimeplotEQ(df, full = true)
   if full
-    return plot(df, xgroup=:query, x=:servers, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar(position=:dodge,orientation=:vertical), free_y_axis=true), Guide.xlabel("Approach"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), colors())
+    return plot(df, xgroup=:query, x=:servers, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar(position=:dodge,orientation=:vertical), Guide.xticks(label=false), free_y_axis=true), Guide.xlabel("Approach"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), colors())
   else
-    return plot(df, xgroup=:query, x=:servers, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar(position=:dodge,orientation=:vertical), free_y_axis=true), Guide.xlabel("Approach"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), colors())
+    return plot(df, xgroup=:query, x=:servers, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar(position=:dodge,orientation=:vertical), Guide.xticks(label=false), free_y_axis=true), Guide.xlabel("Approach"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), colors())
   end
 end
 
