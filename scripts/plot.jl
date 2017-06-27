@@ -165,39 +165,39 @@ compl_all = [compl_peneloop_eq;compl_quartz_eq;compl_all_eq;compl_peneloop_neq;c
 
 # filter data for another plot
 filter_ref = processDataBis(time_ref, whitelist)
-filter_ref[:query] = 1:nrow(filter_ref)
+filter_ref[:query] = [12, 47, 48, 52, 78]
 
 filter_pen_eq = processDataBis(time_peneloop_eq, whitelist)
-filter_pen_eq[:query] = 1:nrow(filter_pen_eq)
+filter_pen_eq[:query] = [12, 47, 48, 52, 78]
 filter_quartz_eq = processDataBis(time_quartz_eq, whitelist)
-filter_quartz_eq[:query] = 1:nrow(filter_quartz_eq)
+filter_quartz_eq[:query] = [12, 47, 48, 52, 78]
 filter_all_eq = processDataBis(time_all_eq, whitelist)
-filter_all_eq[:query] = 1:nrow(filter_all_eq)
+filter_all_eq[:query] = [12, 47, 48, 52, 78]
 
 filter_pen_neq = processDataBis(time_peneloop_neq, whitelist)
-filter_pen_neq[:query] = 1:nrow(filter_pen_neq)
+filter_pen_neq[:query] = [12, 47, 48, 52, 78]
 filter_quartz_neq = processDataBis(time_quartz_neq, whitelist)
-filter_quartz_neq[:query] = 1:nrow(filter_quartz_neq)
+filter_quartz_neq[:query] = [12, 47, 48, 52, 78]
 filter_all_neq = processDataBis(time_all_neq, whitelist)
-filter_all_neq[:query] = 1:nrow(filter_all_neq)
+filter_all_neq[:query] = [12, 47, 48, 52, 78]
 
 filtered_all_eq = [filter_ref;filter_pen_eq;filter_quartz_eq;filter_all_eq]
 filtered_all_neq = [filter_ref;filter_pen_neq;filter_quartz_neq;filter_all_neq]
 
 # time_plot_1 = plot(time_all[time_all[:query] .<= 50, :], x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[0,5,10,15,20,25,30,35,40,45,50]), Guide.yticks(ticks=[0,400,800,1200]))
 # time_plot_2 = plot(time_all[time_all[:query] .> 50, :], x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[50,55,60,65,70,75,80,85,90,95]), Guide.yticks(ticks=[0,400,800,1200]))
-
+#
 # time_plot_12 = plot(time_all2[time_all2[:query] .<= 50, :], x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[0,5,10,15,20,25,30,35,40,45,50]), Guide.yticks(ticks=[0,400,800,1200]))
 # time_plot_22 = plot(time_all2[time_all2[:query] .> 50, :], x=:query, y=:mean_value, color=:servers, Geom.bar(position=:dodge,orientation=:vertical), Guide.xlabel("Queries"), Guide.ylabel("Execution time (s)", orientation=:vertical), Guide.colorkey(""), Scale.x_continuous, colors(), Guide.xticks(ticks=[50,55,60,65,70,75,80,85,90,95]), Guide.yticks(ticks=[0,400,800,1200]))
-
+#
 # time_plot_1 = makeTimeplotEQ(time_all)
 # time_plot_2 = makeTimeplotNEQ(time_all2)
-#
+
 filtered_plot_1 = makeTimeplotEQ(filtered_all_eq, false)
 # filtered_plot_2 = makeTimeplotNEQ(filtered_all_neq, false)
-#
+
 # compl_plot = plot(compl_all, xgroup=:servers, x=:query, y=:mean_value, color=:servers, Geom.subplot_grid(Geom.bar), Guide.xlabel("Queries"), Guide.ylabel("Answer completeness"), Scale.y_continuous, colors(), no_colors_guide)
-#
+
 # draw(PDF("amazon/execution_time_eq.pdf", 7inch, 2.5inch), time_plot_1)
 # draw(PDF("amazon/execution_time_neq.pdf", 7inch, 2.5inch), time_plot_2)
 draw(PDF("amazon/execution_time_filter_eq.pdf", 4inch, 2.5inch), filtered_plot_1)
